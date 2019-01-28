@@ -13,7 +13,11 @@ namespace VenueApp.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        //public DateTime Created { get; set; }               
+        //public DateTime Created { get; set; }  
+        public UserType Type { get; set; }
+        public int TypeID { get; set; }
+        public Membership Membership { get; set; }
+        public int MembershipID { get; set; }
 
     }
 }

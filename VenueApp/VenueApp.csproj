@@ -23,6 +23,7 @@
 <ItemGroup>
   <Folder Include="ViewModels\" />
   <Folder Include="Views\Event\" />
+  <Folder Include="Views\Membership\" />
   <Folder Include="Views\User\" />
 </ItemGroup>
 

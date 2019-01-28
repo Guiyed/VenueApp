@@ -11,6 +11,8 @@ namespace VenueApp.Data
         { }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<UserType> Types { get; set; }
+        public DbSet<Membership> Memberships { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<EventCategory> Categories { get; set; }
 
