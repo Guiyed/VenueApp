@@ -27,14 +27,38 @@ namespace VenueApp.Controllers
             return View(users);
         }
 
-                     
-        public IActionResult Signup()
+
+        //-------------------------------- LOGIN -----------------------------------//
+        // GET: /<controller>/
+        public IActionResult Login()
+        {
+            LoginViewModel userViewModel = new LoginViewModel();
+
+            return View(userViewModel);
+        }
+
+        // POST: /<controller>/
+        [HttpPost]
+        public IActionResult Login(LoginViewModel userFromView)
+        {
+            if (ModelState.IsValid)
+            {
+                Redirect("/User");
+            }
+
+            return View(userFromView);
+        }
+
+
+        //----------------------------------- SIGNUP -----------------------------------//
+                // GET: /<controller>/
+                public IActionResult Signup()
         {
             SignupViewModel userViewModel = new SignupViewModel();
 
             return View(userViewModel);
         }
-
+        
         [HttpPost]
         public IActionResult Signup(SignupViewModel userFromView)
         {

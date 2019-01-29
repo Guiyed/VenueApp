@@ -6,63 +6,7 @@
 
 <h3>Hello, the VenueApp is being implemented.</h3>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-4 col-md-offset-1">
-
-            <div class="landingReturningCustomers landingWrapper" id="landingReturningCustomers">
-                <h2>Returning Customers</h2>
-                <form method="post" action="https://myaccount.batteryjunction.com/login.php" class="landingLoginWrapper">
-                    <input type="hidden" name="formSubmitted" value="login">
-                    <h3>If you already have an account, please sign in.</h3>
-                    <h4>Email Address</h4>
-                    <input type="text" name="email" value="" id="landingReturningCustomersEmail">
-                    <h4 class="password">Password</h4>
-                    <input type="password" name="password" value="" id="landingReturningCustomersPassword">
-                    <a href="/retrievePassword.php" class="landingForgotPassword">Forgot your Password?</a>
-                    <button type="submit" class="landingButton">Sign In <i class="fa fa-caret-right"></i></button>
-                </form>
-
-
-
-            </div>
-            One of two columns
-        </div>
-        <div class="col-md-6 col-md-offset-1">
-
-            <div class="landingNewCustomers landingWrapper">
-                <h2>New Customers</h2>
-                <div class="landingLoginWrapper signUp">
-                    <h3>Don’t have an account? Sign up now - it's Free and Easy!</h3>
-                    <p><a asp-controller="User" asp-action="SignUp">Create an Account</a></p>
-                </div>
-            </div>
-
-            <div class="landingBenefitsWrapper">
-                <div class="landingBenefitsSubheading"><span>Registered account members receive:</span><hr></div>
-                <ul class="landingBenefits">
-                    <li class="benefit one">
-                        <div class="landingDescription">
-                            <h3>Earn Rewards</h3>
-                            <p>Receive redeemable points for purchases, sharing with friends and more.</p>
-                            <a class="learnMore" href="/mod_myRewards/">Learn more <i class="fa fa-caret-right"></i></a>
-                        </div>
-                    </li>
-                    <li class="benefit two">
-                        <div class="landingDescription">
-                            <h3>Easy Checkout</h3>
-                            <p>Save your information to make future ordering quick &amp; easy!</p>
-                        </div>
-                    </li>
-                    <li class="benefit three">
-                        <div class="landingDescription">
-                            <h3>Order Tracking &amp; History</h3>
-                            <p>View and track orders online, easy re-ordering and checkout.</p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            two of two columns
-        </div>
-    </div>
+<div>
+    <h2> Homepage </h2>
+    <a asp-controller="User" asp-action="Login">USER ACCOUNT</a>
 </div>
