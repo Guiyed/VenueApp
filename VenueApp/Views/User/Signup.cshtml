@@ -1,0 +1,43 @@
+﻿@model VenueApp.ViewModels.SignupViewModel
+
+@{
+    ViewBag.Title = "User Signup";
+}
+
+
+<h1>@ViewBag.Title</h1>
+
+<form asp-controller="User" asp-action="Signup" method="post">
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label asp-for="Username"></label>
+            <div>
+                <input class="form-control " asp-for="Username" value="@Model.Username" />
+                <span class="small text-danger" asp-validation-for="Username"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label asp-for="Email"></label>
+            <div>
+                <input class="form-control " asp-for="Email" value="@Model.Email" />
+                <span class="small text-danger" asp-validation-for="Email"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input class="form-control" asp-for="Password" value="@Model.Password" />
+        <span class="small text-danger" asp-validation-for="Password"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Verify"></label>
+        <input class="form-control" asp-for="Verify" />
+        <span class="small text-danger" asp-validation-for="Verify"></span>
+    </div>
+    <input type="submit" value="Sing Up" />
+</form>
+
+
+

@@ -9,7 +9,10 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            return Content("<h1>Hello, soon the VenueApp will be implemented.</h1>", "text/html"); ;
+            return View();
+            //return Content("<h1>Hello, the VenueApp is being implemented.</h1>", "text/html"); 
         }
+
+
     }
 }
