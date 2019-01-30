@@ -58,6 +58,18 @@
         </div>
         <input class="center-block btn btn-success" type="submit" value="Sing Up" />
     </div>
+    <br />
+    <br />
+    <div>        
+
+        @if(Model.ServerError)
+        {
+            <span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>
+        }
+        
+        <span class="text-danger" asp-validation-for="ServerError">
+        </span>
+    </div>
 </form>
 
 

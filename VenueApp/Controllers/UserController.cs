@@ -21,6 +21,8 @@ namespace VenueApp.Controllers
             context = dbContext;
         }
 
+
+        //-------------------------------- INDEX -----------------------------------//
         // GET: /<controller>/
         public IActionResult Index()
         {
@@ -53,9 +55,7 @@ namespace VenueApp.Controllers
                 {
                     currentUser = null;
                 }
-
-                //User testuser = context.Users.Find(userFromView.Username);
-
+                
                 if ((currentUser != null) && (currentUser.Password == userFromView.Password))
                 {
                     HttpContext.Session.SetString("user", currentUser.Username);
@@ -72,61 +72,96 @@ namespace VenueApp.Controllers
                 else if (currentUser == null)
                 {
                     // User Does not exist in the database... return custom message
+                    ModelState.AddModelError("ServerError", "Sorry, we couldn't find an account with that Username");
                     Console.WriteLine("\n");
                     Console.WriteLine("------------------User Does Not exist------------------");
-                    Console.WriteLine("\n");
+                    Console.WriteLine("\n");             
                 }
                 else
                 {
                     // Password Does not Match with stored one in the database... return custom message
+                    ModelState.AddModelError("ServerError", "Sorry, that password isn't right.");
                     Console.WriteLine("\n");
                     Console.WriteLine("--------------Password Does not match------------------");
                     Console.WriteLine("\n");
                 }
 
             }
-
             return View(userFromView);
-
         }
 
 
         //----------------------------------- SIGNUP -----------------------------------//
-                // GET: /<controller>/
-                public IActionResult Signup()
+        // GET: /<controller>/
+        public IActionResult Signup()
         {
             SignupViewModel userViewModel = new SignupViewModel();
 
             return View(userViewModel);
         }
-        
+
+        // POST: /<controller>/
         [HttpPost]
         public IActionResult Signup(SignupViewModel userFromView)
         {
             if (ModelState.IsValid)
             {
-                // Add the new cheese to my existing users
-                User newUser = new User
-                {
-                    Username = userFromView.Username,
-                    Password = userFromView.Password,
-                    TypeID = 1,         // Default for "Regular user"
-                    MembershipID = 1    // Default for "None"
-                    //Created = DateTime.Now
-                };
+                //............. Should I be doing this here or in the view model, Front End??? Wheere ......??????????????
                 
-                context.Users.Add(newUser);
-                context.SaveChanges();
+                //User existingUser = context.Users.Find(userFromView.Username);
+                User existingUser;                
+                try
+                {
+                    existingUser = context.Users.Single(c => c.Username == userFromView.Username);
+                }
+                catch
+                {
+                    existingUser = null;
+                }
 
-                //Session["user"] = newUser.Username;
-                HttpContext.Session.SetString("user", newUser.Username);
+                //User existingUser = context.Users.Single(c => c.Username == userFromView.Username);
+                if (existingUser == null)   // if Avaliable Username (I need to be unique)
+                {
+                    // Add the new user to my existing users table
+                    User newUser = new User
+                    {
+                        Username = userFromView.Username,
+                        FirstName = userFromView.FirstName,
+                        LastName = userFromView.LastName,
+                        Email = userFromView.Email,
+                        Password = userFromView.Password,
+                        TypeID = 1,         // Default for "Regular user", needs to be implemented for the next database update
+                        MembershipID = 1    // Default for "None"
+                                            //Created = DateTime.Now    //To be used when updating database, needs to be implemented for the next database update
+                    };
 
-                Console.WriteLine("/n");
-                Console.WriteLine(HttpContext.Session.GetString("user"));
-                Console.WriteLine("/n");
+                    context.Users.Add(newUser);
+                    context.SaveChanges();
 
-                return Redirect("/User");
+                    // Create a new login session
+                    //Session["user"] = newUser.Username;
+                    HttpContext.Session.SetString("user", newUser.Username);
+
+                    //TEST
+                    Console.WriteLine("/n");
+                    Console.WriteLine(HttpContext.Session.GetString("user"));
+                    Console.WriteLine("/n");
+
+                    // Greet the new user and redirect to its dashboard (to be updated)
+                    return Redirect("/User");
+                }
+                else
+                {
+                    // Cannot use this Username because there is already an User with this Usename
+                    ModelState.AddModelError("ServerError", "Sorry, but seems like someone else already has that Username. Please try with a different one.");
+                    Console.WriteLine("\n");
+                    Console.WriteLine("------------------User already taken. Please select a new one------------------");
+                    Console.WriteLine("\n");
+
+                    
+                }
             }
+                
             return View(userFromView);
         }
 

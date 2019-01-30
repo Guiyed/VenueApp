@@ -15,7 +15,9 @@ namespace VenueApp.ViewModels
         [Required(ErrorMessage = "You must enter a password")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-                
+
+        public string ServerError { get; set; }
+
         public LoginViewModel()
         {
 

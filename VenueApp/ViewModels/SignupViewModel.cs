@@ -38,6 +38,8 @@ namespace VenueApp.ViewModels
         [Display(Name = "Verify Password")]
         public string Verify { get; set; }
 
+        public bool ServerError { get; set; }
+
         public SignupViewModel()
         {
 
