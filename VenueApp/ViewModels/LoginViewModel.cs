@@ -12,7 +12,7 @@ namespace VenueApp.ViewModels
         [Display(Name = "Username")]
         public string Username { get; set; }
                 
-        [Required(ErrorMessage = "You must enter an alphanumeric password")]
+        [Required(ErrorMessage = "You must enter a password")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
                 
