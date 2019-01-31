@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using VenueApp.Data;
 using VenueApp.Models;
 using VenueApp.ViewModels;
+using VenueApp.Helpers;
 
 namespace VenueApp.Controllers
 {
@@ -48,24 +49,22 @@ namespace VenueApp.Controllers
             if (ModelState.IsValid)
             {
                 User currentUser;
-                try {
+                try
+                {
+                    // Check for the same credentials in the database
                     currentUser = context.Users.Single(c => c.Username == userFromView.Username);
                 }
                 catch
                 {
                     currentUser = null;
                 }
-                
+
                 if ((currentUser != null) && (currentUser.Password == userFromView.Password))
                 {
+                    //Login Success... return custom message
                     HttpContext.Session.SetString("user", currentUser.Username);
-
-                    //Login Success
-                    Console.WriteLine("\n");
-                    Console.WriteLine("------------------Loggin Succcess------------------");
                     string sesion = HttpContext.Session.GetString("user");
-                    Console.WriteLine(sesion);
-                    Console.WriteLine("\n");
+                    TestFunctions.PrintConsoleMessage("LOGIN SUCCESS " + sesion);
 
                     return Redirect("/User");
                 }
@@ -73,19 +72,16 @@ namespace VenueApp.Controllers
                 {
                     // User Does not exist in the database... return custom message
                     ModelState.AddModelError("ServerError", "Sorry, we couldn't find an account with that Username");
-                    Console.WriteLine("\n");
-                    Console.WriteLine("------------------User Does Not exist------------------");
-                    Console.WriteLine("\n");             
+                    userFromView.ServerError = true;
+                    TestFunctions.PrintConsoleMessage("USER DOES NOT EXIST IN THE DATABASE");
                 }
                 else
                 {
-                    // Password Does not Match with stored one in the database... return custom message
+                    // Password Does not Match with the one in the database... return custom message
                     ModelState.AddModelError("ServerError", "Sorry, that password isn't right.");
-                    Console.WriteLine("\n");
-                    Console.WriteLine("--------------Password Does not match------------------");
-                    Console.WriteLine("\n");
+                    userFromView.ServerError = true;
+                    TestFunctions.PrintConsoleMessage("PASSWORD DOES NOT MATCH BETWEEN THE FORM AND DATABASE");
                 }
-
             }
             return View(userFromView);
         }
@@ -104,23 +100,27 @@ namespace VenueApp.Controllers
         [HttpPost]
         public IActionResult Signup(SignupViewModel userFromView)
         {
+            bool usernameAvaliable = false;
+
             if (ModelState.IsValid)
             {
                 //............. Should I be doing this here or in the view model, Front End??? Wheere ......??????????????
-                
+
                 //User existingUser = context.Users.Find(userFromView.Username);
-                User existingUser;                
+                //existingUser = context.Users.Single(c => c.Username == userFromView.Username);
+              
                 try
                 {
-                    existingUser = context.Users.Single(c => c.Username == userFromView.Username);
+                    //Check for the availability of the selected username on the database 
+                    context.Users.Single(c => c.Username == userFromView.Username);
                 }
-                catch
+                catch (ArgumentNullException)
                 {
-                    existingUser = null;
+                    //The username does not exist in the database
+                    usernameAvaliable =true;
                 }
 
-                //User existingUser = context.Users.Single(c => c.Username == userFromView.Username);
-                if (existingUser == null)   // if Avaliable Username (I need to be unique)
+                if (usernameAvaliable)   // if Avaliable Username (It needs to be unique)
                 {
                     // Add the new user to my existing users table
                     User newUser = new User
@@ -139,31 +139,24 @@ namespace VenueApp.Controllers
                     context.SaveChanges();
 
                     // Create a new login session
-                    //Session["user"] = newUser.Username;
                     HttpContext.Session.SetString("user", newUser.Username);
+                    //Session["user"] = newUser.Username;
+                    string sesion = HttpContext.Session.GetString("user");
+                    TestFunctions.PrintConsoleMessage("LOGIN SUCCESS " + sesion);       
 
-                    //TEST
-                    Console.WriteLine("/n");
-                    Console.WriteLine(HttpContext.Session.GetString("user"));
-                    Console.WriteLine("/n");
+                    // Greet the new user and redirect to its dashboard (to be implemented
 
-                    // Greet the new user and redirect to its dashboard (to be updated)
                     return Redirect("/User");
                 }
                 else
                 {
-                    // Cannot use this Username because there is already an User with this Usename
+                    // Cannot use this Username because there is already an User with this Username
                     ModelState.AddModelError("ServerError", "Sorry, but seems like someone else already has that Username. Please try with a different one.");
-                    Console.WriteLine("\n");
-                    Console.WriteLine("------------------User already taken. Please select a new one------------------");
-                    Console.WriteLine("\n");
-
-                    
+                    userFromView.ServerError = true;
+                    TestFunctions.PrintConsoleMessage("DUPLICATED USER");
                 }
             }
-                
             return View(userFromView);
         }
-
     }
 }

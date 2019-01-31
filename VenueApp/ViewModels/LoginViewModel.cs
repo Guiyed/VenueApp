@@ -16,7 +16,7 @@ namespace VenueApp.ViewModels
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        public string ServerError { get; set; }
+        public bool ServerError { get; set; }
 
         public LoginViewModel()
         {
