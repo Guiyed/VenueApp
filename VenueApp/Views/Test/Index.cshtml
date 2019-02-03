@@ -37,6 +37,7 @@
                 </button>
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">VenueApp</a>
             </div>
+
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
@@ -55,10 +56,25 @@
                         </ul>
                     </li>
                 </ul>
-                <!-----------------------------------  TESTING ----------------------------------->
+                <!-----------------------------------  User Button ----------------------------------->
                 @if (ViewBag.Session)
                 {
-                    <p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">@ViewBag.UserInSession</a></p>
+                    <p class="navbar-right">
+                        <a asp-controller="User" asp-action="Login">
+                            <button type="button" class="btn btn-default btn-lg user-login-btn"> 
+                                <span class="fas fa-user fa-lg" aria-hidden="true"></span> @ViewBag.UserInSession
+                            </button>
+                        </a>
+                    </p>
+                    <p class="navbar-text navbar-right text-danger" style="margin-right: 10px;">
+                        <a class="text-warning" asp-controller="User" asp-action="Logout">Logout </a>
+                    </p>
+                }
+                else
+                {
+                    <p class="navbar-text navbar-right">
+                        <a class="text-muted" asp-controller="User" asp-action="Login">User Account  <span class="far fa-user-circle fa-lg" aria-hidden="true"></span></a>
+                    </p>
                 }
             </div><!-- /.navbar-collapse -->
         </div>
