@@ -25,9 +25,19 @@
                             <span class="small text-danger" asp-validation-for="Password"></span>
                         </div>
                         <input class="pull-right btn btn-primary" type="submit" value="Login" />
+                        <br />
+                        <br />
+                        <div>
+                            @if(Model.ServerError)
+                            {
+                                <span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>
+                            }                            
+                            <span class="text-danger" asp-validation-for="ServerError">
+                            </span>
+                        </div>
                     </form>
                 </div>
-            </div>
+            </div>            
         </div>
 
         <div class="col-md-6 col-md-offset-1">
@@ -47,7 +57,7 @@
             </div>
             <br />
             <div>
-                <div><span><h3>Registered account members receive:</h3></span><hr></div>
+                <div><h3>Registered account members receive:</h3><hr></div>
                 <ul class="landingBenefits">
                     <li id="benefit one">
                         <div class="landingDescription">
