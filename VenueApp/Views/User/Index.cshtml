@@ -6,12 +6,12 @@
 
 <h1>@ViewBag.Title</h1>
 
-<!--
-    //if (aModel.Username != 0)
+
+@if (ViewBag.Username.Length > 0)
 {
-    <h3 class="alert-success">Welcome aModel.Username!!!</h3>
+    <h3>Welcome, @ViewBag.Username !!!</h3>
+    <p class="text-success">You have Succsessfully Logged In @ViewBag.UserType <span class="glyphicon glyphicon-ok " aria-hidden="true"></span></p>
 }
--->    
 
 
 <h2>List of Users on Database</h2>
@@ -33,4 +33,5 @@ else
         }
     </table>
 }
-    <p><a asp-controller="User" asp-action="SignUp">User SignUp</a> | <a asp-controller="User" asp-action="Login">Login</a></p>
+<p><a asp-controller="User" asp-action="SignUp">User SignUp</a> | <a asp-controller="User" asp-action="Login">Login</a> | <a asp-controller="User" asp-action="Logout">Logout</a></p>
+

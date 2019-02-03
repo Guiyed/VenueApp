@@ -23,50 +23,62 @@ namespace VenueApp.Controllers
         }
 
 
+
         //-------------------------------- INDEX -----------------------------------//
         // GET: /<controller>/
-        public IActionResult Index()
+        public IActionResult Index(string username)
         {
+            //If the username is a Login user get username else get empty ""
+            ViewBag.Username = string.IsNullOrEmpty(username as string) ? "" : username;
+            
             //IList<User> users = context.Users.Include(c => c.Type).ToList();
             IList<User> users = context.Users.ToList();
             return View(users);
         }
 
 
+
         //-------------------------------- LOGIN -----------------------------------//
         // GET: /<controller>/
         public IActionResult Login()
         {
-            LoginViewModel userViewModel = new LoginViewModel();
+            /* For future Refactoring
+            var currentSession = HttpContext.Session;
+            currentSession.TryGetValue("user", out byte[] value1);
+            */
 
-            return View(userViewModel);
+            // If the user is already logged in
+            if (HttpContext.Session.TryGetValue("user", out byte[] value))
+            {
+                return RedirectToAction("Index", "User", new { username = HttpContext.Session.GetString("user") });
+            }
+            else
+            {
+                LoginViewModel userViewModel = new LoginViewModel();
+                return View(userViewModel);
+            }
+            
         }
 
         // POST: /<controller>/
+
         [HttpPost]
         public IActionResult Login(LoginViewModel userFromView)
         {
             if (ModelState.IsValid)
             {
-                User currentUser;
-                try
-                {
-                    // Check for the same credentials in the database
-                    currentUser = context.Users.Single(c => c.Username == userFromView.Username);
-                }
-                catch
-                {
-                    currentUser = null;
-                }
-
+                User currentUser = context.Users.SingleOrDefault(c => c.Username == userFromView.Username);
+                
                 if ((currentUser != null) && (currentUser.Password == userFromView.Password))
                 {
-                    //Login Success... return custom message
+                    //Login Success... Greet the User
                     HttpContext.Session.SetString("user", currentUser.Username);
-                    string sesion = HttpContext.Session.GetString("user");
-                    TestFunctions.PrintConsoleMessage("LOGIN SUCCESS " + sesion);
+                    string userInSesion = HttpContext.Session.GetString("user");
+                    TestFunctions.PrintConsoleMessage("LOGIN SUCCESS " + userInSesion);
 
-                    return Redirect("/User");
+                    //return Redirect("/User");
+                    //return RedirectToAction("Index", "User",new { username = currentUser.Username });
+                    return RedirectToAction("Index", "User", new { username = userInSesion });
                 }
                 else if (currentUser == null)
                 {
@@ -87,6 +99,20 @@ namespace VenueApp.Controllers
         }
 
 
+
+        //-------------------------------- LOGOUT -----------------------------------//
+        // GET: /<controller>/
+        public IActionResult Logout()
+        {
+            //Delete or clear the Current Session
+            HttpContext.Session.Clear();
+
+            return RedirectToAction("Index", "User", new { username = HttpContext.Session.GetString("user") });
+            //return RedirectToAction("Index", "User", new { username = "" });
+        }
+
+
+               
         //----------------------------------- SIGNUP -----------------------------------//
         // GET: /<controller>/
         public IActionResult Signup()
@@ -104,23 +130,25 @@ namespace VenueApp.Controllers
 
             if (ModelState.IsValid)
             {
+                /*
                 //............. Should I be doing this here or in the view model, Front End??? Wheere ......??????????????
-
+                
                 //User existingUser = context.Users.Find(userFromView.Username);
-                //existingUser = context.Users.Single(c => c.Username == userFromView.Username);
+                //existingUser = context.Users.SingleOrDefault(c => c.Username == userFromView.Username);
+                */
               
                 try
                 {
                     //Check for the availability of the selected username on the database 
                     context.Users.Single(c => c.Username == userFromView.Username);
                 }
-                catch (ArgumentNullException)
+                catch
                 {
                     //The username does not exist in the database
                     usernameAvaliable =true;
                 }
-
-                if (usernameAvaliable)   // if Avaliable Username (It needs to be unique)
+                
+                if (usernameAvaliable)   // If is an Avaliable Username (It needs to be unique)
                 {
                     // Add the new user to my existing users table
                     User newUser = new User
@@ -130,7 +158,7 @@ namespace VenueApp.Controllers
                         LastName = userFromView.LastName,
                         Email = userFromView.Email,
                         Password = userFromView.Password,
-                        TypeID = 1,         // Default for "Regular user", needs to be implemented for the next database update
+                        TypeID = 2,         // Default for "Regular user", needs to be implemented for the next database update
                         MembershipID = 1    // Default for "None"
                                             //Created = DateTime.Now    //To be used when updating database, needs to be implemented for the next database update
                     };
@@ -138,15 +166,14 @@ namespace VenueApp.Controllers
                     context.Users.Add(newUser);
                     context.SaveChanges();
 
-                    // Create a new login session
+                    // Create a new login session (Session["user"] = newUser.Username)
                     HttpContext.Session.SetString("user", newUser.Username);
-                    //Session["user"] = newUser.Username;
-                    string sesion = HttpContext.Session.GetString("user");
-                    TestFunctions.PrintConsoleMessage("LOGIN SUCCESS " + sesion);       
+                    string userInSesion = HttpContext.Session.GetString("user");
+                    TestFunctions.PrintConsoleMessage("LOGIN SUCCESS " + userInSesion);
 
                     // Greet the new user and redirect to its dashboard (to be implemented
 
-                    return Redirect("/User");
+                    return RedirectToAction("Index", "User", new { username = userInSesion });
                 }
                 else
                 {
