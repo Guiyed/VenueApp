@@ -12,6 +12,10 @@
     <h3>Welcome, @ViewBag.Username !!!</h3>
     <p class="text-success">You have Succsessfully Logged In @ViewBag.UserType <span class="glyphicon glyphicon-ok " aria-hidden="true"></span></p>
 }
+else if (ViewBag.LogoutMessage.Length > 0)
+{
+    <p class="text-danger">You have Succsessfully Logged Out <span class="glyphicon glyphicon-log-out " aria-hidden="true"></span></p>
+}
 
 
 <h2>List of Users on Database</h2>

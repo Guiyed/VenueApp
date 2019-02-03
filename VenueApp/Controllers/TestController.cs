@@ -10,12 +10,12 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            
+            /* Not needed anymore
             ViewBag.Session = HttpContext.Session.TryGetValue("user",out byte[]value);
             ViewBag.UserInSession = HttpContext.Session.GetString("user");
+            */
 
             return View();
-            //return Content("<h1>Hello, the VenueApp is being implemented.</h1>", "text/html"); 
         }
 
 

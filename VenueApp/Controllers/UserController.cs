@@ -30,7 +30,7 @@ namespace VenueApp.Controllers
         {
             //If the username is a Login user get username else get empty ""
             ViewBag.Username = string.IsNullOrEmpty(username as string) ? "" : username;
-            
+            ViewBag.LogoutMessage = TempData["logoutMessage"] ?? "";
             //IList<User> users = context.Users.Include(c => c.Type).ToList();
             IList<User> users = context.Users.ToList();
             return View(users);
@@ -107,8 +107,9 @@ namespace VenueApp.Controllers
             //Delete or clear the Current Session
             HttpContext.Session.Clear();
 
+            TempData["logoutMessage"] = "You have successfully logged out";
+
             return RedirectToAction("Index", "User", new { username = HttpContext.Session.GetString("user") });
-            //return RedirectToAction("Index", "User", new { username = "" });
         }
 
 
