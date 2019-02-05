@@ -1,0 +1,20 @@
+﻿@model List<VenueApp.Models.User>
+
+@{
+    ViewBag.Title = "Users Dashboard";
+
+    @using Microsoft.AspNetCore.Http
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+    string userName = @HttpContextAccessor.HttpContext.Session.GetString("User") ?? "";
+    string userType = @HttpContextAccessor.HttpContext.Session.GetString("Type") ?? "";
+}
+
+<h1>@ViewBag.Title</h1>
+
+
+@if (userName.Length > 0)
+{
+    <h3>Welcome, @userName !!!</h3>
+    <p class="text-success">You have Succsessfully Logged In as an @userType <span class="glyphicon glyphicon-ok " aria-hidden="true"></span></p>
+}

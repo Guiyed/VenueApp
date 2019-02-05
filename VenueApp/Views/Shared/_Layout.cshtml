@@ -2,7 +2,7 @@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 @{
-    string username = @HttpContextAccessor.HttpContext.Session.GetString("user") ?? "";
+    string username = @HttpContextAccessor.HttpContext.Session.GetString("User") ?? "";
 }
 
 <!DOCTYPE html>
@@ -59,7 +59,7 @@
                 @if (username.Length > 0)
                 {
                     <p class="navbar-right">
-                        <a asp-controller="User" asp-action="Login">
+                        <a asp-controller="Dashboard" asp-action="Index">
                             <button type="button" class="btn btn-default btn-lg user-login-btn">
                                 <span class="fas fa-user fa-lg" aria-hidden="true"></span> @username
                             </button>
