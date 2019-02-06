@@ -18,6 +18,11 @@ namespace VenueApp.Controllers
             return View();
         }
 
+        public IActionResult TBI()
+        {
+            return View();
+        }
+
 
     }
 }

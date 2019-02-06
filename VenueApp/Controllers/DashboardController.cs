@@ -32,7 +32,8 @@ namespace VenueApp.Controllers
         }
 
         [Route("UserDashboard")]
-        public IActionResult UserDashboard()
+        //[ChildActionOnly]
+        public IActionResult UserDashboard ()
         {
             return View("User");
         }
@@ -42,5 +43,8 @@ namespace VenueApp.Controllers
         {
             return View("Admin");
         }
+
+        
+                
     }
 }

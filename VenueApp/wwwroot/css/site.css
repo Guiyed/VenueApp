@@ -3,6 +3,7 @@ for details on configuring this project to bundle and minify static web assets. 
 body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-color: whitesmoke;
 }
 
 
@@ -11,6 +12,36 @@ body {
 .user-login-btn {
     background-color: darkturquoise;
     color: white;
+}
+
+
+
+
+/* Login Template*/
+.landingReturningUser {
+    background-color: #c8dae3;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+/*
+landingNewUser {
+}
+*/
+
+/* Dashboard */
+.dashboardBoxesL, .dashboardBoxesR {
+    height: 100px;
+    padding: 25px;
+    font-size: 30px;
+    border-radius: 10px;
+    margin-top: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+.dashboardBoxesR {
+    margin-left: 20px;
 }
 
 

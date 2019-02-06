@@ -18,3 +18,31 @@
     <h3>Welcome, @userName !!!</h3>
     <p class="text-success">You have Succsessfully Logged In as an @userType <span class="glyphicon glyphicon-ok " aria-hidden="true"></span></p>
 }
+
+    <div class="container-fluid">
+        <br />
+        <div class="row text-center">
+            <a asp-controller="Event" asp-action="Index">
+                <div class="col-md-4 col-md-offset-2 dashboardBoxesL" style="background-color: royalblue"> View Events <i class="far fa-calendar-alt"></i></div>
+            </a>
+            <a asp-controller="Event" asp-action="Add">
+                <div class="col-md-4 dashboardBoxesR" style="background-color: goldenrod"> Create Events <i class="far fa-edit"></i></div>
+</a>
+</div>
+        <div class="row text-center">
+            <a asp-controller="User" asp-action="Index">
+                <div class="col-md-4 col-md-offset-2 dashboardBoxesL" style="background-color: darkred"> Manage Users <i class="fas fa-user-plus"></i></div>
+    </a>
+                <a asp-controller="Test" asp-action="TBI">
+                    <div class="col-md-4 dashboardBoxesR" style="background-color: lightslategrey"> Manage Reports <i class="fas fa-file-invoice"></i></div>
+</a>
+</div>
+        <div class="row text-center">
+            <a asp-controller="Test" asp-action="TBI">
+                <div class="col-md-4 col-md-offset-2 dashboardBoxesL" style="background-color: salmon"> Databases <i class="fas fa-database"></i></div>
+               </a>
+                <a asp-controller="Test" asp-action="TBI">
+                    <div class="col-md-4 dashboardBoxesR" style="background-color: black; padding-top: 7px"> Broadcast <br />Messages <i class="fas fa-users"></i> <i class="far fa-envelope"></i></div>
+                    </a>
+</div>
+    </div>
