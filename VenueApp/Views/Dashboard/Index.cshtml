@@ -26,6 +26,8 @@
     <p id="demo"></p>
 }
 
+<script src="~/js/timeStamp.js"></script>
+
 <script>
     var dt = '@ViewBag.EndDate';
     console.log("Viewbag "+ dt);
@@ -65,15 +67,6 @@
         document.getElementById('countdown').innerHTML = seconds + 'secs';
     }
 
-    timer = setInterval(showRemaining, 900);   // 1 second interval
-
-    var myVar = setInterval(myTimer, 1000);
-
-    function myTimer() {
-        var d = new Date();
-            document.getElementById("demo").innerHTML = d.toLocaleTimeString();
-    }
-
-
+    timer = setInterval(showRemaining, 999);   // 0.99 second interval
 
 </script>
