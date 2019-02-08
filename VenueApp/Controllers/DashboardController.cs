@@ -26,24 +26,45 @@ namespace VenueApp.Controllers
                     return Redirect("/AdminDashboard");
                 }
             }
+            
+            //Unauthorize Access - Give Error and go Back to Login
+            ViewBag.UnauthorizedMessage = new string[] { "Sorry you are not authorized to access this feature, " +
+                "please Log In first.",
+                "You are being redirected to the User Login Page in a few seconds." };
 
-            //Error go Back to Login
-            return RedirectToAction("Login", "User");
+            //Set Timer before Redirection (AddSeconds to timer before the countdown) 
+            HttpContext.Session.SetString("EndDate", DateTime.Now.AddSeconds(7).ToString("yyyy-MM-ddTHH:mm:ss"));
+            ViewBag.EndDate = HttpContext.Session.GetString("EndDate");
+
+            return View(); 
         }
 
         [Route("UserDashboard")]
         //[ChildActionOnly]
         public IActionResult UserDashboard ()
         {
-            return View("User");
+            if (HttpContext.Session.TryGetValue("User", out byte[] value))
+            {
+                return View("User");
+            }
+            else
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }         
         }
 
         [Route("AdminDashboard")]
         public IActionResult AdminDashboard()
         {
-            return View("Admin");
+            if (HttpContext.Session.TryGetValue("User", out byte[] value))
+            {
+                return View("Admin");
+            }
+            else
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
         }
-
         
                 
     }

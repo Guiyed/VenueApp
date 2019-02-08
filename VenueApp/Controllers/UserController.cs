@@ -50,7 +50,8 @@ namespace VenueApp.Controllers
             // If the user is already logged in
             if (HttpContext.Session.TryGetValue("User", out byte[] value))
             {
-                return RedirectToAction("Index", "User", new { username = HttpContext.Session.GetString("User") });
+                //return RedirectToAction("Index", "User", new { username = HttpContext.Session.GetString("User") });
+                return RedirectToAction("Index", "Dashboard");
             }
             else
             {
@@ -78,7 +79,8 @@ namespace VenueApp.Controllers
                     HttpContext.Session.SetString("Type", userType);
                     TestFunctions.PrintConsoleMessage("LOGIN SUCCESS " + userInSesion);
 
-                    return RedirectToAction("Index", "User", new { username = userInSesion });
+                    //return RedirectToAction("Index", "User", new { username = userInSesion });
+                    return RedirectToAction("Index", "Dashboard");
                 }
                 else if (currentUser == null)
                 {
@@ -170,7 +172,7 @@ namespace VenueApp.Controllers
                     HttpContext.Session.SetString("User", newUser.Username);
                     string userInSesion = HttpContext.Session.GetString("User");
                     string userType = context.Types.SingleOrDefault(c => c.ID == newUser.TypeID).Name;
-                    HttpContext.Session.SetString("Yype", newUser.Type.Name);
+                    HttpContext.Session.SetString("Type", newUser.Type.Name);
                     TestFunctions.PrintConsoleMessage("LOGIN SUCCESS " + userInSesion);
 
                     // Greet the new user and redirect to its dashboard

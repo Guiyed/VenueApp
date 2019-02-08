@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+
+}
+
+<h1>@ViewBag.Title</h1>
+
+
+@if (ViewBag.UnauthorizedMessage != null)
+{
+    <br />
+    <div class="text-center text-warning">
+        @foreach (string message in ViewBag.UnauthorizedMessage)
+        {
+            <h3>@message</h3>
+            <br />
+        }
+    </div>
+    //<h3 class="">@ViewBag.UnauthorizedMessage[0]</h3>
+    <div id="timer" class="text-center">
+        <h3 class="glyphicon glyphicon-time" aria-hidden="true"> </h3>
+        <span>&nbsp;&nbsp;&nbsp;</span>
+        <span id="countdown" style="font-size: xx-large"> </span>
+    </div>
+
+    <p id="demo"></p>
+}
+
+<script>
+    var dt = '@ViewBag.EndDate';
+    console.log("Viewbag "+ dt);
+    var end = new Date(dt);
+    console.log("End " + end);
+    var _second = 1000;
+    var _minute = _second * 60;
+    var _hour = _minute * 60;
+    var _day = _hour * 24;
+    var timer;
+
+    function showRemaining() {
+        var now = new Date();
+        console.log("Now " + now);
+        var distance = end - now;
+        console.log(distance)
+        if (distance < 0) {
+            document.getElementById('timer').setAttribute("class", "text-center text-danger");
+            document.getElementById('countdown').innerHTML = "!!! Redirecting !!!";
+            clearInterval(timer);
+            window.location.href = '/User/Login'; //Redirect to Login page
+
+            return;
+        }
+
+        var days = Math.floor(distance / _day);
+        var hours = Math.floor((distance % _day) / _hour);
+        var minutes = Math.floor((distance % _hour) / _minute);
+        var seconds = Math.floor((distance % _minute) / _second);
+
+        /*
+         * document.getElementById('countdown').innerHTML = hours + 'hrs ';
+        document.getElementById('countdown').innerHTML += minutes + 'mins ';
+        document.getElementById('countdown').innerHTML += seconds + 'secs';
+        */
+
+        document.getElementById('countdown').innerHTML = seconds + 'secs';
+    }
+
+    timer = setInterval(showRemaining, 900);   // 1 second interval
+
+    var myVar = setInterval(myTimer, 1000);
+
+    function myTimer() {
+        var d = new Date();
+            document.getElementById("demo").innerHTML = d.toLocaleTimeString();
+    }
+
+
+
+</script>
