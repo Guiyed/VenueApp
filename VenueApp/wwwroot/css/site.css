@@ -72,14 +72,23 @@ landingNewUser {
 
 
 /* ----- Footer -----*/
+
+
 .social-icon {
-    color:midnightblue;
+    color: midnightblue;
+    line-height: 10px;
 }
 
 .copyright {
     text-align: center;
     font-size: 12px;
-    line-height: 30px;
+    line-height: 20px;
+}
+
+.footerLinks {
+    font-size: 14px;
+    line-height: 14px;
+    margin-bottom: 5px;
 }
 
 

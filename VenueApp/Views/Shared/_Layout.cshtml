@@ -88,10 +88,11 @@
 
         <div class="container body-content">
             @RenderBody()
-            <hr />
-            <footer class="text-center">
+            
+            <footer class="text-center navbar-fixed-bottom">
+                <hr />
                 <div>
-                    <ul class="list-inline">
+                    <ul class="list-inline" style="margin-bottom: 5px;">
                         <li><a href="https://www.facebook.com/" target="_blank" class="btn social-icon"><i class="fab fa-facebook fa-lg"></i></a></li>
                         <li><a href="https://twitter.com/" target="_blank" class="btn social-icon"><i class="fab fa-twitter fa-lg"></i></a></li>
                         <li><a href="https://www.linkedin.com/" target="_blank" class="btn social-icon"><i class="fab fa-linkedin fa-lg"></i></a></li>
@@ -100,15 +101,15 @@
                     </ul>
                 </div>
                 <div>
-                    <ul class="list-inline">
-                        <li><a href="#">About Company</a>&nbsp;&nbsp;&nbsp;|</li>
+                    <ul class="list-inline footerLinks">
+                        <li><a asp-area="" asp-controller="Home" asp-action="About">About Company</a>&nbsp;&nbsp;&nbsp;|</li>
                         <li><a href="#">Corporate Partnerships</a>&nbsp;&nbsp;&nbsp;|</li>
                         <li><a href="#">Fundraisers &amp; Donations</a>&nbsp;&nbsp;&nbsp;|</li>
                         <li><a href="#">Help</a>&nbsp;&nbsp;&nbsp;|</li>
-                        <li><a href="#">Contact Us</a>&nbsp;&nbsp;&nbsp;|</li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact Us</a>&nbsp;&nbsp;&nbsp;|</li>
                         <li><a href="#" target="_blank" rel="noopener">Careers</a></li>
                     </ul>
-                    <p><span class="copyright">Copyright &copy; 2019 - VenueApp  | <a href="#">Terms of Use</a> | <a href="#">Privacy Policy</a></span></p>
+                    <p><span class="copyright">Copyright &copy; 2019 - VenueApp  | <a href="https://app.termly.io/document/terms-of-use-for-website/a764b322-a351-457e-9bae-4492e54afeb5">Terms of Use</a> | <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy Policy</a></span></p>
                 </div>
             </footer>
         </div>
