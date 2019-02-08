@@ -1,0 +1,41 @@
+﻿@model List<VenueApp.Models.User>
+
+@{
+    ViewBag.Title = "Users Dashboard";
+
+    @using Microsoft.AspNetCore.Http
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+    string userName = @HttpContextAccessor.HttpContext.Session.GetString("User") ?? "";
+    string userType = @HttpContextAccessor.HttpContext.Session.GetString("Type") ?? "";
+}
+
+<h1>@ViewBag.Title</h1>
+
+
+@if (userName.Length > 0)
+{
+    <h3>Welcome, @userName !!!</h3>
+    <p class="text-success">You have Succsessfully Logged In as an @userType <span class="glyphicon glyphicon-ok " aria-hidden="true"></span></p>
+}
+
+
+
+<div class="container-fluid">
+    <br />
+    <div class="row text-center">
+        <a asp-controller="User" asp-action="Detail">
+            <div class="col-md-4 col-md-offset-2 dashboardBoxesL" style="background-color: deeppink"> My Profile <i class="fas fa-user-circle"></i></div>
+        </a>
+        <a asp-controller="Test" asp-action="TBI">
+            <div class="col-md-4 dashboardBoxesR" style="background-color: mediumpurple"> Memberships <i class="far fa-id-card"></i></div>
+        </a>
+    </div><div class="row text-center">
+        <a asp-controller="Event" asp-action="Search">
+            <div class="col-md-4 col-md-offset-2 dashboardBoxesL" style="background-color: mediumturquoise"> Search Events <i class="fas fa-search"></i></div>
+        </a>
+        <a asp-controller="Event" asp-action="Add">
+            <div class="col-md-4 dashboardBoxesR" style="background-color: mediumseagreen"> My Events <i class="far fa-calendar-check"></i></div>
+        </a>
+    </div>    
+</div>

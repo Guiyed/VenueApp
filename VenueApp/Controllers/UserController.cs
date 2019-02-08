@@ -30,7 +30,7 @@ namespace VenueApp.Controllers
         {
             //If the username is a Login user get username else get empty ""
             ViewBag.Username = string.IsNullOrEmpty(username as string) ? "" : username;
-            
+            ViewBag.LogoutMessage = TempData["logoutMessage"] ?? "";
             //IList<User> users = context.Users.Include(c => c.Type).ToList();
             IList<User> users = context.Users.ToList();
             return View(users);
@@ -48,9 +48,10 @@ namespace VenueApp.Controllers
             */
 
             // If the user is already logged in
-            if (HttpContext.Session.TryGetValue("user", out byte[] value))
+            if (HttpContext.Session.TryGetValue("User", out byte[] value))
             {
-                return RedirectToAction("Index", "User", new { username = HttpContext.Session.GetString("user") });
+                //return RedirectToAction("Index", "User", new { username = HttpContext.Session.GetString("User") });
+                return RedirectToAction("Index", "Dashboard");
             }
             else
             {
@@ -72,13 +73,14 @@ namespace VenueApp.Controllers
                 if ((currentUser != null) && (currentUser.Password == userFromView.Password))
                 {
                     //Login Success... Greet the User
-                    HttpContext.Session.SetString("user", currentUser.Username);
-                    string userInSesion = HttpContext.Session.GetString("user");
+                    HttpContext.Session.SetString("User", currentUser.Username);
+                    string userInSesion = HttpContext.Session.GetString("User");
+                    string userType = context.Types.SingleOrDefault(c => c.ID == currentUser.TypeID).Name;
+                    HttpContext.Session.SetString("Type", userType);
                     TestFunctions.PrintConsoleMessage("LOGIN SUCCESS " + userInSesion);
 
-                    //return Redirect("/User");
-                    //return RedirectToAction("Index", "User",new { username = currentUser.Username });
-                    return RedirectToAction("Index", "User", new { username = userInSesion });
+                    //return RedirectToAction("Index", "User", new { username = userInSesion });
+                    return RedirectToAction("Index", "Dashboard");
                 }
                 else if (currentUser == null)
                 {
@@ -106,9 +108,9 @@ namespace VenueApp.Controllers
         {
             //Delete or clear the Current Session
             HttpContext.Session.Clear();
+            TempData["logoutMessage"] = "You have successfully logged out";
 
-            return RedirectToAction("Index", "User", new { username = HttpContext.Session.GetString("user") });
-            //return RedirectToAction("Index", "User", new { username = "" });
+            return RedirectToAction("Index", "User", new { username = HttpContext.Session.GetString("User") });
         }
 
 
@@ -167,12 +169,13 @@ namespace VenueApp.Controllers
                     context.SaveChanges();
 
                     // Create a new login session (Session["user"] = newUser.Username)
-                    HttpContext.Session.SetString("user", newUser.Username);
-                    string userInSesion = HttpContext.Session.GetString("user");
+                    HttpContext.Session.SetString("User", newUser.Username);
+                    string userInSesion = HttpContext.Session.GetString("User");
+                    string userType = context.Types.SingleOrDefault(c => c.ID == newUser.TypeID).Name;
+                    HttpContext.Session.SetString("Type", newUser.Type.Name);
                     TestFunctions.PrintConsoleMessage("LOGIN SUCCESS " + userInSesion);
 
-                    // Greet the new user and redirect to its dashboard (to be implemented
-
+                    // Greet the new user and redirect to its dashboard
                     return RedirectToAction("Index", "User", new { username = userInSesion });
                 }
                 else
