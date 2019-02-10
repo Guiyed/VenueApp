@@ -13,9 +13,12 @@ namespace VenueApp.Models
         public DateTime Date { get; set; }
         public double Price { get; set; }
         public EventCategory Category { get; set; }
-        public int CategoryID { get; set; }        
-        
-        //public DateTime Created { get; set; }     
+        public int CategoryID { get; set; }
+
+        public bool Protected { get; set; }
+        public bool Deleted { get; set; }
+
+        public DateTime Created { get; set; }     
 
     }
 }
