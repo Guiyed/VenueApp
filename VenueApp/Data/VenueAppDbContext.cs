@@ -22,8 +22,8 @@ namespace VenueApp.Data
         {
             modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
 
-            modelBuilder.Entity<Membership>().HasData(
-                new Membership { ID = 1, Name = "none", Protected = true }
+            modelBuilder.Entity<User>().HasData(
+                new User { ID = 1, Username = "admin", Password = "password", MembershipID = 1, TypeID = 1 ,Protected = true }
                 );
 
             modelBuilder.Entity<Membership>().HasData(
@@ -31,7 +31,7 @@ namespace VenueApp.Data
                 );
 
             modelBuilder.Entity<UserType>().HasData(
-                new UserType { ID = 1, Name = "admin", Protected =true },
+                new UserType { ID = 1, Name = "admin", Protected = true },
                 new UserType { ID = 2, Name = "user", Protected = true }
                 );
 

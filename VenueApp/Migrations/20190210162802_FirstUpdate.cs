@@ -84,22 +84,29 @@ namespace VenueApp.Migrations
                 name: "Protected",
                 table: "Categories",
                 nullable: false,
-                defaultValue: false);
 
+
+                defaultValue: false);
+                                 
             migrationBuilder.InsertData(
                 table: "Memberships",
                 columns: new[] { "ID", "Deleted", "Name", "Protected" },
-                values: new object[] { 1, false, "none", false });
+                values: new object[] { 1, false, "none", true });
 
             migrationBuilder.InsertData(
                 table: "Types",
                 columns: new[] { "ID", "Deleted", "Name", "Protected" },
-                values: new object[] { 1, false, "admin", false });
+                values: new object[] { 1, false, "admin", true });
 
             migrationBuilder.InsertData(
                 table: "Types",
                 columns: new[] { "ID", "Deleted", "Name", "Protected" },
-                values: new object[] { 2, false, "user", false });
+                values: new object[] { 2, false, "user", true });
+
+            migrationBuilder.InsertData(
+             table: "Users",
+             columns: new[] { "ID", "Username", "Password", "MembershipID", "TypeID", "Created", "Deleted", "Protected" },
+             values: new object[] { 1, "admin", "password", 1, 1, DateTime.Now, false, true });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Username",
