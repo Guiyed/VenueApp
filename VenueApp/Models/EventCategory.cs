@@ -10,5 +10,7 @@ namespace VenueApp.Models
         public int ID { get; set; }
         public string Name { get; set; }
 
+        public IList<Event> Events { get; set; }
+
     }
 }

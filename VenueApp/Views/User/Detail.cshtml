@@ -1,0 +1,26 @@
+﻿@model VenueApp.Models.User
+
+@{
+    ViewBag.Title = "User Detail";
+
+    @using Microsoft.AspNetCore.Http
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+    string userType = @HttpContextAccessor.HttpContext.Session.GetString("Type") ?? "";
+}
+
+
+<h1>User Detail (User ID: @Model.ID)</h1>
+<div>
+    <h4>Username: @Model.Username</h4>
+    <h4>First Name: @Model.FirstName</h4>
+    <h4>Last Name: @Model.LastName</h4>
+    <h4>Email: @Model.Email</h4>
+    <!--
+    <h4>Date created: aModel.Created</h4>
+    -->
+    <h4>Membership: @Model.Membership</h4>
+    <h4>UserType: @Model.Type</h4>
+
+    
+</div>

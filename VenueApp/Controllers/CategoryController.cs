@@ -5,48 +5,49 @@ using VenueApp.ViewModels;
 using VenueApp.Data;
 using System.Linq;
 
+
 namespace VenueApp.Controllers
 {
-    public class MembershipController : Controller
+    public class CategoryController : Controller
     {
         private readonly VenueAppDbContext context;
 
-        public MembershipController(VenueAppDbContext dbContext)
+        public CategoryController(VenueAppDbContext dbContext)
         {
             context = dbContext;
         }
 
         public IActionResult Index()
         {
-            List<Membership> memberships = context.Memberships.ToList();
+            List<EventCategory> categories = context.Categories.ToList();
 
-            return View(memberships);
+            return View(categories);
         }
 
         public IActionResult Add()
         {
-            AddMembershipViewModel addMembershipViewModel = new AddMembershipViewModel();
-            return View(addMembershipViewModel);
+            AddCategoryViewModel addCategoryViewModel = new AddCategoryViewModel();
+            return View(addCategoryViewModel);
         }
 
         [HttpPost]
-        public IActionResult Add(AddMembershipViewModel addMembershipViewModel)
+        public IActionResult Add(AddCategoryViewModel addCategoryViewModel)
         {
             if (ModelState.IsValid)
             {
                 // Add the new category to my existing categories
-                Membership newMembership = new Membership
+                EventCategory newCategory = new EventCategory
                 {
-                    Name = addMembershipViewModel.Name
+                    Name = addCategoryViewModel.Name
                 };
 
-                context.Memberships.Add(newMembership);
+                context.Categories.Add(newCategory);
                 context.SaveChanges();
 
-                return Redirect("/Membership");
+                return Redirect("/Category");
             }
 
-            return View(addMembershipViewModel);
+            return View(addCategoryViewModel);
         }
 
         public IActionResult Remove()
@@ -60,13 +61,14 @@ namespace VenueApp.Controllers
         {
             foreach (int categoryId in categoryIds)
             {
-                Membership theMembership = context.Memberships.Single(c => c.ID == categoryId);
-                context.Memberships.Remove(theMembership);
-            }
+                EventCategory theCategory = context.Categories.Single(c => c.ID == categoryId);
+                context.Categories.Remove(theCategory);            }
 
             context.SaveChanges();
 
-            return Redirect("/Membership");
+            return Redirect("/Category");
         }
+
+
     }
 }
