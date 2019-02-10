@@ -188,5 +188,31 @@ namespace VenueApp.Controllers
             }
             return View(userFromView);
         }
+
+
+        //----------------------------------- DETAILS -----------------------------------//
+        // GET: /<controller>/
+        public IActionResult Detail(int userId)
+        {
+            User selectedUser = context.Users.Single(c => c.ID == userId);            
+            UserType userType = context.Types.Single(c => c.ID == selectedUser.TypeID);
+            Membership userMembership = context.Memberships.Single(c => c.ID == selectedUser.MembershipID);
+
+            User userToShow = new User()
+            {
+                Username = selectedUser.Username,
+                FirstName = selectedUser.FirstName,
+                LastName = selectedUser.LastName,
+                Email = (selectedUser.Email ?? "-" ),
+                Membership = userMembership,
+                Type = userType
+            };
+            
+            return View(userToShow);
+        }
+
+
+
+
     }
 }

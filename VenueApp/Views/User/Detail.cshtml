@@ -10,17 +10,17 @@
 }
 
 
-<h1>User Detail (User ID: @Model.ID)</h1>
+<h1>User Detail (ID = @Model.ID)</h1>
 <div>
-    <h4>Username: @Model.Username</h4>
-    <h4>First Name: @Model.FirstName</h4>
-    <h4>Last Name: @Model.LastName</h4>
-    <h4>Email: @Model.Email</h4>
+    <h4>Username: <b><i>@Model.Username</i></b></h4>
+    <h4>First Name: <b><i>@Model.FirstName</i></b></h4>
+    <h4>Last Name: <b><i>@Model.LastName</i></b></h4>
+    <h4>Email: <b><i>@Model.Email</i></b></h4>
     <!--
-    <h4>Date created: aModel.Created</h4>
+    <h4>Date created: <b><italic>aModel.Created</h4>
     -->
-    <h4>Membership: @Model.Membership</h4>
-    <h4>UserType: @Model.Type</h4>
+    <h4>Membership: <b><i>@Model.Membership.Name</i></b></h4>
+    <h4>User Role Type: <b><i>@Model.Type.Name</i></b></h4>
 
-    
+
 </div>

@@ -6,9 +6,9 @@
 
 <form method="post">
 
-    @foreach (var membership in ViewBag.membership)
+    @foreach (var membership in ViewBag.memberships)
     {
-        <input type="checkbox" name="categoryIds" id="@membership.ID" value="@membership.ID" />
+        <input type="checkbox" name="membershipIds" id="@membership.ID" value="@membership.ID" />
         <label for="@membership.ID">@membership.Name</label>
         <br />
     }

@@ -11,7 +11,7 @@
     @foreach (var membership in Model)
     {
 
-        <li>@membership.Name</li>
+    <li>@membership.Name (ID = @membership.ID)</li>
     }
 </ul>
 
@@ -21,4 +21,4 @@
     <p>No Memberships yet!</p>
 }
 
-    <p><a asp-controller="Membership" asp-action="Add">Add </a> | <a asp-controller="Memberships" asp-action="Remove">Remove</a></p>
+    <p><a asp-controller="Membership" asp-action="Add">Add </a> | <a asp-controller="Membership" asp-action="Remove">Remove</a></p>

@@ -51,16 +51,16 @@ namespace VenueApp.Controllers
 
         public IActionResult Remove()
         {
-            ViewBag.categories = context.Categories.ToList();
+            ViewBag.memberships = context.Memberships.ToList();
             return View();
         }
 
         [HttpPost]
-        public IActionResult Remove(int[] categoryIds)
+        public IActionResult Remove(int[] membershipIds)
         {
-            foreach (int categoryId in categoryIds)
+            foreach (int membershipId in membershipIds)
             {
-                Membership theMembership = context.Memberships.Single(c => c.ID == categoryId);
+                Membership theMembership = context.Memberships.Single(c => c.ID == membershipId);
                 context.Memberships.Remove(theMembership);
             }
 

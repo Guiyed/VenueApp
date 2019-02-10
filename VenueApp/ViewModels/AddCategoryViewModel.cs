@@ -10,7 +10,7 @@ namespace VenueApp.ViewModels
     {
         [Required]
         [RegularExpression("^[a-zA-Z0-9]{1,12}$", ErrorMessage = "User must be between 1 and 12 alphanumeric characters")]
-        [Display(Name = "Category Name")]
+        [Display(Name = "Event Category Name")]
         public string Name { get; set; }
         
 
