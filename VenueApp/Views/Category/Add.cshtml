@@ -9,8 +9,11 @@
         <input class="form-control" asp-for="Name" />
         <span class="small text-danger" asp-validation-for="Name"></span>
     </div>
-   
 
-    <input class="btn bg-primary" type="submit" value="Add Category" />
+
+    <input class="btn bg-primary pull-right" type="submit" value="Add Category" />
 
 </form>
+
+<br />
+<p><a asp-controller="Category" asp-action="Index">back</a>

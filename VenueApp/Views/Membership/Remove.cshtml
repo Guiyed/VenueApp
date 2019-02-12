@@ -1,17 +1,32 @@
 ﻿@{
     ViewBag.Title = "Remove Membership";
+    int count = 1;
 }
 
 <h1>@ViewBag.Title</h1>
 
 <form method="post">
 
-    @foreach (var membership in ViewBag.memberships)
-    {
-        <input type="checkbox" name="membershipIds" id="@membership.ID" value="@membership.ID" />
-        <label for="@membership.ID">@membership.Name</label>
-        <br />
-    }
+    <table class="table table-striped">
+        <tr class="info">
+            <th class="col-md-1">#</th>
+            <th class="col-md-10">Membership</th>
+            <th class="col-md-1">Selection</th>
+        </tr>
 
-    <input class="btn bg-danger" type="submit" value="Remove Selected Membership" />
+        @foreach (var membership in ViewBag.memberships)
+        {
+            <tr>
+                <td>@count</td>
+                <td class=""><label for="@membership.ID">@membership.Name</label></td>
+                <td class="text-center"><input type="checkbox" name="categoryIds" id="@membership.ID" value="@membership.ID" /> </td>
+            </tr>
+            count += 1;
+        }
+    </table>
+
+    <input class="btn bg-danger pull-right" type="submit" value="Remove Selected Membership" />
 </form>
+
+<br />
+<p><a asp-controller="Membership" asp-action="Index">back</a>

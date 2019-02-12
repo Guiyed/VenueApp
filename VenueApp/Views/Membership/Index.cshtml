@@ -6,12 +6,12 @@
 
 <h1>@ViewBag.Title</h1>
 
-<ul>
+<ul class="list-group">
 
     @foreach (var membership in Model)
     {
 
-    <li>ID = @membership.ID: @membership.Name @(membership.Protected ? "(Protected)":"")</li>
+    <li class="list-group-item">ID = @membership.ID: <b>@membership.Name</b> &nbsp; @(membership.Protected ? "(Protected)":"")</li>
     }
 </ul>
 
