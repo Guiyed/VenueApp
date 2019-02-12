@@ -63,6 +63,10 @@ namespace VenueApp.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new { ID = 1, Deleted = false, Name = "none", Protected = false }
+                    );
                 });
 
             modelBuilder.Entity("VenueApp.Models.Membership", b =>

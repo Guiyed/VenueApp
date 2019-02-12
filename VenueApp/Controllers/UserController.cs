@@ -28,10 +28,9 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Index(string username)
         {
-            //If the username is a Login user get username else get empty ""
+            //If the username is a Logged in user... get username else get empty ""
             ViewBag.Username = string.IsNullOrEmpty(username as string) ? "" : username;
             ViewBag.LogoutMessage = TempData["logoutMessage"] ?? "";
-            //IList<User> users = context.Users.Include(c => c.Type).ToList();
             IList<User> users = context.Users.ToList();
             return View(users);
         }
@@ -62,7 +61,6 @@ namespace VenueApp.Controllers
         }
 
         // POST: /<controller>/
-
         [HttpPost]
         public IActionResult Login(LoginViewModel userFromView)
         {
@@ -160,6 +158,7 @@ namespace VenueApp.Controllers
                         LastName = userFromView.LastName,
                         Email = userFromView.Email,
                         Password = userFromView.Password,
+                        Created = DateTime.Now,
                         TypeID = 2,         // Default for "Regular user", needs to be implemented for the next database update
                         MembershipID = 1    // Default for "None"
                                             //Created = DateTime.Now    //To be used when updating database, needs to be implemented for the next database update
@@ -190,13 +189,16 @@ namespace VenueApp.Controllers
         }
 
 
+
         //----------------------------------- DETAILS -----------------------------------//
         // GET: /<controller>/
         public IActionResult Detail(int userId)
         {
-            User selectedUser = context.Users.Single(c => c.ID == userId);            
-            UserType userType = context.Types.Single(c => c.ID == selectedUser.TypeID);
-            Membership userMembership = context.Memberships.Single(c => c.ID == selectedUser.MembershipID);
+
+            User selectedUser = context.Users.Include(c => c.Type).Include(d => d.Membership).Single(c => c.ID == userId);
+            //User selectedUser = context.Users.Single(c => c.ID == userId);            
+            //UserType userType = context.Types.Single(c => c.ID == selectedUser.TypeID);
+            //Membership userMembership = context.Memberships.Single(c => c.ID == selectedUser.MembershipID);
 
             User userToShow = new User()
             {
@@ -204,8 +206,11 @@ namespace VenueApp.Controllers
                 FirstName = selectedUser.FirstName,
                 LastName = selectedUser.LastName,
                 Email = (selectedUser.Email ?? "-" ),
-                Membership = userMembership,
-                Type = userType
+                Created = selectedUser.Created,
+                Membership = selectedUser.Membership,
+                Type = selectedUser.Type
+                //Membership = userMembership,
+                //Type = userType
             };
             
             return View(userToShow);

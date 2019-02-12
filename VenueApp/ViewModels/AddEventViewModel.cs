@@ -10,24 +10,37 @@ namespace VenueApp.ViewModels
 {
     public class AddEventViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "!! Please give your event an Awesome Name !!!")]
         [Display(Name = "Event Name")]
+        [RegularExpression("^[a-zA-Z0-9 ]{1,30}$", ErrorMessage = "Do not use special caracters and limit the name to 30 characters")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "You must give your event a description")]
         public string Description { get; set; }
 
-        //[Required]
+        [Required]
+        [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
-        //[Required]
+        [Required]
+        //[DataType(DataType.TimeSpan)]
+        public TimeSpan Time { get; set; }
+
+        [Required]
+        [DataType(DataType.Currency)]
         public double Price { get; set; }
+
+        //[Required]
+        public string Location { get; set; }
 
         [Required]
         [Display(Name = "Category")]
         public int CategoryID { get; set; }                             
         
+        [Required]
         public List<SelectListItem> Categories { get; set; }
+
+        public bool ServerError { get; set; }
 
 
         public AddEventViewModel()
@@ -35,19 +48,34 @@ namespace VenueApp.ViewModels
 
 
         public AddEventViewModel(IEnumerable<EventCategory> categories) {
+            SetCategories(categories);             
+        }
 
-            Categories = new List<SelectListItem>();
+        public void SetCategories(IEnumerable<EventCategory> categories)
+        {
+            List<SelectListItem> CategoriesCopy = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Value = "Select One",
+                    Text = "Select One",
+                    Selected = true,
+                }
+            };
 
             foreach (EventCategory category in categories)
             {
-                Categories.Add(new SelectListItem
+
+                CategoriesCopy.Add(new SelectListItem
                 {
                     Value = ((int)category.ID).ToString(),
-                    Text = category.Name.ToString()
+                    Text = category.Name.ToString(),
+                    Selected = (category.Name.ToString().ToLower() == "none") ? true : false,
                 });
 
-            }              
+            }
 
+            this.Categories = CategoriesCopy;
         }
     }
 }
