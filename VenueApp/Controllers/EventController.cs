@@ -11,8 +11,6 @@ using VenueApp.Models;
 using VenueApp.ViewModels;
 using VenueApp.Helpers;
 
-using Microsoft.AspNetCore.Mvc.Rendering;
-
 namespace VenueApp.Controllers
 {
     public class EventController : Controller
@@ -61,7 +59,8 @@ namespace VenueApp.Controllers
                     Description = addEventViewModel.Description,
                     Category = newEventCategory,
                     Price = addEventViewModel.Price,
-                    Date = addEventViewModel.Date + addEventViewModel.Time
+                    Date = addEventViewModel.Date + addEventViewModel.Time,
+                    Created = DateTime.Now
                 };
                 
                 context.Events.Add(newEvent);
@@ -144,5 +143,34 @@ namespace VenueApp.Controllers
             return View(modEvent);
 
         }
+
+
+
+        //----------------------------------- DETAILS -----------------------------------//
+        // GET: /<controller>/
+        public IActionResult Detail(int eventId)
+        {
+
+            Event selectedEvent = context.Events.Include(c => c.Category).Single(c => c.ID == eventId);
+
+            Event eventToShow = new Event()
+            {
+                ID = selectedEvent.ID,
+                Name = selectedEvent.Name,
+                Description = selectedEvent.Description,
+                Date = selectedEvent.Date,
+                Price = selectedEvent.Price,
+                Category = selectedEvent.Category,
+                //Location = userMembership,
+                Created = selectedEvent.Created
+            };
+
+            return View(eventToShow);
+        }
+
+
+
+
+
     }
 }
