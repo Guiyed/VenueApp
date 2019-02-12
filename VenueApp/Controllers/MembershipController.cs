@@ -22,7 +22,11 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            List<Membership> memberships = context.Memberships.ToList();
+            //List<Membership> memberships = context.Memberships.ToList();
+
+            //pass Non "deleted" memberships 
+            List<Membership> memberships = context.Memberships.Where(c => c.Deleted == false).ToList();
+
 
             return View(memberships);
         }
@@ -64,7 +68,10 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Remove()
         {
-            ViewBag.memberships = context.Memberships.ToList();
+            //ViewBag.memberships = context.Memberships.ToList();
+
+            //pass Non "deleted" and Non Protected memberships 
+            ViewBag.memberships = context.Memberships.Where(c => (c.Deleted == false) && (c.Protected == false)).ToList();
             return View();
         }
 
@@ -74,8 +81,14 @@ namespace VenueApp.Controllers
         {
             foreach (int membershipId in membershipIds)
             {
-                Membership theMembership = context.Memberships.Single(c => c.ID == membershipId);
-                context.Memberships.Remove(theMembership);
+                Membership theMembership = context.Memberships.SingleOrDefault(c => c.ID == membershipId);
+                //context.Memberships.Remove(theMembership);    //Change to Deleted Flag to avoid loss of data
+
+                // Deleted Flag method
+                if (theMembership != null)
+                {
+                    theMembership.Deleted = true;
+                }
             }
 
             context.SaveChanges();

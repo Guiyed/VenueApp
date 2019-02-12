@@ -11,7 +11,7 @@
     @foreach (var membership in Model)
     {
 
-    <li>@membership.Name (ID = @membership.ID)</li>
+    <li>ID = @membership.ID: @membership.Name @(membership.Protected ? "(Protected)":"")</li>
     }
 </ul>
 
