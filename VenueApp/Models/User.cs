@@ -9,7 +9,7 @@ namespace VenueApp.Models
     public class User
     {
         public int ID { get; set; }
-        //[Index("UsernameIndex", IsUnique = true)] // not suported on EF core
+        //[Index("UsernameIndex", IsUnique = true)] // not suported on EF core --> Found a workaround in dbcontext.
         public string Username { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

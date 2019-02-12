@@ -14,6 +14,7 @@ namespace VenueApp.Models
         public double Price { get; set; }
         public EventCategory Category { get; set; }
         public int CategoryID { get; set; }
+        //public String Location {get; set;}
 
         public bool Protected { get; set; }
         public bool Deleted { get; set; }

@@ -11,6 +11,8 @@ using VenueApp.Models;
 using VenueApp.ViewModels;
 using VenueApp.Helpers;
 
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 namespace VenueApp.Controllers
 {
     public class EventController : Controller
@@ -22,7 +24,9 @@ namespace VenueApp.Controllers
             context = dbContext;
         }
 
-        
+
+
+        //-------------------------------- INDEX -----------------------------------//
         // GET: /<controller>/
         public IActionResult Index()
         {
@@ -31,12 +35,17 @@ namespace VenueApp.Controllers
             return View(events);
         }
 
+
+
+        //-------------------------------- ADD EVENT -----------------------------------//
+        // GET: /<controller>/
         public IActionResult Add()
         {
             AddEventViewModel addEventViewModel = new AddEventViewModel(context.Categories.ToList());
             return View(addEventViewModel);
         }
 
+        // POST: /<controller>/
         [HttpPost]
         public IActionResult Add(AddEventViewModel addEventViewModel)
         {
@@ -50,20 +59,25 @@ namespace VenueApp.Controllers
                 {
                     Name = addEventViewModel.Name,
                     Description = addEventViewModel.Description,
-                    Category = newEventCategory
+                    Category = newEventCategory,
+                    Price = addEventViewModel.Price,
+                    Date = addEventViewModel.Date + addEventViewModel.Time
                 };
-
-
-
+                
                 context.Events.Add(newEvent);
                 context.SaveChanges();
 
                 return Redirect("/Event");
             }
 
+            addEventViewModel.SetCategories(context.Categories.ToList());
             return View(addEventViewModel);
         }
 
+
+
+        //-------------------------------- REMOVE OR DELETE EVENT -----------------------------------//
+        // GET: /<controller>/
         public IActionResult Remove()
         {
             ViewBag.title = "Remove Events";
@@ -71,6 +85,7 @@ namespace VenueApp.Controllers
             return View();
         }
 
+        // POST: /<controller>/
         [HttpPost]
         public IActionResult Remove(int[] eventIds)
         {
@@ -85,6 +100,10 @@ namespace VenueApp.Controllers
             return Redirect("/");
         }
 
+
+
+        //-------------------------------- EDIT AN EVENT -----------------------------------//
+        // GET: /<controller>/
         public IActionResult Edit(int eventId)
         {
             Event eventToEdit = context.Events.Single(c => c.ID == eventId);
@@ -99,6 +118,7 @@ namespace VenueApp.Controllers
             return View(editEventViewModel);
         }
 
+        // POST: /<controller>/
         [HttpPost]
         public IActionResult Edit(EditEventViewModel modEvent)
         {

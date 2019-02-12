@@ -26,6 +26,10 @@ namespace VenueApp.Data
                 new User { ID = 1, Username = "admin", Password = "password", MembershipID = 1, TypeID = 1 ,Protected = true }
                 );
 
+            modelBuilder.Entity<EventCategory>().HasData(
+                new EventCategory { ID = 1, Name = "none", Protected = true }
+                );
+
             modelBuilder.Entity<Membership>().HasData(
                 new Membership { ID = 1, Name = "none", Protected = true }
                 );
