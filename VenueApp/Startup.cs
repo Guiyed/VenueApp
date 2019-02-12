@@ -69,8 +69,8 @@ namespace VenueApp
             {
                 routes.MapRoute(
                     name: "default",
-                    //template: "{controller=Home}/{action=Index}/{id?}");
-                    template: "{controller=Test}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
+                    //template: "{controller=Test}/{action=Index}/{id?}");
             });
         }
     }

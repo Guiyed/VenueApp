@@ -22,8 +22,21 @@
 </ItemGroup>
   
 <ItemGroup>
-  <Folder Include="Views\Event\" />
-  <Folder Include="Views\Membership\" />
+  <Content Update="Views\Membership\Add.cshtml">
+    <Pack>$(IncludeRazorContentInPack)</Pack>
+  </Content>
+  <Content Update="Views\Membership\Index.cshtml">
+    <Pack>$(IncludeRazorContentInPack)</Pack>
+  </Content>
+  <Content Update="Views\Membership\Remove.cshtml">
+    <Pack>$(IncludeRazorContentInPack)</Pack>
+  </Content>
+  <Content Update="Views\Role\Index.cshtml">
+    <Pack>$(IncludeRazorContentInPack)</Pack>
+  </Content>
+  <Content Update="Views\User\Add.cshtml">
+    <Pack>$(IncludeRazorContentInPack)</Pack>
+  </Content>
 </ItemGroup>
 
 

@@ -30,7 +30,7 @@
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                         <img style="margin-top: -15px" alt="Brand" src="~/images/venue.png">
                     </a>
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -43,19 +43,32 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li><a asp-area="" asp-controller="Test" asp-action="Index">LandingPage</a></li>
-                        <li><a asp-area="" asp-controller="User" asp-action="Index">UserIndex</a></li>
+                        <li><a asp-area="" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                        <li><a asp-area="" asp-controller="Test" asp-action="Index">TestPage</a></li>                        
                     </ul>
+
                     <ul class="nav navbar-nav navbar-left">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">TEST <span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Events <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
+                                <li><a href="#">Category 1</a></li>
+                                <li><a href="#">Category 2</a></li>
+                                <li><a href="#">Category 3</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
+                                <li><a href="#">Booked Events</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-left">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data(Models) <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a asp-area="" asp-controller="User" asp-action="Index">User Index</a></li>
+                                <li><a asp-area="" asp-controller="Event" asp-action="Index">Events Index</a></li>
+                                <li><a asp-area="" asp-controller="Category" asp-action="Index">Event Categories Index</a></li>
+                                <li><a asp-area="" asp-controller="Membership" asp-action="Index">Memberships Index</a></li>
+                                <li><a asp-area="" asp-controller="Role" asp-action="Index">User Roles Index</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -88,10 +101,11 @@
 
         <div class="container body-content">
             @RenderBody()
-            <hr />
-            <footer class="text-center">
+            
+            <footer class="text-center navbar-fixed-bottom">
+                <hr />
                 <div>
-                    <ul class="list-inline">
+                    <ul class="list-inline" style="margin-bottom: 5px;">
                         <li><a href="https://www.facebook.com/" target="_blank" class="btn social-icon"><i class="fab fa-facebook fa-lg"></i></a></li>
                         <li><a href="https://twitter.com/" target="_blank" class="btn social-icon"><i class="fab fa-twitter fa-lg"></i></a></li>
                         <li><a href="https://www.linkedin.com/" target="_blank" class="btn social-icon"><i class="fab fa-linkedin fa-lg"></i></a></li>
@@ -100,15 +114,15 @@
                     </ul>
                 </div>
                 <div>
-                    <ul class="list-inline">
-                        <li><a href="#">About Company</a>&nbsp;&nbsp;&nbsp;|</li>
+                    <ul class="list-inline footerLinks">
+                        <li><a asp-area="" asp-controller="Home" asp-action="About">About Company</a>&nbsp;&nbsp;&nbsp;|</li>
                         <li><a href="#">Corporate Partnerships</a>&nbsp;&nbsp;&nbsp;|</li>
                         <li><a href="#">Fundraisers &amp; Donations</a>&nbsp;&nbsp;&nbsp;|</li>
                         <li><a href="#">Help</a>&nbsp;&nbsp;&nbsp;|</li>
-                        <li><a href="#">Contact Us</a>&nbsp;&nbsp;&nbsp;|</li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact Us</a>&nbsp;&nbsp;&nbsp;|</li>
                         <li><a href="#" target="_blank" rel="noopener">Careers</a></li>
                     </ul>
-                    <p><span class="copyright">Copyright &copy; 2019 - VenueApp  | <a href="#">Terms of Use</a> | <a href="#">Privacy Policy</a></span></p>
+                    <p><span class="copyright">Copyright &copy; 2019 - VenueApp  | <a href="https://app.termly.io/document/terms-of-use-for-website/a764b322-a351-457e-9bae-4492e54afeb5">Terms of Use</a> | <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy Policy</a></span></p>
                 </div>
             </footer>
         </div>

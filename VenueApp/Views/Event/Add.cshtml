@@ -1,0 +1,76 @@
+﻿@model VenueApp.ViewModels.AddEventViewModel
+@{
+    
+}
+
+<h1>Add Event</h1>
+
+
+<form asp-controller="Event" asp-action="Add" method="post">
+    <div class="container">
+        <div class=" row"> <h3> New Event Data</h3></div>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label asp-for="Name"></label>
+                <div>
+                    <input class="form-control " asp-for="Name" value="@Model.Name" />
+                    <span class="small text-danger" asp-validation-for="Name"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label asp-for="Description"></label>
+                <div>
+                    <textarea class="form-control" style="height: 200px" asp-for="Description" value="@Model.Description"></textarea>
+                    <span class="small text-danger" asp-validation-for="Description"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label asp-for="CategoryID"></label>
+                <select class="form-control " asp-for="CategoryID" asp-items="@Model.Categories"> </select>
+                <span class="small text-danger" asp-validation-for="CategoryID"></span>
+                <input type="hidden" asp-for="Categories" value="@Model.Categories" />
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="Date"></label>
+                <input type="date" class="form-control " style="line-height: 1" asp-for="Date" value="@Model.Date.ToString("yyyy-MM-dd")" />
+                <span class="small text-danger" asp-validation-for="Date"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="Time"></label>
+                <input type="time" class="form-control " style="line-height: 1" asp-for="Time" value="@(Model.Time)" />
+                <span class="small text-danger" asp-validation-for="Time"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="Price">Price (in dollars)</label>
+                <div class="input-group">
+                    <div class="input-group-addon">$</div>
+                    <input type="number" inputmode="numeric" step="0.01" min="0.00" max="500.00" class="form-control" asp-for="Price" value="@(Model.Price)" placeholder="Amount" />
+                </div>
+                <span class="small text-danger" asp-validation-for="Price"></span>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label asp-for="Location"></label>
+                <input class="form-control" asp-for="Location" />
+
+            </div>
+        </div>
+
+
+        <input class="pull-right btn btn-success" type="submit" value="Add Event" />
+
+    </div>
+    <br />
+    <div>
+        @if (Model.ServerError)
+        {
+            <span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>
+        }
+        <span class="text-danger" asp-validation-for="ServerError"></span>
+    </div>
+</form>
+

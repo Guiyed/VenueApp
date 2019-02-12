@@ -1,0 +1,23 @@
+﻿@model List<VenueApp.Models.UserType>
+
+@{
+    ViewBag.Title = " List of User Roles";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<ul>
+
+    @foreach (var role in Model)
+    {
+
+    <li>@role.Name (ID = @role.ID)</li>
+    }
+</ul>
+
+
+@if (Model.Count == 0)
+{
+    <p>No User Types or Roles yet!</p>
+}
+   

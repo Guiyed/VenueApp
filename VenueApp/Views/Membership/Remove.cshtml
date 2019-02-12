@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Remove Membership";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<form method="post">
+
+    @foreach (var membership in ViewBag.memberships)
+    {
+        <input type="checkbox" name="membershipIds" id="@membership.ID" value="@membership.ID" />
+        <label for="@membership.ID">@membership.Name</label>
+        <br />
+    }
+
+    <input type="submit" value="Remove Selected Membership" />
+</form>

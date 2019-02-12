@@ -28,10 +28,9 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Index(string username)
         {
-            //If the username is a Login user get username else get empty ""
+            //If the username is a Logged in user... get username else get empty ""
             ViewBag.Username = string.IsNullOrEmpty(username as string) ? "" : username;
             ViewBag.LogoutMessage = TempData["logoutMessage"] ?? "";
-            //IList<User> users = context.Users.Include(c => c.Type).ToList();
             IList<User> users = context.Users.ToList();
             return View(users);
         }
@@ -62,7 +61,6 @@ namespace VenueApp.Controllers
         }
 
         // POST: /<controller>/
-
         [HttpPost]
         public IActionResult Login(LoginViewModel userFromView)
         {
@@ -160,6 +158,7 @@ namespace VenueApp.Controllers
                         LastName = userFromView.LastName,
                         Email = userFromView.Email,
                         Password = userFromView.Password,
+                        Created = DateTime.Now,
                         TypeID = 2,         // Default for "Regular user", needs to be implemented for the next database update
                         MembershipID = 1    // Default for "None"
                                             //Created = DateTime.Now    //To be used when updating database, needs to be implemented for the next database update
@@ -188,5 +187,91 @@ namespace VenueApp.Controllers
             }
             return View(userFromView);
         }
+
+
+
+
+
+        //----------------------------------- ADD USER -----------------------------------//
+        // GET: /<controller>/
+        public IActionResult Add()
+        {
+            AddUserViewModel userViewModel = new AddUserViewModel(context.Memberships.ToList(), context.Types.ToList());
+
+            return View(userViewModel);
+        }
+
+        // POST: /<controller>/
+        [HttpPost]
+        public IActionResult Add(AddUserViewModel userFromView)
+        {            
+            if (ModelState.IsValid)
+            {
+                if (context.Users.SingleOrDefault(c => c.Username == userFromView.Username) == null)   // If is an Avaliable Username (It needs to be unique)
+                {
+                    // Add the new user to my existing users table
+                    User newUser = new User
+                    {
+                        Username = userFromView.Username,
+                        FirstName = userFromView.FirstName,
+                        LastName = userFromView.LastName,
+                        Email = userFromView.Email,
+                        Password = userFromView.Password,
+                        Created = DateTime.Now,
+                        TypeID = userFromView.UserTypeID,         
+                        MembershipID = userFromView.MembershipID    
+                    };
+
+                    context.Users.Add(newUser);
+                    context.SaveChanges();
+                    
+                    // Greet the new user and redirect to its dashboard
+                    return RedirectToAction("Index", "User");
+                }
+                else
+                {
+                    // Cannot use this Username because there is already an User with this Username
+                    ModelState.AddModelError("ServerError", "Sorry, but seems like someone else already has that Username. Please try with a different one.");
+                    userFromView.ServerError = true;
+                    TestFunctions.PrintConsoleMessage("DUPLICATED USER");
+                }
+            }
+
+            userFromView.SetSelectList(context.Memberships.ToList(), context.Types.ToList());
+            return View(userFromView);
+        }
+
+
+
+        //----------------------------------- DETAILS -----------------------------------//
+        // GET: /<controller>/
+        public IActionResult Detail(int userId)
+        {
+
+            User selectedUser = context.Users.Include(c => c.Type).Include(d => d.Membership).Single(c => c.ID == userId);
+            //User selectedUser = context.Users.Single(c => c.ID == userId);            
+            //UserType userType = context.Types.Single(c => c.ID == selectedUser.TypeID);
+            //Membership userMembership = context.Memberships.Single(c => c.ID == selectedUser.MembershipID);
+
+            User userToShow = new User()
+            {
+                ID = userId,
+                Username = selectedUser.Username,
+                FirstName = selectedUser.FirstName,
+                LastName = selectedUser.LastName,
+                Email = (selectedUser.Email ?? "-" ),
+                Created = selectedUser.Created,
+                Membership = selectedUser.Membership,
+                Type = selectedUser.Type
+                //Membership = userMembership,
+                //Type = userType
+            };
+            
+            return View(userToShow);
+        }
+
+
+
+
     }
 }

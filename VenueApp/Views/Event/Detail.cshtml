@@ -1,0 +1,27 @@
+﻿@model VenueApp.Models.Event
+
+@{
+    ViewBag.Title = "Event Detail";
+
+    @using Microsoft.AspNetCore.Http
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+    string userType = @HttpContextAccessor.HttpContext.Session.GetString("Type") ?? "";
+}
+
+
+<h1>Event Detail (ID = @Model.ID)</h1>
+<div>
+    <h4>Name: <b><i>@Model.Name</i></b></h4>
+    <h4>Description: <b><i>@Model.Description</i></b></h4>
+    <h4>Date: <b><i>@Model.Date</i></b></h4>
+    <h4>Category: <b><i>@Model.Category.Name</i></b></h4>
+    <h4>Price: <b><i>@Model.Price</i></b></h4>
+    <!--   <h4>Location: <b><i>aModel.Location</i></b></h4> -->
+    <h4>Created: <b><i>@Model.Created</i></b></h4>
+
+</div>
+
+
+<p><a asp-controller="Event" asp-action="Index">Index</a> &nbsp;&nbsp; [<a asp-controller="Event" asp-action="Detail" asp-route-eventId="@((Model.ID == 1)?1:Model.ID-1)">prev</a> | <a asp-controller="Event" asp-action="Detail" asp-route-eventId="@(Model.ID+1)">next</a>]</p>
+<!-- There is a BUG here with ID not in database-->

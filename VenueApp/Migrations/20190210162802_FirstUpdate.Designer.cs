@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VenueApp.Data;
 
 namespace VenueApp.Migrations
 {
     [DbContext(typeof(VenueAppDbContext))]
-    partial class VenueAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190210162802_FirstUpdate")]
+    partial class FirstUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,10 +65,6 @@ namespace VenueApp.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new { ID = 1, Deleted = false, Name = "none", Protected = false }
-                    );
                 });
 
             modelBuilder.Entity("VenueApp.Models.Membership", b =>
