@@ -16,6 +16,10 @@ namespace VenueApp.Controllers
             context = dbContext;
         }
 
+
+
+        //-------------------------------- INDEX -----------------------------------//
+        // GET: /<controller>/
         public IActionResult Index()
         {
             List<Membership> memberships = context.Memberships.ToList();
@@ -23,12 +27,17 @@ namespace VenueApp.Controllers
             return View(memberships);
         }
 
+
+
+        //-------------------------------- ADD -----------------------------------//
+        // GET: /<controller>/
         public IActionResult Add()
         {
             AddMembershipViewModel addMembershipViewModel = new AddMembershipViewModel();
             return View(addMembershipViewModel);
         }
 
+        // POST: /<controller>/
         [HttpPost]
         public IActionResult Add(AddMembershipViewModel addMembershipViewModel)
         {
@@ -49,12 +58,17 @@ namespace VenueApp.Controllers
             return View(addMembershipViewModel);
         }
 
+
+
+        //-------------------------------- REMOVE -----------------------------------//
+        // GET: /<controller>/
         public IActionResult Remove()
         {
             ViewBag.memberships = context.Memberships.ToList();
             return View();
         }
 
+        // POST: /<controller>/
         [HttpPost]
         public IActionResult Remove(int[] membershipIds)
         {
