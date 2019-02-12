@@ -17,6 +17,10 @@ namespace VenueApp.Controllers
             context = dbContext;
         }
 
+
+
+        //-------------------------------- INDEX -----------------------------------//
+        // GET: /<controller>/
         public IActionResult Index()
         {
             List<EventCategory> categories = context.Categories.ToList();
@@ -24,12 +28,17 @@ namespace VenueApp.Controllers
             return View(categories);
         }
 
+
+
+        //-------------------------------- ADD -----------------------------------//
+        // GET: /<controller>/
         public IActionResult Add()
         {
             AddCategoryViewModel addCategoryViewModel = new AddCategoryViewModel();
             return View(addCategoryViewModel);
         }
 
+        // POST: /<controller>/
         [HttpPost]
         public IActionResult Add(AddCategoryViewModel addCategoryViewModel)
         {
@@ -50,12 +59,15 @@ namespace VenueApp.Controllers
             return View(addCategoryViewModel);
         }
 
+        //-------------------------------- REMOVE -----------------------------------//
+        // GET: /<controller>/
         public IActionResult Remove()
         {
             ViewBag.categories = context.Categories.ToList();
             return View();
         }
 
+        // GET: /<controller>/
         [HttpPost]
         public IActionResult Remove(int[] categoryIds)
         {
