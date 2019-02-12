@@ -1,0 +1,87 @@
+﻿@model VenueApp.ViewModels.AddUserViewModel
+
+@{
+    ViewBag.Title = "Add User";
+}
+
+
+<h1>@ViewBag.Title</h1>
+
+<form asp-controller="User" asp-action="Add" method="post">
+    <div class="container">
+        <div class=" row"> <h3> New User Data</h3></div>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label asp-for="Username"></label>
+                <div>
+                    <input class="form-control " asp-for="Username" value="@Model.Username" />
+                    <span class="small text-danger" asp-validation-for="Username"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label asp-for="Email"></label>
+                <div>
+                    <input class="form-control " asp-for="Email" value="@Model.Email" />
+                    <span class="small text-danger" asp-validation-for="Email"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label asp-for="FirstName"></label>
+                <div>
+                    <input class="form-control " asp-for="FirstName" value="@Model.FirstName" />
+                    <span class="small text-danger" asp-validation-for="FirstName"></span>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="LastName"></label>
+                <div>
+                    <input class="form-control " asp-for="LastName" value="@Model.LastName" />
+                    <span class="small text-danger" asp-validation-for="LastName"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label asp-for="Password"></label>
+                <input class="form-control" asp-for="Password" />
+                <span class="small text-danger" asp-validation-for="Password"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Verify"></label>
+                <input class="form-control" asp-for="Verify" />
+                <span class="small text-danger" asp-validation-for="Verify"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label asp-for="MembershipID"></label>
+                <select class="form-control " asp-for="MembershipID" asp-items="@Model.Memberships"> </select>
+                <span class="small text-danger" asp-validation-for="MembershipID"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="UserTypeID"></label>
+                <select class="form-control " asp-for="UserTypeID" asp-items="@Model.Roles"> </select>
+                <span class="small text-danger" asp-validation-for="UserTypeID"></span>
+            </div>
+        </div>
+        <br />
+        <input class="center-block btn btn-info btn-lg" type="submit" value="Add User To Database" />
+
+    </div>
+        <br />
+        <br />
+        <div>
+            @if (Model.ServerError)
+            {
+                <span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>
+            }
+            <span class="text-danger" asp-validation-for="ServerError"></span>
+        </div>
+</form>
+
+
+

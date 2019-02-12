@@ -40,6 +40,7 @@ namespace VenueApp.Controllers
         public IActionResult Add()
         {
             AddEventViewModel addEventViewModel = new AddEventViewModel(context.Categories.ToList());
+            
             return View(addEventViewModel);
         }
 
@@ -161,7 +162,7 @@ namespace VenueApp.Controllers
                 Date = selectedEvent.Date,
                 Price = selectedEvent.Price,
                 Category = selectedEvent.Category,
-                //Location = userMembership,
+                //Location = selectedEvent.Location??"",
                 Created = selectedEvent.Created
             };
 

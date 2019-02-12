@@ -190,6 +190,59 @@ namespace VenueApp.Controllers
 
 
 
+
+
+        //----------------------------------- ADD USER -----------------------------------//
+        // GET: /<controller>/
+        public IActionResult Add()
+        {
+            AddUserViewModel userViewModel = new AddUserViewModel(context.Memberships.ToList(), context.Types.ToList());
+
+            return View(userViewModel);
+        }
+
+        // POST: /<controller>/
+        [HttpPost]
+        public IActionResult Add(AddUserViewModel userFromView)
+        {            
+            if (ModelState.IsValid)
+            {
+                if (context.Users.SingleOrDefault(c => c.Username == userFromView.Username) == null)   // If is an Avaliable Username (It needs to be unique)
+                {
+                    // Add the new user to my existing users table
+                    User newUser = new User
+                    {
+                        Username = userFromView.Username,
+                        FirstName = userFromView.FirstName,
+                        LastName = userFromView.LastName,
+                        Email = userFromView.Email,
+                        Password = userFromView.Password,
+                        Created = DateTime.Now,
+                        TypeID = userFromView.UserTypeID,         
+                        MembershipID = userFromView.MembershipID    
+                    };
+
+                    context.Users.Add(newUser);
+                    context.SaveChanges();
+                    
+                    // Greet the new user and redirect to its dashboard
+                    return RedirectToAction("Index", "User");
+                }
+                else
+                {
+                    // Cannot use this Username because there is already an User with this Username
+                    ModelState.AddModelError("ServerError", "Sorry, but seems like someone else already has that Username. Please try with a different one.");
+                    userFromView.ServerError = true;
+                    TestFunctions.PrintConsoleMessage("DUPLICATED USER");
+                }
+            }
+
+            userFromView.SetSelectList(context.Memberships.ToList(), context.Types.ToList());
+            return View(userFromView);
+        }
+
+
+
         //----------------------------------- DETAILS -----------------------------------//
         // GET: /<controller>/
         public IActionResult Detail(int userId)
@@ -202,6 +255,7 @@ namespace VenueApp.Controllers
 
             User userToShow = new User()
             {
+                ID = userId,
                 Username = selectedUser.Username,
                 FirstName = selectedUser.FirstName,
                 LastName = selectedUser.LastName,

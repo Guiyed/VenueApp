@@ -34,6 +34,9 @@
   <Content Update="Views\Role\Index.cshtml">
     <Pack>$(IncludeRazorContentInPack)</Pack>
   </Content>
+  <Content Update="Views\User\Add.cshtml">
+    <Pack>$(IncludeRazorContentInPack)</Pack>
+  </Content>
 </ItemGroup>
 
 
