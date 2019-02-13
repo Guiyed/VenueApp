@@ -1,17 +1,32 @@
 ﻿@{
     ViewBag.Title = "Remove Category";
+    int count = 1;
 }
 
 <h1>@ViewBag.Title</h1>
 
 <form method="post">
+        
+    <table class="table table-striped">
+        <tr class="info">
+            <th class="col-md-1">#</th>
+            <th class="col-md-10">Category</th>
+            <th class="col-md-1">Selection</th>
+        </tr>
 
-    @foreach (var category in ViewBag.categories)
-    {
-        <input type="checkbox" name="categoryIds" id="@category.ID" value="@category.ID" />
-        <label for="@category.ID">@category.Name</label>
-        <br />
-    }
-
-    <input type="submit" value="Remove Selected Category" />
+        @foreach (var category in ViewBag.categories)
+        {
+            <tr>
+                <td>@count</td>
+                <td class=""><label for="@category.ID">@category.Name</label></td>
+                <td class="text-center"><input type="checkbox" name="categoryIds" id="@category.ID" value="@category.ID" /> </td>
+            </tr>
+            count += 1;
+        }
+    </table>
+       
+    <input class="btn bg-danger pull-right" type="submit" value="Remove Selected Category" />
 </form>
+
+<br />
+<p><a asp-controller="Category" asp-action="Index">back</a>

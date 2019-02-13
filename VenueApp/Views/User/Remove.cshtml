@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Remove Users";
+    int count = 1;
+}
+
+<h1>@ViewBag.Title</h1>
+
+<form method="post">
+
+    <table class="table table-striped">
+        <tr class="info">
+            <th class="col-md-1">#</th>
+            <th class="col-md-10">Users</th>
+            <th class="col-md-1">Selection</th>
+        </tr>
+        
+
+        @foreach (var user in ViewBag.users)
+        {
+            <tr>
+                <td>@count</td>
+                <td class=""><label for="@user.ID">@user.Username</label></td>
+                <td class="text-center"><input type="checkbox" name="usersIds" id="@user.ID" value="@user.ID" /> </td>
+            </tr>
+            count += 1;
+        }
+    </table>
+
+    <input class="btn bg-danger pull-right" type="submit" value="Remove Selected Users" />
+</form>
+
+<br />
+<p><a asp-controller="User" asp-action="Index">back</a>

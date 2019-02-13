@@ -26,12 +26,17 @@ namespace VenueApp.Controllers
 
         //-------------------------------- INDEX -----------------------------------//
         // GET: /<controller>/
-        public IActionResult Index(string username)
+        public IActionResult Index(string activeUser)
         {
             //If the username is a Logged in user... get username else get empty ""
-            ViewBag.Username = string.IsNullOrEmpty(username as string) ? "" : username;
+            ViewBag.Username = string.IsNullOrEmpty(activeUser as string) ? "" : activeUser;
             ViewBag.LogoutMessage = TempData["logoutMessage"] ?? "";
-            IList<User> users = context.Users.ToList();
+            ViewBag.Message = TempData["Message"] ?? "";
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
+
+            //IList<User> users = context.Users.ToList();   //Changing to Non "Deleted Users"
+            IList<User> users = context.Users.Where(c => c.Deleted == false).ToList();
+
             return View(users);
         }
 
@@ -72,6 +77,7 @@ namespace VenueApp.Controllers
                 {
                     //Login Success... Greet the User
                     HttpContext.Session.SetString("User", currentUser.Username);
+                    HttpContext.Session.SetInt32("UserID", currentUser.ID);
                     string userInSesion = HttpContext.Session.GetString("User");
                     string userType = context.Types.SingleOrDefault(c => c.ID == currentUser.TypeID).Name;
                     HttpContext.Session.SetString("Type", userType);
@@ -169,6 +175,7 @@ namespace VenueApp.Controllers
 
                     // Create a new login session (Session["user"] = newUser.Username)
                     HttpContext.Session.SetString("User", newUser.Username);
+                    HttpContext.Session.SetInt32("UserID", newUser.ID);
                     string userInSesion = HttpContext.Session.GetString("User");
                     string userType = context.Types.SingleOrDefault(c => c.ID == newUser.TypeID).Name;
                     HttpContext.Session.SetString("Type", newUser.Type.Name);
@@ -224,8 +231,11 @@ namespace VenueApp.Controllers
 
                     context.Users.Add(newUser);
                     context.SaveChanges();
-                    
-                    // Greet the new user and redirect to its dashboard
+
+                    // Success!!! user added...  return custom message
+                    TempData["Message"] = "User " + newUser.Username + " was successfully created.";
+                    TestFunctions.PrintConsoleMessage("SUCCESS, USER ADDED / CREATED");
+
                     return RedirectToAction("Index", "User");
                 }
                 else
@@ -272,6 +282,119 @@ namespace VenueApp.Controllers
 
 
 
+        //-------------------------------- REMOVE -----------------------------------//
+        // GET: /<controller>/
+        public IActionResult Remove()
+        {
+            //pass Non "deleted" and Non Protected users 
+            ViewBag.users = context.Users.Where(c => (c.Deleted == false) && (c.Protected == false)).ToList();
+            return View();
+        }
+
+        // POST: /<controller>/
+        [HttpPost]
+        public IActionResult Remove(int[] usersIds)
+        {
+            foreach (int userId in usersIds)
+            {
+                User theUser = context.Users.SingleOrDefault(c => c.ID == userId);
+                if (theUser != null)
+                {
+                    theUser.Deleted = true;
+                }
+            }
+
+            context.SaveChanges();
+
+            // Success!!! user deleted...  return custom message
+            TempData["Message"] = "User(s) successfully deleted.";
+            TestFunctions.PrintConsoleMessage("SUCCESS, USER DELETED");
+
+            return Redirect("/User");
+        }
+
+
+
+
+        //-------------------------------- EDIT AN USER -----------------------------------//
+        // GET: /<controller>/
+        public IActionResult Edit(int userId)
+        {
+            User userToEdit = context.Users.Where(c => c.Protected == false).SingleOrDefault(c => c.ID == userId);
+
+            if (userToEdit != null)
+            {
+                EditUserViewModel editUserViewModel = new EditUserViewModel(context.Memberships.ToList(), context.Types.ToList())
+                {
+                    UserID = userToEdit.ID,
+                    Username = userToEdit.Username,
+                    FirstName = userToEdit.FirstName,
+                    LastName = userToEdit.LastName,
+                    Email = userToEdit.Email,
+                    Password = userToEdit.Password,
+                    UserTypeID = userToEdit.TypeID,
+                    MembershipID = userToEdit.MembershipID
+                };
+
+                return View(editUserViewModel);
+            }
+            else
+            {
+                // The user does not exist in the Database or it is a protected user wich cannot be updted... return custom message
+                TempData["ErrorMessage"] = "Sorry, The user does not exist in the Database or it is a protected user wich cannot be updted.";
+                TestFunctions.PrintConsoleMessage("COULD NOT FIND THE USER IN THE DATABASE OR THE EVENT IS A PROTECTED ONE");
+            }
+
+            return Redirect("/User");
+
+        }
+
+        // PUT: /<controller>/  ?????????????????????????????????????????????????????????
+        [HttpPut]
+        [HttpPost]
+        public IActionResult Edit(EditUserViewModel modUser)
+        {
+            if (ModelState.IsValid)
+            {
+                User userToEdit = context.Users.Where(c => c.Protected == false).SingleOrDefault(c => c.ID == modUser.UserID);
+
+                if (userToEdit != null)
+                {
+                    Membership newUserMembership = context.Memberships.Single(c => c.ID == modUser.MembershipID);
+                    UserType newUserRole = context.Types.Single(c => c.ID == modUser.UserTypeID);
+
+                    // Modify the user with new information
+                    userToEdit.Username = modUser.Username;
+                    userToEdit.FirstName = modUser.FirstName;
+                    userToEdit.LastName = modUser.LastName;
+                    userToEdit.Membership = newUserMembership;
+                    userToEdit.Type = newUserRole;
+                    userToEdit.Email = modUser.Email;
+                    userToEdit.Password = modUser.Password;
+
+                    context.Users.Update(userToEdit);
+                    context.SaveChanges();
+
+                    // Success!!! user updated...  return custom message
+                    TempData["Message"] = "Great!... the user was successfully updated.";
+                    TestFunctions.PrintConsoleMessage("SUCCESS, EVENT UPDATED CORRECTLY");
+
+
+                    return Redirect("/User");
+                }
+                else
+                {
+                    // The user does not exist in the Database or it is a protected user wich cannot be updted... return custom message
+                    ModelState.AddModelError("ServerError", "Sorry, The user does not exist in the Database or it is a protected user wich cannot be updted.");
+                    modUser.ServerError = true;
+                    TestFunctions.PrintConsoleMessage("COULD NOT FIND THE USER IN THE DATABASE OR THE USER IS A PROTECTED ONE");
+                }
+
+            }
+            modUser.SetSelectList(context.Memberships.ToList(), context.Types.ToList());
+            return View(modUser);
+        }
 
     }
+
 }

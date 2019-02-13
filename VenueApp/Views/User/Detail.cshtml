@@ -21,6 +21,6 @@
     <h4>User Role Type: <b><i>@Model.Type.Name</i></b></h4>
 
 </div>
-
-<p><a asp-controller="User" asp-action="Index">Index</a> &nbsp;&nbsp; [<a asp-controller="User" asp-action="Detail" asp-route-userId="@((Model.ID == 1)?1:Model.ID-1)">prev</a> | <a asp-controller="User" asp-action="Detail" asp-route-userId="@(Model.ID+1)">next</a>]</p>
+<br />
+<p><a asp-controller="User" asp-action="Index">back</a> &nbsp;&nbsp; [<a asp-controller="User" asp-action="Detail" asp-route-userId="@((Model.ID == 1)?1:Model.ID-1)">prev</a> | <a asp-controller="User" asp-action="Detail" asp-route-userId="@(Model.ID+1)">next</a>]</p>
 <!-- There is a BUG here with ID not in database-->

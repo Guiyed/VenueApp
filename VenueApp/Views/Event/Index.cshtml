@@ -10,11 +10,24 @@
     string userType = @HttpContextAccessor.HttpContext.Session.GetString("Type") ?? "";
 
     int count = 1;
+
+
 }
 
 <h1>@ViewBag.Title</h1>
 
 <h2>List of Events on Database</h2>
+
+@if (ViewBag.Message.Length > 0)
+{
+    <p class="text-success">@ViewBag.Message<span class="glyphicon glyphicon-ok " aria-hidden="true"></span></p>
+}
+else if (ViewBag.ErrorMessage.Length > 0)
+{
+    <p class="text-danger">@ViewBag.ErrorMessage <span class="glyphicon glyphicon-remove " aria-hidden="true"></span></p>
+}
+
+
 @if (Model.Count == 0)
 {
     <p>No events yet!</p>
@@ -30,17 +43,20 @@ else
             <th class="col-md-2">Options</th>
 
         </tr>
-        @foreach (var evento in Model){
-        <tr>
-            <td>@count</td>
-            <td><a asp-controller="Event" asp-action="Detail" asp-route-eventId="@evento.ID">@evento.Name</a></td>
-            <td>@evento.Date.ToString("ddd d MMM yyyy", CultureInfo.CreateSpecificCulture("en-US"))</td>
-            <td>@evento.Date.ToString("hh:mm tt", CultureInfo.CreateSpecificCulture("en-US"))</td>
-            <td><a asp-controller="Event" asp-action="Edit" asp-route-eventId="@evento.ID">edit</a></td>
-        </tr>
+        @foreach (var evento in Model)
+        {
+            <tr>
+                <td>@count</td>
+                <td><a asp-controller="Event" asp-action="Detail" asp-route-eventId="@evento.ID">@evento.Name</a></td>
+                <td>@evento.Date.ToString("ddd d MMM yyyy", CultureInfo.CreateSpecificCulture("en-US"))</td>
+                <td>@evento.Date.ToString("hh:mm tt", CultureInfo.CreateSpecificCulture("en-US"))</td>
+                <td><a asp-controller="Event" asp-action="Edit" asp-route-eventId="@evento.ID">edit</a></td>
+            </tr>
             count += 1;
         }
     </table>
 }
+
+
 
 <p><a asp-controller="Event" asp-action="Add">Add</a> | <a asp-controller="Event" asp-action="Remove">Remove</a></p>

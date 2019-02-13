@@ -1,6 +1,6 @@
 ﻿@model VenueApp.ViewModels.AddEventViewModel
 @{
-    
+
 }
 
 <h1>Add Event</h1>
@@ -61,7 +61,7 @@
         </div>
 
 
-        <input class="pull-right btn btn-success" type="submit" value="Add Event" />
+        <input class="pull-right btn btn-success btn-lg" type="submit" value="Add Event" />
 
     </div>
     <br />
@@ -73,4 +73,7 @@
         <span class="text-danger" asp-validation-for="ServerError"></span>
     </div>
 </form>
+
+<br />
+<p><a asp-controller="Event" asp-action="Index">back</a>
 

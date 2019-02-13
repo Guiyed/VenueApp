@@ -7,10 +7,13 @@
     <div class="form-group">
         <label asp-for="Name"></label>
         <input class="form-control" asp-for="Name" />
-        <span asp-validation-for="Name"></span>
+        <span class="small text-danger" asp-validation-for="Name"></span>
     </div>
-   
 
-    <input class="btn bg-primary" type="submit" value="Add Membership" />
+
+    <input class="btn bg-primary pull-right" type="submit" value="Add Membership" />
 
 </form>
+
+<br />
+<p><a asp-controller="Membership" asp-action="Index">back</a>
