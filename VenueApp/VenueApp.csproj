@@ -37,6 +37,9 @@
   <Content Update="Views\User\Add.cshtml">
     <Pack>$(IncludeRazorContentInPack)</Pack>
   </Content>
+  <Content Update="Views\User\Remove.cshtml">
+    <Pack>$(IncludeRazorContentInPack)</Pack>
+  </Content>
 </ItemGroup>
 
 

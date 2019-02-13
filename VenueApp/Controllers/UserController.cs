@@ -26,12 +26,15 @@ namespace VenueApp.Controllers
 
         //-------------------------------- INDEX -----------------------------------//
         // GET: /<controller>/
-        public IActionResult Index(string username)
+        public IActionResult Index(string activeUser)
         {
             //If the username is a Logged in user... get username else get empty ""
-            ViewBag.Username = string.IsNullOrEmpty(username as string) ? "" : username;
+            ViewBag.Username = string.IsNullOrEmpty(activeUser as string) ? "" : activeUser;
             ViewBag.LogoutMessage = TempData["logoutMessage"] ?? "";
-            IList<User> users = context.Users.ToList();
+
+            //IList<User> users = context.Users.ToList();   //Changing to Non "Deleted Users"
+            IList<User> users = context.Users.Where(c => c.Deleted == false).ToList();
+
             return View(users);
         }
 
@@ -272,6 +275,33 @@ namespace VenueApp.Controllers
 
 
 
+        //-------------------------------- REMOVE -----------------------------------//
+        // GET: /<controller>/
+        public IActionResult Remove()
+        {
+            //pass Non "deleted" and Non Protected users 
+            ViewBag.users = context.Users.Where(c => (c.Deleted == false) && (c.Protected == false)).ToList();
+            return View();
+        }
 
+        // POST: /<controller>/
+        [HttpPost]
+        public IActionResult Remove(int[] usersIds)
+        {
+            foreach (int userId in usersIds)
+            {
+                User theUser = context.Users.SingleOrDefault(c => c.ID == userId);
+                if (theUser != null)
+                {
+                    theUser.Deleted = true;
+                }
+            }
+
+            context.SaveChanges();
+
+            return Redirect("/User");
+        }
     }
+
+
 }
