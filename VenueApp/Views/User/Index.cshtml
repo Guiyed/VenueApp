@@ -23,6 +23,14 @@ else if (ViewBag.LogoutMessage.Length > 0)
 {
     <p class="text-danger">You have Succsessfully Logged Out <span class="glyphicon glyphicon-log-out " aria-hidden="true"></span></p>
 }
+else if (ViewBag.Message.Length > 0)
+{
+    <p class="text-success">@ViewBag.Message<span class="glyphicon glyphicon-ok " aria-hidden="true"></span></p>
+}
+else if (ViewBag.ErrorMessage.Length > 0)
+{
+    <p class="text-danger">@ViewBag.ErrorMessage <span class="glyphicon glyphicon-remove " aria-hidden="true"></span></p>
+}
 
 
 <h2>List of Users on Database</h2>
