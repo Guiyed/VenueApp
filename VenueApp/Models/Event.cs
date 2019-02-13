@@ -15,11 +15,11 @@ namespace VenueApp.Models
         public EventCategory Category { get; set; }
         public int CategoryID { get; set; }
         //public String Location {get; set;}
+        public DateTime Created { get; set; }     
 
         public bool Protected { get; set; }
         public bool Deleted { get; set; }
 
-        public DateTime Created { get; set; }     
 
     }
 }

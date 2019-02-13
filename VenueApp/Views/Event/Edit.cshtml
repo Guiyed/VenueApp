@@ -5,25 +5,76 @@
 
 <h1>@ViewBag.Title</h1>
 
-<form asp-controller="Cheese" asp-action="Edit" method="post">
 
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input class="form-control" asp-for="Name" value="@Model.Name" />
-        <span asp-validation-for="Name"></span>
+<br />
+<form asp-controller="Event" asp-action="Edit" method="post">
+    <div class="container">
+        <div class=" row"> <h3> New Event Data</h3></div>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label asp-for="Name"></label>
+                <div>
+                    <input class="form-control " asp-for="Name" value="@Model.Name" />
+                    <span class="small text-danger" asp-validation-for="Name"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label asp-for="Description"></label>
+                <div>
+                    <textarea class="form-control" style="height: 200px" asp-for="Description" value="@Model.Description"></textarea>
+                    <span class="small text-danger" asp-validation-for="Description"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label asp-for="CategoryID"></label>
+                <select class="form-control " asp-for="CategoryID" asp-items="@Model.Categories"> </select>
+                <span class="small text-danger" asp-validation-for="CategoryID"></span>
+                <input type="hidden" asp-for="Categories" value="@Model.Categories" />
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="Date"></label>
+                <input type="date" class="form-control " style="line-height: 1" asp-for="Date" value="@Model.Date.ToString("yyyy-MM-dd")" />
+                <span class="small text-danger" asp-validation-for="Date"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="Time"></label>
+                <input type="time" class="form-control " style="line-height: 1" asp-for="Time" value="@(Model.Time)" />
+                <span class="small text-danger" asp-validation-for="Time"></span>
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="Price">Price (in dollars)</label>
+                <div class="input-group">
+                    <div class="input-group-addon">$</div>
+                    <input type="number" inputmode="numeric" step="0.01" min="0.00" max="500.00" class="form-control" asp-for="Price" value="@(Model.Price)" placeholder="Amount" />
+                </div>
+                <span class="small text-danger" asp-validation-for="Price"></span>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label asp-for="Location"></label>
+                <input class="form-control" asp-for="Location" />
+
+            </div>
+        </div>
+
+
+        <input class="pull-right btn btn-success btn-lg" type="submit" value="Edit Event" />
+        <input type="hidden" name="EventID" value="@Model.EventID" />
+
     </div>
-    <div class="form-group">
-        <label asp-for="Description"></label>
-        <input class="form-control" asp-for="Description" value="@Model.Description" />
-        <span asp-validation-for="Description"></span>
+    <br />
+    <div>
+        @if (Model.ServerError)
+        {
+            <span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>
+        }
+        <span class="text-danger" asp-validation-for="ServerError"></span>
     </div>
-
-    <div class="form-group">
-        <label asp-for="CategoryID"></label>
-        <select asp-for="CategoryID" asp-items="Model.Categories"></select>
-    </div>
-
-    <input type="submit" value="Edit Cheese" />
-    <input type="hidden" name="EventID" value="@Model.EventID" />
-
 </form>
+
+<br />
+<p><a asp-controller="Event" asp-action="Index">back</a>

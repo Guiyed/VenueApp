@@ -30,6 +30,9 @@ namespace VenueApp.Controllers
         {
             IList<Event> events = context.Events.Where(c => c.Deleted == false).Include(c => c.Category).ToList();
 
+            ViewBag.Message = TempData["Message"] ?? "";
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
+
             return View(events);
         }
 
@@ -67,6 +70,11 @@ namespace VenueApp.Controllers
                 context.Events.Add(newEvent);
                 context.SaveChanges();
 
+
+                // Success!!! event added...  return custom message
+                TempData["Message"] = "Event " + newEvent.ID + " was successfully created.";
+                TestFunctions.PrintConsoleMessage("SUCCESS, EVENT ADDED / CREATED");
+
                 return Redirect("/Event");
             }
 
@@ -77,9 +85,6 @@ namespace VenueApp.Controllers
 
 
         //-------------------------------- REMOVE OR DELETE EVENT -----------------------------------//
-
-
-        //-------------------------------- REMOVE -----------------------------------//
         // GET: /<controller>/
         public IActionResult Remove()
         {
@@ -103,6 +108,10 @@ namespace VenueApp.Controllers
 
             context.SaveChanges();
 
+            // Success!!! event deleted...  return custom message
+            TempData["Message"] = "Event(s) successfully deleted.";
+            TestFunctions.PrintConsoleMessage("SUCCESS, EVENT DELETED");
+
             return Redirect("/Event");
         }
 
@@ -112,43 +121,75 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Edit(int eventId)
         {
-            Event eventToEdit = context.Events.Single(c => c.ID == eventId);
-            EditEventViewModel editEventViewModel = new EditEventViewModel(context.Categories.ToList())
-            {
-                Name = eventToEdit.Name,
-                Description = eventToEdit.Description,
-                CategoryID = eventToEdit.CategoryID,
-                EventID = eventToEdit.ID
-            };
+            Event eventToEdit = context.Events.Where(c => c.Protected == false).SingleOrDefault(c => c.ID == eventId);
 
-            return View(editEventViewModel);
+            if (eventToEdit != null)
+            {
+                EditEventViewModel editEventViewModel = new EditEventViewModel(context.Categories.ToList())
+                {
+                    EventID = eventToEdit.ID,
+                    Name = eventToEdit.Name,
+                    Description = eventToEdit.Description,
+                    CategoryID = eventToEdit.CategoryID,
+                    //Category = newEventCategory,
+                    Price = eventToEdit.Price,
+                    Date = eventToEdit.Date,
+                    Time = eventToEdit.Date.TimeOfDay
+                };
+
+                return View(editEventViewModel);
+            }
+            else
+            {
+                // The event does not exist in the Database or it is a protected event wich cannot be updted... return custom message
+                TempData["ErrorMessage"] = "Sorry, The event does not exist in the Database or it is a protected event wich cannot be updted.";
+                TestFunctions.PrintConsoleMessage("COULD NOT FIND THE EVENT IN THE DATABASE OR THE EVENT IS A PROTECTED ONE");
+            }
+
+            return Redirect("/Event");
+
         }
 
-        // POST: /<controller>/
+        // PUT: /<controller>/  ?????????????????????????????????????????????????????????
+        [HttpPut]
         [HttpPost]
         public IActionResult Edit(EditEventViewModel modEvent)
         {
             if (ModelState.IsValid)
             {
-                Event eventToEdit = context.Events.Single(c => c.ID == modEvent.EventID);
+                Event eventToEdit = context.Events.Where(c => c.Protected == false).SingleOrDefault(c => c.ID == modEvent.EventID);
 
-                EventCategory newEventCategory =
-                    context.Categories.Single(c => c.ID == modEvent.CategoryID);
+                if(eventToEdit != null)
+                {
+                    EventCategory newEventCategory =context.Categories.Single(c => c.ID == modEvent.CategoryID);
 
-                // Modify the event with new information
-                eventToEdit.Name = modEvent.Name;
-                eventToEdit.Description = modEvent.Description;
-                eventToEdit.Category = newEventCategory;
-                                
-                context.Events.Update(eventToEdit);
-                context.SaveChanges();
+                    // Modify the event with new information
+                    eventToEdit.Name = modEvent.Name;
+                    eventToEdit.Description = modEvent.Description;
+                    eventToEdit.Category = newEventCategory;
+                    eventToEdit.Price = modEvent.Price;
+                    eventToEdit.Date = modEvent.Date + modEvent.Time;
 
-                return Redirect("/");
+                    context.Events.Update(eventToEdit);
+                    context.SaveChanges();
 
+                    // Success!!! event updated...  return custom message
+                    TempData["Message"] = "Great!... the event was successfully updated.";
+                    TestFunctions.PrintConsoleMessage("SUCCESS, EVENT UPDATED CORRECTLY");
+
+
+                    return Redirect("/Event");
+                }
+                else
+                {
+                    // The event does not exist in the Database or it is a protected event wich cannot be updted... return custom message
+                    ModelState.AddModelError("ServerError", "Sorry, The event does not exist in the Database or it is a protected event wich cannot be updted.");
+                    modEvent.ServerError = true;
+                    TestFunctions.PrintConsoleMessage("COULD NOT FIND THE EVENT IN THE DATABASE OR THE EVENT IS A PROTECTED ONE");
+                }
 
             }
             return View(modEvent);
-
         }
 
 
