@@ -69,19 +69,22 @@
             </div>
         </div>
         <br />
-        <input class="center-block btn btn-info btn-lg" type="submit" value="Add User To Database" />
+        <input class="pull-right btn btn-info btn-lg" type="submit" value="Add User To Database" />
 
     </div>
-        <br />
-        <br />
-        <div>
-            @if (Model.ServerError)
-            {
-                <span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>
-            }
-            <span class="text-danger" asp-validation-for="ServerError"></span>
-        </div>
+    <br />
+    <br />
+    <div>
+        @if (Model.ServerError)
+        {
+            <span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>
+        }
+        <span class="text-danger" asp-validation-for="ServerError"></span>
+    </div>
 </form>
+
+<br />
+<p><a asp-controller="User" asp-action="Index">back</a> 
 
 
 

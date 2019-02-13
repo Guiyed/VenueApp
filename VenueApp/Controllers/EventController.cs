@@ -28,7 +28,7 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            IList<Event> events = context.Events.Include(c => c.Category).ToList();
+            IList<Event> events = context.Events.Where(c => c.Deleted == false).Include(c => c.Category).ToList();
 
             return View(events);
         }
@@ -77,27 +77,33 @@ namespace VenueApp.Controllers
 
 
         //-------------------------------- REMOVE OR DELETE EVENT -----------------------------------//
+
+
+        //-------------------------------- REMOVE -----------------------------------//
         // GET: /<controller>/
         public IActionResult Remove()
         {
-            ViewBag.title = "Remove Events";
-            ViewBag.events = context.Events.ToList();
+            //pass Non "deleted" and Non Protected users 
+            ViewBag.events = context.Events.Where(c => (c.Deleted == false) && (c.Protected == false)).ToList();
             return View();
         }
 
         // POST: /<controller>/
         [HttpPost]
-        public IActionResult Remove(int[] eventIds)
+        public IActionResult Remove(int[] eventsIds)
         {
-            foreach (int eventId in eventIds)
+            foreach (int eventId in eventsIds)
             {
-                Event theEvent = context.Events.Single(c => c.ID == eventId);
-                context.Events.Remove(theEvent);
+                Event theEvent = context.Events.SingleOrDefault(c => c.ID == eventId);
+                if (theEvent != null)
+                {
+                    theEvent.Deleted = true;
+                }
             }
 
             context.SaveChanges();
 
-            return Redirect("/");
+            return Redirect("/Event");
         }
 
 

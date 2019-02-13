@@ -12,7 +12,7 @@ namespace VenueApp.ViewModels
     {
         [Required(ErrorMessage = "!! Please give your event an Awesome Name !!!")]
         [Display(Name = "Event Name")]
-        [RegularExpression("^[a-zA-Z0-9 '-]{5,100}$", ErrorMessage = "Do not use special caracters and limit the name to 100 characters")]
+        [RegularExpression("^[a-zA-Z0-9 '-]{3,100}$", ErrorMessage = "Do not use special caracters and limit the name to 100 characters")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "You must give your event a description")]
