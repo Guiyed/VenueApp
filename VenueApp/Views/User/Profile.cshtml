@@ -9,7 +9,7 @@
     string userName = @HttpContextAccessor.HttpContext.Session.GetString("User") ?? "";
     string userType = @HttpContextAccessor.HttpContext.Session.GetString("Type") ?? "";
     int userID = @HttpContextAccessor.HttpContext.Session.GetInt32("UserID") ?? 0;
-        
+
 }
 
 <h1>@ViewBag.Title</h1>
@@ -35,10 +35,10 @@
                 <li class="list-group-item text-right"><span class="pull-left"><strong>Email</strong></span> @ViewBag.ProfileInfo["Email"]</li>
                 <!--
 
-    <li class="list-group-item text-right"><span class="pull-left"><strong>Name</strong></span> a(Model.FirstName ?? "-") a(Model.LastName ?? "-")</li>
-    <li class="list-group-item text-right"><span class="pull-left"><strong>Birthday</strong></span> -- / -- / --</li>
-    <li class="list-group-item text-right"><span class="pull-left"><strong>Email</strong></span> a(Model.Email ?? "-")</li>
-                    -->
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Name</strong></span> a(Model.FirstName ?? "-") a(Model.LastName ?? "-")</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Birthday</strong></span> -- / -- / --</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Email</strong></span> a(Model.Email ?? "-")</li>
+                                -->
 
             </ul>
 
@@ -66,8 +66,8 @@
 
             <ul class="nav nav-tabs" id="myTab">
                 <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
-                <li ><a href="#messages" data-toggle="tab">Messages</a></li>
-                <li ><a href="#settings" data-toggle="tab">Settings</a></li>
+                <li><a href="#messages" data-toggle="tab">Messages</a></li>
+                <li><a href="#settings" data-toggle="tab">Settings</a></li>
             </ul>
 
             <div class="tab-content">
@@ -218,7 +218,7 @@
                                 <span class="small text-danger" asp-validation-for="FirstName"></span>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
 
                             <div class="col-xs-6">
@@ -228,62 +228,62 @@
                             </div>
                         </div>
 
-                            <div class="form-group">
+                        <div class="form-group">
 
-                                <div class="col-xs-6">
-                                    <label for="phone"><h4>Phone</h4></label>
-                                    <input type="text" class="form-control" name="phone" id="phone" placeholder="enter phone" title="enter your phone number if any.">
-                                </div>
+                            <div class="col-xs-6">
+                                <label for="phone"><h4>Phone</h4></label>
+                                <input type="text" class="form-control" name="phone" id="phone" placeholder="enter phone" title="enter your phone number if any.">
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <div class="col-xs-6">
-                                    <label for="birthday"><h4>Birthday</h4></label>
-                                    <input type="date" class="form-control" style="line-height: 1" name="birthday" id="birthday" placeholder="birthday date" title="enter your birthday Date (optional).">
-                                </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="birthday"><h4>Birthday</h4></label>
+                                <input type="date" class="form-control" style="line-height: 1" name="birthday" id="birthday" placeholder="birthday date" title="enter your birthday Date (optional).">
                             </div>
-                            <div class="form-group">
+                        </div>
+                        <div class="form-group">
 
-                                <div class="col-xs-6">
-                                    <label asp-for="Email"><h4>Email</h4></label>
-                                    <input type="text" class="form-control" asp-for="Email" value="@Model.Email" id="email" placeholder="you@email.com" title="enter your email.">
-                                    <span class="small text-danger" asp-validation-for="Email"></span>
-                                </div>
+                            <div class="col-xs-6">
+                                <label asp-for="Email"><h4>Email</h4></label>
+                                <input type="text" class="form-control" asp-for="Email" value="@Model.Email" id="email" placeholder="you@email.com" title="enter your email.">
+                                <span class="small text-danger" asp-validation-for="Email"></span>
                             </div>
+                        </div>
 
-                            <div class="form-group">
+                        <div class="form-group">
 
-                                <div class="col-xs-6">
-                                    <label for="email"><h4>Location</h4></label>
-                                    <input type="email" class="form-control" id="location" placeholder="somewhere" title="enter a location">
-                                </div>
+                            <div class="col-xs-6">
+                                <label for="email"><h4>Location</h4></label>
+                                <input type="email" class="form-control" id="location" placeholder="somewhere" title="enter a location">
                             </div>
-                            <div class="form-group">
+                        </div>
+                        <div class="form-group">
 
-                                <div class="col-xs-6">
-                                    <label asp-for="Password"><h4>Password</h4></label>
-                                    <input type="password" class="form-control" asp-for="Password" value="@Model.Password" id="password" placeholder="password" title="enter your password.">
-                                    <span class="small text-danger" asp-validation-for="Password"></span>
-                                </div>
+                            <div class="col-xs-6">
+                                <label asp-for="Password"><h4>Password</h4></label>
+                                <input type="password" class="form-control" asp-for="Password" value="@Model.Password" id="password" placeholder="password" title="enter your password.">
+                                <span class="small text-danger" asp-validation-for="Password"></span>
                             </div>
-                            <div class="form-group">
+                        </div>
+                        <div class="form-group">
 
-                                <div class="col-xs-6">
-                                    <label asp-for="Verify"><h4>Verify Password</h4></label>
-                                    <input type="password" class="form-control" asp-for="Verify" id="verifypassword" placeholder="verify password" title="enter your password again.">
-                                    <span class="small text-danger" asp-validation-for="Verify"></span>
-                                </div>
+                            <div class="col-xs-6">
+                                <label asp-for="Verify"><h4>Verify Password</h4></label>
+                                <input type="password" class="form-control" asp-for="Verify" id="verifypassword" placeholder="verify password" title="enter your password again.">
+                                <span class="small text-danger" asp-validation-for="Verify"></span>
                             </div>
-                            <div class="form-group">
-                                <div class="col-xs-12">
-                                    <br>
-                                    <button class="btn btn-lg btn-success" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
-                                    <input type="hidden" name="UserID" value="@Model.UserID" />
-                                    <input type="hidden" name="Username" value="@Model.Username" />
-                                    <input type="hidden" name="Membership" value="@Model.Membership" />
-                                    <button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <br>
+                                <button class="btn btn-lg btn-success" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
+                                <input type="hidden" name="UserID" value="@Model.UserID" />
+                                <input type="hidden" name="Username" value="@Model.Username" />
+                                <input type="hidden" name="Membership" value="@Model.Membership" />
+                                <button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
                             </div>
+                        </div>
                     </form>
                 </div>
 
@@ -292,25 +292,18 @@
     </div><!--/col-9-->
 </div><!--/row-->
 
+<script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
 <script>
-    var keepSetting = '@ViewBag.Retry';
-    console.log("Viewbag " + keepSetting);
-
-    if (keepSetting) {
-        document.getElementsByName(href = "#settings").toggle();
-    }
-
-
-    /*$(document).ready(function () {
-        if ('aViewBag.Retry') {
-        activaTab('settings');
+    'use strict';
+    $(document).ready(function () {
+        if ('@ViewBag.Retry') {
+            activaTab('settings');
         }
     });
 
     function activaTab(tab) {
         $('.nav-tabs a[href="#' + tab + '"]').tab('show');
-    };*/
-
-
+        console.log('Change Tab');
+    };
 
 </script>
