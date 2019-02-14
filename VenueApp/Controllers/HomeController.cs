@@ -12,6 +12,10 @@ namespace VenueApp.Controllers
     {
         public IActionResult Index()
         {
+            ViewBag.LogoutMessage = TempData["logoutMessage"] ?? "";
+            ViewBag.Message = TempData["Message"] ?? "";
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
+
             return View();
         }
 

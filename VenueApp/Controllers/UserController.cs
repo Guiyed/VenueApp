@@ -62,7 +62,7 @@ namespace VenueApp.Controllers
                 LoginViewModel userViewModel = new LoginViewModel();
                 return View(userViewModel);
             }
-            
+
         }
 
         // POST: /<controller>/
@@ -72,7 +72,7 @@ namespace VenueApp.Controllers
             if (ModelState.IsValid)
             {
                 User currentUser = context.Users.SingleOrDefault(c => c.Username == userFromView.Username);
-                
+
                 if ((currentUser != null) && (currentUser.Password == userFromView.Password))
                 {
                     //Login Success... Greet the User
@@ -114,11 +114,11 @@ namespace VenueApp.Controllers
             HttpContext.Session.Clear();
             TempData["logoutMessage"] = "You have successfully logged out";
 
-            return RedirectToAction("Index", "User", new { username = HttpContext.Session.GetString("User") });
+            return RedirectToAction("Index", "Home", new { username = HttpContext.Session.GetString("User") });
         }
 
 
-               
+
         //----------------------------------- SIGNUP -----------------------------------//
         // GET: /<controller>/
         public IActionResult Signup()
@@ -142,7 +142,7 @@ namespace VenueApp.Controllers
                 //User existingUser = context.Users.Find(userFromView.Username);
                 //existingUser = context.Users.SingleOrDefault(c => c.Username == userFromView.Username);
                 */
-              
+
                 try
                 {
                     //Check for the availability of the selected username on the database 
@@ -151,9 +151,9 @@ namespace VenueApp.Controllers
                 catch
                 {
                     //The username does not exist in the database
-                    usernameAvaliable =true;
+                    usernameAvaliable = true;
                 }
-                
+
                 if (usernameAvaliable)   // If is an Avaliable Username (It needs to be unique)
                 {
                     // Add the new user to my existing users table
@@ -211,7 +211,7 @@ namespace VenueApp.Controllers
         // POST: /<controller>/
         [HttpPost]
         public IActionResult Add(AddUserViewModel userFromView)
-        {            
+        {
             if (ModelState.IsValid)
             {
                 if (context.Users.SingleOrDefault(c => c.Username == userFromView.Username) == null)   // If is an Avaliable Username (It needs to be unique)
@@ -225,8 +225,8 @@ namespace VenueApp.Controllers
                         Email = userFromView.Email,
                         Password = userFromView.Password,
                         Created = DateTime.Now,
-                        TypeID = userFromView.UserTypeID,         
-                        MembershipID = userFromView.MembershipID    
+                        TypeID = userFromView.UserTypeID,
+                        MembershipID = userFromView.MembershipID
                     };
 
                     context.Users.Add(newUser);
@@ -269,14 +269,14 @@ namespace VenueApp.Controllers
                 Username = selectedUser.Username,
                 FirstName = selectedUser.FirstName,
                 LastName = selectedUser.LastName,
-                Email = (selectedUser.Email ?? "-" ),
+                Email = (selectedUser.Email ?? "-"),
                 Created = selectedUser.Created,
                 Membership = selectedUser.Membership,
                 Type = selectedUser.Type
                 //Membership = userMembership,
                 //Type = userType
             };
-            
+
             return View(userToShow);
         }
 
@@ -395,6 +395,80 @@ namespace VenueApp.Controllers
             return View(modUser);
         }
 
+
+
+        //-------------------------------- Profile -----------------------------------//
+        // GET: /<controller>/
+        public IActionResult Profile(int userId = 0)
+        {
+            User selectedUser = context.Users.Where(c => c.Protected == false).Include(c => c.Type).Include(d => d.Membership).SingleOrDefault(c => c.ID == userId);
+
+            if (selectedUser != null)
+            {
+                EditUserViewModel userToShow = new EditUserViewModel(context.Memberships.ToList(), context.Types.ToList())
+                {
+                    UserID = userId,
+                    Username = selectedUser.Username,
+                    FirstName = selectedUser.FirstName,
+                    LastName = selectedUser.LastName,
+                    Email = selectedUser.Email,
+                    Password = selectedUser.Password,
+                    Created = selectedUser.Created,
+                    Membership = selectedUser.Membership,
+                    Type = selectedUser.Type,
+                    UserTypeID = selectedUser.TypeID,
+                    MembershipID = selectedUser.MembershipID
+                };
+
+                ViewBag.ProfileInfo = new Dictionary<string, string>()
+                {
+                    {"Membership", userToShow.Membership.Name },
+                    {"FullName", (userToShow.FirstName ?? (userToShow.LastName?? "-")) + " " + userToShow.LastName?? "" },
+                    {"Email", userToShow.Email ?? "-" }
+                }; 
+                return View(userToShow);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+        }
+        
+        // PUT: /<controller>/  ?????????????????????????????????????????????????????????
+        [HttpPut]
+        [HttpPost]
+        public IActionResult Profile(EditUserViewModel modUser)
+        {
+            User userToEdit = context.Users.Include(c => c.Type).Include(d => d.Membership).SingleOrDefault(c => c.ID == modUser.UserID);
+
+            ViewBag.ProfileInfo = new Dictionary<string, string>()
+            {
+                {"Membership", userToEdit.Membership.Name },
+                {"FullName", (userToEdit.FirstName ?? (userToEdit.LastName?? "-")) + " " + userToEdit.LastName?? ""},
+                {"Email", userToEdit.Email ?? "-" }
+            };
+
+            if (ModelState.IsValid)
+            {
+                if (userToEdit != null)
+                {
+                    // Modify the user with new information
+                    userToEdit.Username = modUser.Username;
+                    userToEdit.FirstName = modUser.FirstName;
+                    userToEdit.LastName = modUser.LastName;
+                    userToEdit.Email = modUser.Email;
+                    userToEdit.Password = modUser.Password;
+
+                    context.Users.Update(userToEdit);
+                    context.SaveChanges();
+                }
+
+                return RedirectToAction("Profile", new { userId = modUser.UserID });
+            }
+
+            ViewBag.Retry = true;
+            return View(modUser);
+        }
     }
 
 }

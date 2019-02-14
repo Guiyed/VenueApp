@@ -6,28 +6,14 @@ body {
     background-color: whitesmoke;
 }
 
-
-
-/* Header */
-.user-login-btn {
-    background-color: darkturquoise;
+/* Profile */
+.profileheader {
+    background-color: #607880;
     color: white;
+    font-weight: bolder;
 }
 
 
-
-
-/* Login Template*/
-.landingReturningUser {
-    background-color: #c8dae3;
-    padding: 15px;
-    border-radius: 10px;
-}
-
-/*
-landingNewUser {
-}
-*/
 
 /* Dashboard */
 .dashboardBoxesL, .dashboardBoxesR {
@@ -43,6 +29,102 @@ landingNewUser {
 .dashboardBoxesR {
     margin-left: 20px;
 }
+
+/* Dashboard Buttons colors */
+#Profile {
+    background-color: deeppink;
+}
+
+#Memberships {
+    background-color: mediumpurple;
+}
+
+#Search-Events {
+    background-color: mediumseagreen;
+}
+
+#Events {
+    background-color: mediumturquoise;
+}
+
+#MyEvents {
+    background-color: mediumturquoise;
+}
+
+#Create-Events {
+    background-color: mediumseagreen;
+}
+
+#Manage-Users {
+    background-color: deeppink;
+}
+
+#Reports {
+    /*background-color: lightslategrey; */
+    background-color: mediumpurple;
+}
+
+#Databases {
+    background-color: salmon;
+}
+
+#Broadcast {
+    background-color: black;
+    padding-top: 7px;
+}
+
+.Highlight{
+    color: darkturquoise;
+    font-weight:700;
+}
+
+
+
+/* Header */
+.user-login-btn {
+    /*
+    background-color: darkturquoise;
+    color:white; 
+    */
+    background-color: lawngreen;
+    color: darkslategray;
+}
+
+.user-login-btn:hover {
+    background-color: limegreen;
+    color: darkslategray;
+}
+
+
+#logout {    
+    color: lightcyan;
+}
+#logout:hover {
+    color: crimson;
+}
+
+
+
+
+/* Login/Signup Template*/
+.landingReturningUser {
+    background-color: #c8dae3;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.required{
+    font-weight: bold;
+    font-size:20px;
+    color: darkred;
+}
+
+/*
+landingNewUser {
+}
+*/
+
+
 
 
 
@@ -72,8 +154,6 @@ landingNewUser {
 
 
 /* ----- Footer -----*/
-
-
 .social-icon {
     color: midnightblue;
     line-height: 10px;

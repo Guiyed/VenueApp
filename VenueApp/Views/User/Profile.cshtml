@@ -1,0 +1,316 @@
+﻿@model VenueApp.ViewModels.EditUserViewModel
+
+@{
+    ViewBag.Title = "User Profile";
+
+    @using Microsoft.AspNetCore.Http
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+    string userName = @HttpContextAccessor.HttpContext.Session.GetString("User") ?? "";
+    string userType = @HttpContextAccessor.HttpContext.Session.GetString("Type") ?? "";
+    int userID = @HttpContextAccessor.HttpContext.Session.GetInt32("UserID") ?? 0;
+        
+}
+
+<h1>@ViewBag.Title</h1>
+
+<hr>
+<div class="container bootstrap snippet">
+    <div class="row">
+        <div class="col-md-3">
+            <!--left col-->
+
+            <div class="text-center">
+                <img src="~/images/Avatar1.svg" class="avatar img-circle img-thumbnail img-responsive" style="max-width: 60%" alt="avatar">
+                <h6>Upload a different photo...</h6>
+                <input type="file" class="text-center center-block well well-sm">
+            </div>
+
+
+            <ul class="list-group">
+                <li class="list-group-item text-muted profileheader">Profile</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Joined</strong></span> @Model.Created.ToShortDateString()</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Name</strong></span> @ViewBag.ProfileInfo["FullName"]</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Birthday</strong></span> -- / -- / --</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Email</strong></span> @ViewBag.ProfileInfo["Email"]</li>
+                <!--
+
+    <li class="list-group-item text-right"><span class="pull-left"><strong>Name</strong></span> a(Model.FirstName ?? "-") a(Model.LastName ?? "-")</li>
+    <li class="list-group-item text-right"><span class="pull-left"><strong>Birthday</strong></span> -- / -- / --</li>
+    <li class="list-group-item text-right"><span class="pull-left"><strong>Email</strong></span> a(Model.Email ?? "-")</li>
+                    -->
+
+            </ul>
+
+            <div class="panel panel-default">
+                <div class="panel-heading"><span class="text-muted">Website </span><i class="fa fa-link fa-1x"></i></div>
+                <div class="panel-body"><a href="https://github.com/Guiyed">Github.com</a></div>
+            </div>
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading"><a class="text-muted" asp-controller="Membership" asp-action="Index">Membership </a><i class="far fa-id-card fa-1x"></i></div>
+                <div class="panel-body">@ViewBag.ProfileInfo["Membership"]</div>
+                <!-- <div class="panel-body"><a asp-controller="Membership" asp-action="Detail">aModel.Membership</a></div> -->
+            </div>
+
+        </div><!--/col-3-->
+        <!-- right col -->
+        <div class="col-md-9">
+            <br />
+            <div class="row">
+                <div class="col-md-9"><h1>Username: <span class="Highlight">"@Model.Username"</span></h1></div>
+                <div class="col-md-3 center-block"><h1>ID: <span class="Highlight">"@Model.UserID"</span></h1></div>
+            </div>
+            <br />
+
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
+                <li ><a href="#messages" data-toggle="tab">Messages</a></li>
+                <li ><a href="#settings" data-toggle="tab">Settings</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="home">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Label 1</th>
+                                    <th>Label 2</th>
+                                    <th>Label 3</th>
+                                    <th>Label </th>
+                                    <th>Label </th>
+                                    <th>Label </th>
+                                </tr>
+                            </thead>
+                            <tbody id="items">
+                                <tr>
+                                    <td>1</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                </tr>
+                                <tr>
+                                    <td>8</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                </tr>
+                                <tr>
+                                    <td>9</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                </tr>
+                                <tr>
+                                    <td>10</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                    <td>Table cell</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-4 text-center">
+                                <ul class="pagination" id="myPager"></ul>
+                            </div>
+                        </div>
+                    </div><!--/table-resp-->
+
+                    <hr>
+
+                </div><!--/tab-pane-->
+                <div class="tab-pane" id="messages">
+
+                    <h2></h2>
+
+                    <ul class="list-group">
+                        <li class="list-group-item text-muted">Inbox</li>
+                        <li class="list-group-item text-right"><a href="#" class="pull-left">Here is your a link to the latest summary report from the..</a> 2.13.2014</li>
+                        <li class="list-group-item text-right"><a href="#" class="pull-left">Hi Joe, There has been a request on your account since that was..</a> 2.11.2014</li>
+                        <li class="list-group-item text-right"><a href="#" class="pull-left">Nullam sapien massaortor. A lobortis vitae, condimentum justo...</a> 2.11.2014</li>
+                        <li class="list-group-item text-right"><a href="#" class="pull-left">Thllam sapien massaortor. A lobortis vitae, condimentum justo...</a> 2.11.2014</li>
+                        <li class="list-group-item text-right"><a href="#" class="pull-left">Wesm sapien massaortor. A lobortis vitae, condimentum justo...</a> 2.11.2014</li>
+                        <li class="list-group-item text-right"><a href="#" class="pull-left">For therepien massaortor. A lobortis vitae, condimentum justo...</a> 2.11.2014</li>
+                        <li class="list-group-item text-right"><a href="#" class="pull-left">Also we, havesapien massaortor. A lobortis vitae, condimentum justo...</a> 2.11.2014</li>
+                        <li class="list-group-item text-right"><a href="#" class="pull-left">Swedish chef is assaortor. A lobortis vitae, condimentum justo...</a> 2.11.2014</li>
+
+                    </ul>
+
+                </div><!--/tab-pane-->
+                <div class="tab-pane" id="settings">
+                    <hr>
+                    <form id="registrationForm" class="form" asp-controller="User" asp-action="Profile" method="post">
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label asp-for="FirstName"><h4>First name</h4></label>
+                                <input type="text" class="form-control" asp-for="FirstName" value="@Model.FirstName" id="first_name" placeholder="first name" title="enter your first name if any.">
+                                <span class="small text-danger" asp-validation-for="FirstName"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+                                <label asp-for="LastName"><h4>Last name</h4></label>
+                                <input type="text" class="form-control" asp-for="LastName" value="@Model.LastName" id="last_name" placeholder="last name" title="enter your last name if any.">
+                                <span class="small text-danger" asp-validation-for="LastName"></span>
+                            </div>
+                        </div>
+
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+                                    <label for="phone"><h4>Phone</h4></label>
+                                    <input type="text" class="form-control" name="phone" id="phone" placeholder="enter phone" title="enter your phone number if any.">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="birthday"><h4>Birthday</h4></label>
+                                    <input type="date" class="form-control" style="line-height: 1" name="birthday" id="birthday" placeholder="birthday date" title="enter your birthday Date (optional).">
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+                                    <label asp-for="Email"><h4>Email</h4></label>
+                                    <input type="text" class="form-control" asp-for="Email" value="@Model.Email" id="email" placeholder="you@email.com" title="enter your email.">
+                                    <span class="small text-danger" asp-validation-for="Email"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+                                    <label for="email"><h4>Location</h4></label>
+                                    <input type="email" class="form-control" id="location" placeholder="somewhere" title="enter a location">
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+                                    <label asp-for="Password"><h4>Password</h4></label>
+                                    <input type="password" class="form-control" asp-for="Password" value="@Model.Password" id="password" placeholder="password" title="enter your password.">
+                                    <span class="small text-danger" asp-validation-for="Password"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+                                    <label asp-for="Verify"><h4>Verify Password</h4></label>
+                                    <input type="password" class="form-control" asp-for="Verify" id="verifypassword" placeholder="verify password" title="enter your password again.">
+                                    <span class="small text-danger" asp-validation-for="Verify"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <br>
+                                    <button class="btn btn-lg btn-success" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
+                                    <input type="hidden" name="UserID" value="@Model.UserID" />
+                                    <input type="hidden" name="Username" value="@Model.Username" />
+                                    <input type="hidden" name="Membership" value="@Model.Membership" />
+                                    <button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
+                                </div>
+                            </div>
+                    </form>
+                </div>
+
+            </div><!--/tab-pane-->
+        </div><!--/tab-content-->
+    </div><!--/col-9-->
+</div><!--/row-->
+
+<script>
+    var keepSetting = '@ViewBag.Retry';
+    console.log("Viewbag " + keepSetting);
+
+    if (keepSetting) {
+        document.getElementsByName(href = "#settings").toggle();
+    }
+
+
+    /*$(document).ready(function () {
+        if ('aViewBag.Retry') {
+        activaTab('settings');
+        }
+    });
+
+    function activaTab(tab) {
+        $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+    };*/
+
+
+
+</script>

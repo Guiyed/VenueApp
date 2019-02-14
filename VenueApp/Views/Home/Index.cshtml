@@ -1,12 +1,30 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+
+    @using Microsoft.AspNetCore.Http
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+    string userType = @HttpContextAccessor.HttpContext.Session.GetString("Type") ?? "";
 }
+
 
 <h1>@ViewBag.Title</h1>
 
-<h3>Hello, the VenueApp is being implemented. Press the button "User Account" to begin (It is located in the top right of the navbar)</h3>
 
-<br />
+@if (ViewBag.LogoutMessage.Length > 0)
+{
+    <p class="text-danger">You have Succsessfully Logged Out <span class="glyphicon glyphicon-log-out " aria-hidden="true"></span></p>
+}
+else if (ViewBag.Message.Length > 0)
+{
+    <p class="text-success">@ViewBag.Message<span class="glyphicon glyphicon-ok " aria-hidden="true"></span></p>
+}
+else if (ViewBag.ErrorMessage.Length > 0)
+{
+    <p class="text-danger">@ViewBag.ErrorMessage <span class="glyphicon glyphicon-remove " aria-hidden="true"></span></p>
+}
+
+<h3>Hello, the VenueApp is being implemented. Press the button "User Account" to begin (It is located in the top right of the navbar)</h3>
 
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
     <ol class="carousel-indicators">

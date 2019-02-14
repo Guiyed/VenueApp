@@ -23,26 +23,26 @@
         <br />
         <div class="row text-center">
             <a asp-controller="Event" asp-action="Index">
-                <div class="col-md-4 col-md-offset-2 dashboardBoxesL" style="background-color: royalblue"> View Events <i class="far fa-calendar-alt"></i></div>
+                <div id="Events" class="col-md-4 col-md-offset-2 dashboardBoxesL" > View Events <i class="far fa-calendar-alt"></i></div>
             </a>
             <a asp-controller="Event" asp-action="Add">
-                <div class="col-md-4 dashboardBoxesR" style="background-color: goldenrod"> Create Events <i class="far fa-edit"></i></div>
+                <div id="Create-Events" class="col-md-4 dashboardBoxesR" > Create Events <i class="far fa-edit"></i></div>
 </a>
 </div>
         <div class="row text-center">
             <a asp-controller="User" asp-action="Index">
-                <div class="col-md-4 col-md-offset-2 dashboardBoxesL" style="background-color: darkred"> Manage Users <i class="fas fa-user-plus"></i></div>
+                <div id="Manage-Users" class="col-md-4 col-md-offset-2 dashboardBoxesL" > Manage Users <i class="fas fa-user-plus"></i></div>
     </a>
                 <a asp-controller="Test" asp-action="TBI">
-                    <div class="col-md-4 dashboardBoxesR" style="background-color: lightslategrey"> Manage Reports <i class="fas fa-file-invoice"></i></div>
+                    <div id="Reports" class="col-md-4 dashboardBoxesR" > Manage Reports <i class="fas fa-file-invoice"></i></div>
 </a>
 </div>
         <div class="row text-center">
             <a asp-controller="Test" asp-action="TBI">
-                <div class="col-md-4 col-md-offset-2 dashboardBoxesL" style="background-color: salmon"> Databases <i class="fas fa-database"></i></div>
-               </a>
-                <a asp-controller="Test" asp-action="TBI">
-                    <div class="col-md-4 dashboardBoxesR" style="background-color: black; padding-top: 7px"> Broadcast <br />Messages <i class="fas fa-users"></i> <i class="far fa-envelope"></i></div>
-                    </a>
+                <div id="Databases" class="col-md-4 col-md-offset-2 dashboardBoxesL" > Databases <i class="fas fa-database"></i></div>
+            </a>
+            <a asp-controller="Test" asp-action="TBI">
+                <div id="Broadcast" class="col-md-4 dashboardBoxesR" > Broadcast <br />Messages <i class="fas fa-users"></i> <i class="far fa-envelope"></i></div>
+                </a>
 </div>
     </div>
