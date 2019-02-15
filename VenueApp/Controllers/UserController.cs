@@ -35,9 +35,25 @@ namespace VenueApp.Controllers
             ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
 
             //IList<User> users = context.Users.ToList();   //Changing to Non "Deleted Users"
-            IList<User> users = context.Users.Where(c => c.Deleted == false).ToList();
+            //IList<User> users = context.Users.Where(c => c.Deleted == false).ToList();
 
-            return View(users);
+            IList<User> users = new List<User>();
+
+            if (HttpContext.Session.GetString("Type") == "admin")
+            {
+                users = context.Users.Where(c => c.Deleted == false).ToList();
+                return View(users);
+            }
+            else if(HttpContext.Session.GetString("Type") == "user")
+            {
+                return RedirectToAction("Detail", new { userId = HttpContext.Session.GetInt32("UserID") });
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "You need to be Logged In to access this feature";
+                return View( users );
+            }
+
         }
 
 
@@ -51,6 +67,10 @@ namespace VenueApp.Controllers
             currentSession.TryGetValue("user", out byte[] value1);
             */
 
+            ViewBag.LogoutMessage = TempData["logoutMessage"] ?? "";
+            ViewBag.Message = TempData["Message"] ?? "";
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
+
             // If the user is already logged in
             if (HttpContext.Session.TryGetValue("User", out byte[] value))
             {
@@ -62,7 +82,6 @@ namespace VenueApp.Controllers
                 LoginViewModel userViewModel = new LoginViewModel();
                 return View(userViewModel);
             }
-
         }
 
         // POST: /<controller>/
@@ -83,7 +102,6 @@ namespace VenueApp.Controllers
                     HttpContext.Session.SetString("Type", userType);
                     TestFunctions.PrintConsoleMessage("LOGIN SUCCESS " + userInSesion);
 
-                    //return RedirectToAction("Index", "User", new { username = userInSesion });
                     return RedirectToAction("Index", "Dashboard");
                 }
                 else if (currentUser == null)
@@ -101,6 +119,10 @@ namespace VenueApp.Controllers
                     TestFunctions.PrintConsoleMessage("PASSWORD DOES NOT MATCH BETWEEN THE FORM AND DATABASE");
                 }
             }
+
+            ViewBag.LogoutMessage = TempData["logoutMessage"] ?? "";
+            ViewBag.Message = TempData["Message"] ?? "";
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
             return View(userFromView);
         }
 
@@ -114,6 +136,7 @@ namespace VenueApp.Controllers
             HttpContext.Session.Clear();
             TempData["logoutMessage"] = "You have successfully logged out";
 
+            //Retrun to index verifiying theres no User in session
             return RedirectToAction("Index", "Home", new { username = HttpContext.Session.GetString("User") });
         }
 
@@ -203,9 +226,16 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Add()
         {
-            AddUserViewModel userViewModel = new AddUserViewModel(context.Memberships.ToList(), context.Types.ToList());
+            if(HttpContext.Session.GetString("Type") == "admin"){
+                AddUserViewModel userViewModel = new AddUserViewModel(context.Memberships.ToList(), context.Types.ToList());
+                return View(userViewModel);
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "This feature is reserved for Admins Only";
+                return RedirectToAction("Index", new { username = HttpContext.Session.GetString("User")});
+            }
 
-            return View(userViewModel);
         }
 
         // POST: /<controller>/
