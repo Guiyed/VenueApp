@@ -6,6 +6,15 @@
 
 <h1>@ViewBag.Title</h1>
 
+@if (ViewBag.Message.Length > 0)
+{
+    <p class="text-success">@ViewBag.Message<span class="glyphicon glyphicon-ok " aria-hidden="true"></span></p>
+}
+else if (ViewBag.ErrorMessage.Length > 0)
+{
+    <p class="text-danger">@ViewBag.ErrorMessage <span class="glyphicon glyphicon-remove " aria-hidden="true"></span></p>
+}
+
 <ul class="list-group">
 
     @foreach (var category in Model)
@@ -20,4 +29,4 @@
     <p>No Categories yet!</p>
 }
 
-    <p><a asp-controller="Category" asp-action="Add">Add </a> | <a asp-controller="Category" asp-action="Remove">Remove</a></p>
+<p><a asp-controller="Category" asp-action="Add">Add </a> | <a asp-controller="Category" asp-action="Remove">Remove</a></p>

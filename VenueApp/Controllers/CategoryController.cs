@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using VenueApp.ViewModels;
 using VenueApp.Data;
 using System.Linq;
-
+using Microsoft.AspNetCore.Http;
 
 namespace VenueApp.Controllers
 {
@@ -23,6 +23,9 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
+            ViewBag.Message = TempData["Message"] ?? "";
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
+            
             //List<EventCategory> categories = context.Categories.ToList();
 
             //pass Non "deleted" categories 
@@ -37,8 +40,19 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Add()
         {
-            AddCategoryViewModel addCategoryViewModel = new AddCategoryViewModel();
-            return View(addCategoryViewModel);
+            //If a Logged In "Admin" is accessing this feature
+            if (HttpContext.Session.GetString("Type") == "admin")
+            {
+                //Display Add Form View
+                AddCategoryViewModel addCategoryViewModel = new AddCategoryViewModel();
+                return View(addCategoryViewModel);
+            }
+            else
+            {
+                //Return Error. Only Admins can add users to database
+                TempData["ErrorMessage"] = "This feature is reserved for Admins Only";
+                return RedirectToAction("Index", new { username = HttpContext.Session.GetString("User") });
+            }
         }
 
         // POST: /<controller>/
@@ -66,12 +80,19 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Remove()
         {
-            //ViewBag.categories = context.Categories.ToList();
-
-            //pass Non "deleted" and Non Protected categories 
-            ViewBag.categories = context.Categories.Where(c => (c.Deleted == false) && (c.Protected == false)).ToList();
-
-            return View();
+            //If a Logged In "Admin" is accessing this feature
+            if (HttpContext.Session.GetString("Type") == "admin")
+            {
+                //pass Non "deleted" and Non Protected categories 
+                ViewBag.categories = context.Categories.Where(c => (c.Deleted == false) && (c.Protected == false)).ToList();
+                return View();
+            }
+            else
+            {
+                //Return Error. Only Admins can delete/remove users to database
+                TempData["ErrorMessage"] = "This feature is reserved for Admins Only";
+                return RedirectToAction("Index", new { username = HttpContext.Session.GetString("User") });
+            }
         }
 
         // GET: /<controller>/

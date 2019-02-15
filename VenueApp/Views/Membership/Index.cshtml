@@ -6,12 +6,21 @@
 
 <h1>@ViewBag.Title</h1>
 
+@if (ViewBag.Message.Length > 0)
+{
+<p class="text-success">@ViewBag.Message<span class="glyphicon glyphicon-ok " aria-hidden="true"></span></p>
+}
+else if (ViewBag.ErrorMessage.Length > 0)
+{
+<p class="text-danger">@ViewBag.ErrorMessage <span class="glyphicon glyphicon-remove " aria-hidden="true"></span></p>
+}
+
 <ul class="list-group">
 
     @foreach (var membership in Model)
     {
 
-    <li class="list-group-item">ID = @membership.ID: <b>@membership.Name</b> &nbsp; @(membership.Protected ? "(Protected)":"")</li>
+        <li class="list-group-item">ID = @membership.ID: <b>@membership.Name</b> &nbsp; @(membership.Protected ? "(Protected)" : "")</li>
     }
 </ul>
 
@@ -21,4 +30,4 @@
     <p>No Memberships yet!</p>
 }
 
-    <p><a asp-controller="Membership" asp-action="Add">Add </a> | <a asp-controller="Membership" asp-action="Remove">Remove</a></p>
+<p><a asp-controller="Membership" asp-action="Add">Add </a> | <a asp-controller="Membership" asp-action="Remove">Remove</a></p>
