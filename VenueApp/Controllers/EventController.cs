@@ -28,12 +28,36 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            IList<Event> events = context.Events.Where(c => c.Deleted == false).Include(c => c.Category).ToList();
-
             ViewBag.Message = TempData["Message"] ?? "";
             ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
+            
+            //Create empty list
+            IList<Event> events = new List<Event>();
 
-            return View(events);
+            //If there is an "Admin" Logged in the session
+            if (HttpContext.Session.GetString("Type") == "admin")
+            {
+                //Add all the events to the list
+                events = context.Events.Where(c => c.Deleted == false).Include(c => c.Category).ToList();
+                return View(events);
+            }
+            //If there is an regular "User" Logged in the session
+            else if (HttpContext.Session.GetString("Type") == "user")
+            {
+                //Show his details only
+                /*return RedirectToAction("Detail", new { userId = HttpContext.Session.GetInt32("UserID") });
+                       OR       
+                events = context.Events.Where(c => c.ID == HttpContext.Session.GetInt32("UserID")).ToList();
+                */
+                return View(events);
+            }
+            //If not...
+            else
+            {
+                //return empty list with Error Message
+                ViewBag.ErrorMessage = "You need to be Logged In to access this feature";
+                return View(events);
+            }
         }
 
 
@@ -42,9 +66,23 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Add()
         {
-            AddEventViewModel addEventViewModel = new AddEventViewModel(context.Categories.ToList());
-            
-            return View(addEventViewModel);
+
+            //If a Logged In "Admin" is accessing this feature
+            if (HttpContext.Session.GetString("Type") == "admin")
+            {
+                //Display Add Form View
+                AddEventViewModel addEventViewModel = new AddEventViewModel(context.Categories.ToList());
+                return View(addEventViewModel);
+                
+            }
+            else
+            {
+                //Return Error. Only Admins can add users to database
+                TempData["ErrorMessage"] = "This feature is reserved for Admins Only";
+                return RedirectToAction("Index", new { username = HttpContext.Session.GetString("User") });
+            }
+
+
         }
 
         // POST: /<controller>/
@@ -88,9 +126,19 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Remove()
         {
-            //pass Non "deleted" and Non Protected users 
-            ViewBag.events = context.Events.Where(c => (c.Deleted == false) && (c.Protected == false)).ToList();
-            return View();
+            //If a Logged In "Admin" is accessing this feature
+            if (HttpContext.Session.GetString("Type") == "admin")
+            {
+                //pass Non "deleted" and Non Protected events 
+                ViewBag.events = context.Events.Where(c => (c.Deleted == false) && (c.Protected == false)).ToList();
+                return View();
+            }
+            else
+            {
+                //Return Error. Only Admins can delete/remove users to database
+                TempData["ErrorMessage"] = "This feature is reserved for Admins Only";
+                return RedirectToAction("Index", new { username = HttpContext.Session.GetString("User") });
+            }
         }
 
         // POST: /<controller>/
@@ -121,32 +169,42 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Edit(int eventId)
         {
-            Event eventToEdit = context.Events.Where(c => c.Protected == false).SingleOrDefault(c => c.ID == eventId);
-
-            if (eventToEdit != null)
+            //If a Logged In "Admin" is accessing this feature
+            if (HttpContext.Session.GetString("Type") == "admin")
             {
-                EditEventViewModel editEventViewModel = new EditEventViewModel(context.Categories.ToList())
-                {
-                    EventID = eventToEdit.ID,
-                    Name = eventToEdit.Name,
-                    Description = eventToEdit.Description,
-                    CategoryID = eventToEdit.CategoryID,
-                    //Category = newEventCategory,
-                    Price = eventToEdit.Price,
-                    Date = eventToEdit.Date,
-                    Time = eventToEdit.Date.TimeOfDay
-                };
+                Event eventToEdit = context.Events.Where(c => c.Protected == false).SingleOrDefault(c => c.ID == eventId);
 
-                return View(editEventViewModel);
+                if (eventToEdit != null)
+                {
+                    EditEventViewModel editEventViewModel = new EditEventViewModel(context.Categories.ToList())
+                    {
+                        EventID = eventToEdit.ID,
+                        Name = eventToEdit.Name,
+                        Description = eventToEdit.Description,
+                        CategoryID = eventToEdit.CategoryID,
+                        //Category = newEventCategory,
+                        Price = eventToEdit.Price,
+                        Date = eventToEdit.Date,
+                        Time = eventToEdit.Date.TimeOfDay
+                    };
+
+                    return View(editEventViewModel);
+                }
+                else
+                {
+                    // The event does not exist in the Database or it is a protected event wich cannot be updted... return custom message
+                    TempData["ErrorMessage"] = "Sorry, The event does not exist in the Database or it is a protected event wich cannot be updted.";
+                    TestFunctions.PrintConsoleMessage("COULD NOT FIND THE EVENT IN THE DATABASE OR THE EVENT IS A PROTECTED ONE");
+                }
+
+                return Redirect("/Event");
             }
             else
             {
-                // The event does not exist in the Database or it is a protected event wich cannot be updted... return custom message
-                TempData["ErrorMessage"] = "Sorry, The event does not exist in the Database or it is a protected event wich cannot be updted.";
-                TestFunctions.PrintConsoleMessage("COULD NOT FIND THE EVENT IN THE DATABASE OR THE EVENT IS A PROTECTED ONE");
+                //Return Error. Only Admins can edit users inside the database
+                TempData["ErrorMessage"] = "This feature is reserved for Admins Only";
+                return RedirectToAction("Index", new { username = HttpContext.Session.GetString("User") });
             }
-
-            return Redirect("/Event");
 
         }
 
@@ -198,27 +256,38 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Detail(int eventId)
         {
+            ViewBag.Message = TempData["Message"] ?? "";
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
 
-            Event selectedEvent = context.Events.Include(c => c.Category).Single(c => c.ID == eventId);
-
-            Event eventToShow = new Event()
+            //If there is an "Admin" Logged in the session
+            if (HttpContext.Session.GetString("Type") == "admin")
             {
-                ID = selectedEvent.ID,
-                Name = selectedEvent.Name,
-                Description = selectedEvent.Description,
-                Date = selectedEvent.Date,
-                Price = selectedEvent.Price,
-                Category = selectedEvent.Category,
-                //Location = selectedEvent.Location??"",
-                Created = selectedEvent.Created
-            };
+                // Do nothing... The admin can view any eventID
+                Event selectedEvent = context.Events.Include(c => c.Category).Single(c => c.ID == eventId);
 
-            return View(eventToShow);
+                Event eventToShow = new Event()
+                {
+                    ID = selectedEvent.ID,
+                    Name = selectedEvent.Name,
+                    Description = selectedEvent.Description,
+                    Date = selectedEvent.Date,
+                    Price = selectedEvent.Price,
+                    Category = selectedEvent.Category,
+                    //Location = selectedEvent.Location??"",
+                    Created = selectedEvent.Created
+                };
+
+                return View(eventToShow);
+            }
+            else
+            {
+                //Return Error. Only Admins can add users to database
+                TempData["ErrorMessage"] = "You need to be Logged In to access this feature";
+                return RedirectToAction("Index", new { username = HttpContext.Session.GetString("User") });
+            }
+
+            
         }
-
-
-
-
 
     }
 }

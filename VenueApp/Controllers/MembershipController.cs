@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using VenueApp.ViewModels;
 using VenueApp.Data;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace VenueApp.Controllers
 {
@@ -22,11 +23,11 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            //List<Membership> memberships = context.Memberships.ToList();
+            ViewBag.Message = TempData["Message"] ?? "";
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
 
             //pass Non "deleted" memberships 
             List<Membership> memberships = context.Memberships.Where(c => c.Deleted == false).ToList();
-
 
             return View(memberships);
         }
@@ -37,8 +38,19 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Add()
         {
-            AddMembershipViewModel addMembershipViewModel = new AddMembershipViewModel();
-            return View(addMembershipViewModel);
+            //If a Logged In "Admin" is accessing this feature
+            if (HttpContext.Session.GetString("Type") == "admin")
+            {
+                //Display Add Form View
+                AddMembershipViewModel addMembershipViewModel = new AddMembershipViewModel();
+                return View(addMembershipViewModel);
+            }
+            else
+            {
+                //Return Error. Only Admins can add users to database
+                TempData["ErrorMessage"] = "This feature is reserved for Admins Only";
+                return RedirectToAction("Index", new { username = HttpContext.Session.GetString("User") });
+            }
         }
 
         // POST: /<controller>/
@@ -68,11 +80,19 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Remove()
         {
-            //ViewBag.memberships = context.Memberships.ToList();
-
-            //pass Non "deleted" and Non Protected memberships 
-            ViewBag.memberships = context.Memberships.Where(c => (c.Deleted == false) && (c.Protected == false)).ToList();
-            return View();
+            //If a Logged In "Admin" is accessing this feature
+            if (HttpContext.Session.GetString("Type") == "admin")
+            {
+                //pass Non "deleted" and Non Protected memberships 
+                ViewBag.memberships = context.Memberships.Where(c => (c.Deleted == false) && (c.Protected == false)).ToList();
+                return View();
+            }
+            else
+            {
+                //Return Error. Only Admins can delete/remove users to database
+                TempData["ErrorMessage"] = "This feature is reserved for Admins Only";
+                return RedirectToAction("Index", new { username = HttpContext.Session.GetString("User") });
+            }
         }
 
         // POST: /<controller>/

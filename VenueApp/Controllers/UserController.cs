@@ -35,9 +35,34 @@ namespace VenueApp.Controllers
             ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
 
             //IList<User> users = context.Users.ToList();   //Changing to Non "Deleted Users"
-            IList<User> users = context.Users.Where(c => c.Deleted == false).ToList();
+            //IList<User> users = context.Users.Where(c => c.Deleted == false).ToList();
 
-            return View(users);
+            //Create empty list
+            IList<User> users = new List<User>();
+
+            //If there is an "Admin" Logged in the session
+            if (HttpContext.Session.GetString("Type") == "admin")
+            {
+                //Add all the users to the list
+                users = context.Users.Where(c => c.Deleted == false).ToList();
+                return View(users);
+            }
+            //If there is an regular "User" Logged in the session
+            else if (HttpContext.Session.GetString("Type") == "user")
+            {
+                //Show his details only
+                /*return RedirectToAction("Detail", new { userId = HttpContext.Session.GetInt32("UserID") });
+                       OR        */
+                users = context.Users.Where(c => c.ID == HttpContext.Session.GetInt32("UserID")).ToList();
+                return View(users);
+            }
+            //If not...
+            else
+            {
+                //return empty list with Error Message
+                ViewBag.ErrorMessage = "You need to be Logged In to access this feature";
+                return View( users );
+            }
         }
 
 
@@ -46,23 +71,25 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Login()
         {
-            /* For future Refactoring
+            /* For future Refactoring */
             var currentSession = HttpContext.Session;
-            currentSession.TryGetValue("user", out byte[] value1);
-            */
+                       
+            ViewBag.LogoutMessage = TempData["logoutMessage"] ?? "";
+            ViewBag.Message = TempData["Message"] ?? "";
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
 
             // If the user is already logged in
-            if (HttpContext.Session.TryGetValue("User", out byte[] value))
+            if (currentSession.TryGetValue("User", out byte[] value))
             {
-                //return RedirectToAction("Index", "User", new { username = HttpContext.Session.GetString("User") });
+                //Go to Welcome Dashboard
                 return RedirectToAction("Index", "Dashboard");
+                //return RedirectToAction("Index", "User", new { username = HttpContext.Session.GetString("User") });
             }
             else
             {
                 LoginViewModel userViewModel = new LoginViewModel();
                 return View(userViewModel);
             }
-            
         }
 
         // POST: /<controller>/
@@ -72,7 +99,7 @@ namespace VenueApp.Controllers
             if (ModelState.IsValid)
             {
                 User currentUser = context.Users.SingleOrDefault(c => c.Username == userFromView.Username);
-                
+
                 if ((currentUser != null) && (currentUser.Password == userFromView.Password))
                 {
                     //Login Success... Greet the User
@@ -83,7 +110,6 @@ namespace VenueApp.Controllers
                     HttpContext.Session.SetString("Type", userType);
                     TestFunctions.PrintConsoleMessage("LOGIN SUCCESS " + userInSesion);
 
-                    //return RedirectToAction("Index", "User", new { username = userInSesion });
                     return RedirectToAction("Index", "Dashboard");
                 }
                 else if (currentUser == null)
@@ -101,6 +127,10 @@ namespace VenueApp.Controllers
                     TestFunctions.PrintConsoleMessage("PASSWORD DOES NOT MATCH BETWEEN THE FORM AND DATABASE");
                 }
             }
+
+            ViewBag.LogoutMessage = TempData["logoutMessage"] ?? "";
+            ViewBag.Message = TempData["Message"] ?? "";
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
             return View(userFromView);
         }
 
@@ -114,17 +144,17 @@ namespace VenueApp.Controllers
             HttpContext.Session.Clear();
             TempData["logoutMessage"] = "You have successfully logged out";
 
-            return RedirectToAction("Index", "User", new { username = HttpContext.Session.GetString("User") });
+            //Return to Home Index verifiying there is no User in session
+            return RedirectToAction("Index", "Home", new { username = HttpContext.Session.GetString("User") });
         }
+        
 
 
-               
         //----------------------------------- SIGNUP -----------------------------------//
         // GET: /<controller>/
         public IActionResult Signup()
         {
             SignupViewModel userViewModel = new SignupViewModel();
-
             return View(userViewModel);
         }
 
@@ -142,7 +172,7 @@ namespace VenueApp.Controllers
                 //User existingUser = context.Users.Find(userFromView.Username);
                 //existingUser = context.Users.SingleOrDefault(c => c.Username == userFromView.Username);
                 */
-              
+
                 try
                 {
                     //Check for the availability of the selected username on the database 
@@ -151,10 +181,11 @@ namespace VenueApp.Controllers
                 catch
                 {
                     //The username does not exist in the database
-                    usernameAvaliable =true;
+                    usernameAvaliable = true;
                 }
-                
-                if (usernameAvaliable)   // If is an Avaliable Username (It needs to be unique)
+
+                // If the Username is an Avaliable Username (It needs to be unique)
+                if (usernameAvaliable)   
                 {
                     // Add the new user to my existing users table
                     User newUser = new User
@@ -182,7 +213,8 @@ namespace VenueApp.Controllers
                     TestFunctions.PrintConsoleMessage("LOGIN SUCCESS " + userInSesion);
 
                     // Greet the new user and redirect to its dashboard
-                    return RedirectToAction("Index", "User", new { username = userInSesion });
+                    return RedirectToAction("Index", "Dashboard");
+                    //return RedirectToAction("Index", "User", new { username = userInSesion });
                 }
                 else
                 {
@@ -196,22 +228,29 @@ namespace VenueApp.Controllers
         }
 
 
-
-
-
+               
         //----------------------------------- ADD USER -----------------------------------//
         // GET: /<controller>/
         public IActionResult Add()
         {
-            AddUserViewModel userViewModel = new AddUserViewModel(context.Memberships.ToList(), context.Types.ToList());
-
-            return View(userViewModel);
+            //If a Logged In "Admin" is accessing this feature
+            if (HttpContext.Session.GetString("Type") == "admin"){
+                //Display Add Form View
+                AddUserViewModel userViewModel = new AddUserViewModel(context.Memberships.ToList(), context.Types.ToList());
+                return View(userViewModel);
+            }
+            else
+            {
+                //Return Error. Only Admins can add users to database
+                TempData["ErrorMessage"] = "This feature is reserved for Admins Only";
+                return RedirectToAction("Index", new { username = HttpContext.Session.GetString("User")});
+            }
         }
 
         // POST: /<controller>/
         [HttpPost]
         public IActionResult Add(AddUserViewModel userFromView)
-        {            
+        {
             if (ModelState.IsValid)
             {
                 if (context.Users.SingleOrDefault(c => c.Username == userFromView.Username) == null)   // If is an Avaliable Username (It needs to be unique)
@@ -225,8 +264,8 @@ namespace VenueApp.Controllers
                         Email = userFromView.Email,
                         Password = userFromView.Password,
                         Created = DateTime.Now,
-                        TypeID = userFromView.UserTypeID,         
-                        MembershipID = userFromView.MembershipID    
+                        TypeID = userFromView.UserTypeID,
+                        MembershipID = userFromView.MembershipID
                     };
 
                     context.Users.Add(newUser);
@@ -257,38 +296,80 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Detail(int userId)
         {
+            ViewBag.Message = TempData["Message"] ?? "";
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
 
-            User selectedUser = context.Users.Include(c => c.Type).Include(d => d.Membership).Single(c => c.ID == userId);
-            //User selectedUser = context.Users.Single(c => c.ID == userId);            
-            //UserType userType = context.Types.Single(c => c.ID == selectedUser.TypeID);
-            //Membership userMembership = context.Memberships.Single(c => c.ID == selectedUser.MembershipID);
+            //If there is an "Admin" Logged in the session
+            if (HttpContext.Session.GetString("Type") == "admin") {
+                // Do nothing... The admin can view any userID
+            }
+            //If there is an regular "User" Logged in the session
+            else if (HttpContext.Session.GetString("Type") == "user") {
+                // Use the Logged user ID only
+                int sessionID = HttpContext.Session.GetInt32("UserID").Value;
+                if (userId != sessionID)
+                {
+                    ViewBag.ErrorMessage = "Sorry, but you can only access your User Details";
+                }
+                userId = sessionID;
+            }
+            else {
+                //Return Error. Only Admins can add users to database
+                TempData["ErrorMessage"] = "You need to be Logged In to access this feature";
+                return RedirectToAction("Index", new { username = HttpContext.Session.GetString("User") });
 
-            User userToShow = new User()
+            }
+
+            // Select the user with the argument ID
+            User selectedUser = context.Users.Include(c => c.Type).Include(d => d.Membership).SingleOrDefault(c => c.ID == userId);
+
+            //If User exist in the database
+            if (selectedUser != null)
             {
-                ID = userId,
-                Username = selectedUser.Username,
-                FirstName = selectedUser.FirstName,
-                LastName = selectedUser.LastName,
-                Email = (selectedUser.Email ?? "-" ),
-                Created = selectedUser.Created,
-                Membership = selectedUser.Membership,
-                Type = selectedUser.Type
-                //Membership = userMembership,
-                //Type = userType
-            };
-            
-            return View(userToShow);
-        }
+                //Create Model of user to show
+                User userToShow = new User()
+                {
+                    ID = userId,
+                    Username = selectedUser.Username,
+                    FirstName = selectedUser.FirstName,
+                    LastName = selectedUser.LastName,
+                    Email = (selectedUser.Email ?? "-"),
+                    Created = selectedUser.Created,
+                    Membership = selectedUser.Membership,
+                    Type = selectedUser.Type
+                };
 
+                //Render the HTML View with th complete users info
+                return View(userToShow);
+            }
+            else
+            {
+                // The user does not exist in the Database and cannot be displayed... return custom message
+                ViewBag.ErrorMessage = "The user you are triying to see, does not exist in the database";
+                ViewBag.UserID = userId;
+                return View(selectedUser);
+            }
+        }
+    
 
 
         //-------------------------------- REMOVE -----------------------------------//
         // GET: /<controller>/
         public IActionResult Remove()
         {
-            //pass Non "deleted" and Non Protected users 
-            ViewBag.users = context.Users.Where(c => (c.Deleted == false) && (c.Protected == false)).ToList();
-            return View();
+            //If a Logged In "Admin" is accessing this feature
+            if (HttpContext.Session.GetString("Type") == "admin")
+            {
+                //pass Non "deleted" and Non "Protected" users to view
+                ViewBag.users = context.Users.Where(c => (c.Deleted == false) && (c.Protected == false)).ToList();
+                return View();
+            }
+            else
+            {
+                //Return Error. Only Admins can delete/remove users to database
+                TempData["ErrorMessage"] = "This feature is reserved for Admins Only";
+                return RedirectToAction("Index", new { username = HttpContext.Session.GetString("User") });
+            }
         }
 
         // POST: /<controller>/
@@ -320,33 +401,41 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Edit(int userId)
         {
-            User userToEdit = context.Users.Where(c => c.Protected == false).SingleOrDefault(c => c.ID == userId);
-
-            if (userToEdit != null)
+            //If a Logged In "Admin" is accessing this feature
+            if (HttpContext.Session.GetString("Type") == "admin")
             {
-                EditUserViewModel editUserViewModel = new EditUserViewModel(context.Memberships.ToList(), context.Types.ToList())
-                {
-                    UserID = userToEdit.ID,
-                    Username = userToEdit.Username,
-                    FirstName = userToEdit.FirstName,
-                    LastName = userToEdit.LastName,
-                    Email = userToEdit.Email,
-                    Password = userToEdit.Password,
-                    UserTypeID = userToEdit.TypeID,
-                    MembershipID = userToEdit.MembershipID
-                };
+                //Select the User to delete or remove
+                User userToEdit = context.Users.Where(c => c.Protected == false).SingleOrDefault(c => c.ID == userId);
 
-                return View(editUserViewModel);
+                if (userToEdit != null)
+                {
+                    EditUserViewModel editUserViewModel = new EditUserViewModel(context.Memberships.ToList(), context.Types.ToList())
+                    {
+                        UserID = userToEdit.ID,
+                        Username = userToEdit.Username,
+                        FirstName = userToEdit.FirstName,
+                        LastName = userToEdit.LastName,
+                        Email = userToEdit.Email,
+                        Password = userToEdit.Password,
+                        UserTypeID = userToEdit.TypeID,
+                        MembershipID = userToEdit.MembershipID
+                    };
+                    return View(editUserViewModel);
+                }
+                else
+                {
+                    // The user does not exist in the Database or it is a protected user which cannot be updted... return custom message
+                    TempData["ErrorMessage"] = "Sorry, The user does not exist in the Database or it is a protected user which cannot be updted.";
+                    TestFunctions.PrintConsoleMessage("COULD NOT FIND THE USER IN THE DATABASE OR THE EVENT IS A PROTECTED ONE");
+                }
+                return Redirect("/User");
             }
             else
             {
-                // The user does not exist in the Database or it is a protected user wich cannot be updted... return custom message
-                TempData["ErrorMessage"] = "Sorry, The user does not exist in the Database or it is a protected user wich cannot be updted.";
-                TestFunctions.PrintConsoleMessage("COULD NOT FIND THE USER IN THE DATABASE OR THE EVENT IS A PROTECTED ONE");
+                //Return Error. Only Admins can edit users inside the database
+                TempData["ErrorMessage"] = "This feature is reserved for Admins Only";
+                return RedirectToAction("Index", new { username = HttpContext.Session.GetString("User") });
             }
-
-            return Redirect("/User");
-
         }
 
         // PUT: /<controller>/  ?????????????????????????????????????????????????????????
@@ -384,8 +473,8 @@ namespace VenueApp.Controllers
                 }
                 else
                 {
-                    // The user does not exist in the Database or it is a protected user wich cannot be updted... return custom message
-                    ModelState.AddModelError("ServerError", "Sorry, The user does not exist in the Database or it is a protected user wich cannot be updted.");
+                    // The user does not exist in the Database or it is a protected user which cannot be updted... return custom message
+                    ModelState.AddModelError("ServerError", "Sorry, The user does not exist in the Database or it is a protected user which cannot be updted.");
                     modUser.ServerError = true;
                     TestFunctions.PrintConsoleMessage("COULD NOT FIND THE USER IN THE DATABASE OR THE USER IS A PROTECTED ONE");
                 }
@@ -395,6 +484,84 @@ namespace VenueApp.Controllers
             return View(modUser);
         }
 
+
+
+        //-------------------------------- Profile -----------------------------------//
+        // GET: /<controller>/
+        public IActionResult Profile(int userId = 0)
+        {
+
+            // If the user is already logged in
+//------------------- if (HttpContext.Session.TryGetValue("User", out byte[] value))
+            { 
+                User selectedUser = context.Users.Where(c => c.Protected == false).Include(c => c.Type).Include(d => d.Membership).SingleOrDefault(c => c.ID == userId);
+
+                if (selectedUser != null)
+                {
+                    EditUserViewModel userToShow = new EditUserViewModel(context.Memberships.ToList(), context.Types.ToList())
+                    {
+                        UserID = userId,
+                        Username = selectedUser.Username,
+                        FirstName = selectedUser.FirstName,
+                        LastName = selectedUser.LastName,
+                        Email = selectedUser.Email,
+                        Password = selectedUser.Password,
+                        Created = selectedUser.Created,
+                        Membership = selectedUser.Membership,
+                        Type = selectedUser.Type,
+                        UserTypeID = selectedUser.TypeID,
+                        MembershipID = selectedUser.MembershipID
+                    };
+
+                    ViewBag.ProfileInfo = new Dictionary<string, string>()
+                    {
+                        {"Membership", userToShow.Membership.Name },
+                        {"FullName", (userToShow.FirstName ?? (userToShow.LastName?? "-")) + " " + userToShow.LastName?? "" },
+                        {"Email", userToShow.Email ?? "-" }
+                    }; 
+                    //Send all info to Profile View
+                    return View(userToShow);
+                }
+            }
+            //If user not logged in... Send Unauthorized Access page
+            return RedirectToAction("Index", "Dashboard");
+        }
+        
+        // PUT: /<controller>/  ?????????????????????????????????????????????????????????
+        [HttpPut]
+        [HttpPost]
+        public IActionResult Profile(EditUserViewModel modUser)
+        {
+            User userToEdit = context.Users.Include(c => c.Type).Include(d => d.Membership).SingleOrDefault(c => c.ID == modUser.UserID);
+
+            ViewBag.ProfileInfo = new Dictionary<string, string>()
+            {
+                {"Membership", userToEdit.Membership.Name },
+                {"FullName", (userToEdit.FirstName ?? (userToEdit.LastName?? "-")) + " " + userToEdit.LastName?? ""},
+                {"Email", userToEdit.Email ?? "-" }
+            };
+
+            if (ModelState.IsValid)
+            {
+                if (userToEdit != null)
+                {
+                    // Modify the user with new information
+                    userToEdit.Username = modUser.Username;
+                    userToEdit.FirstName = modUser.FirstName;
+                    userToEdit.LastName = modUser.LastName;
+                    userToEdit.Email = modUser.Email;
+                    userToEdit.Password = modUser.Password;
+
+                    context.Users.Update(userToEdit);
+                    context.SaveChanges();
+                }
+
+                return RedirectToAction("Profile", new { userId = modUser.UserID });
+            }
+
+            ViewBag.Retry = true;
+            return View(modUser);
+        }
     }
 
 }

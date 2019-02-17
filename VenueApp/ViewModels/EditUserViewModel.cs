@@ -13,6 +13,15 @@ namespace VenueApp.ViewModels
         [Required]
         public int UserID { get; set; }
 
+        //[Required]
+        public DateTime Created { get; set; }
+        
+        //[Required]
+        public Membership Membership { get; set; }
+
+        //[Required]
+        public UserType Type { get; set; }
+
         public EditUserViewModel() { }
 
         public EditUserViewModel(IEnumerable<Membership> memberships, IEnumerable<UserType> roles) : base(memberships, roles)

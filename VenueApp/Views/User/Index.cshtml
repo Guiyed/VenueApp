@@ -32,32 +32,45 @@ else if (ViewBag.ErrorMessage.Length > 0)
     <p class="text-danger">@ViewBag.ErrorMessage <span class="glyphicon glyphicon-remove " aria-hidden="true"></span></p>
 }
 
-
-<h2>List of Users on Database</h2>
-@if (Model.Count == 0)
+@if (userType.Length > 0)
 {
-    <p>No users yet!</p>
-}
-else
-{
-    <table class="table table-hover">
-        <tr>
-            <th class="col-md-1">#</th>
-            <th class="col-md-8">Name</th>
-            <th class="col-md-3">Options</th>
-        </tr>
 
-        @foreach (var user in Model)
-        {
+    @if (Model.Count == 0)
+    {
+        <h3>List of Users on Database</h3>
+        <p>No users yet!</p>
+    }
+    else
+    {
+        <h3>
+            List of Users in Database
+            <a class="delete pull-right" asp-controller="User" asp-action="Remove"><i class="fas fa-times bi"></i></a>
+            <span class="pull-right">&nbsp;&nbsp;&nbsp;</span>
+            <a class="add pull-right" asp-controller="User" asp-action="add"><i class="fas fa-plus"></i></a>
+        </h3>
+                
+        <table class="table table-hover">
             <tr>
-                <td>@count</td>
-                <td><a asp-controller="User" asp-action="Detail" asp-route-userId="@user.ID">@user.Username</a></td>
-                <td class="right"><a asp-controller="User" asp-action="Edit" asp-route-userId="@user.ID">Edit</a> </td>
+                <th class="col-md-1">#</th>
+                <th class="col-md-8">Name</th>
+                <th class="col-md-3">Options</th>
             </tr>
-            count += 1;
-        }
-    </table>
+
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@count</td>
+                    <td><a asp-controller="User" asp-action="Detail" asp-route-userId="@user.ID">@user.Username</a></td>
+                    <td class="right"><a asp-controller="User" asp-action="Edit" asp-route-userId="@user.ID">Edit</a> </td>
+                </tr>
+                count += 1;
+            }
+        </table>
+    }
+
+    <!--
+    <p><a asp-controller="User" asp-action="Add">Add User</a> | <a asp-controller="User" asp-action="Remove">Remove</a></p>
+        
+    -->
+
 }
-
-<p><a asp-controller="User" asp-action="Add">Add User</a> | <a asp-controller="User" asp-action="Remove">Remove</a></p>
-

@@ -2,25 +2,44 @@
 
 @{
     ViewBag.Title = "User Detail";
+}
 
-    @using Microsoft.AspNetCore.Http
-    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-
-    string userType = @HttpContextAccessor.HttpContext.Session.GetString("Type") ?? "";
+@if (Model == null)
+{
+    <h1> @ViewBag.Title (<span class="text-primary">ID = @ViewBag.UserID</span>)</h1>
+}
+else
+{
+    <h1> @ViewBag.Title (<span class="text-primary">ID = @Model.ID</span>)</h1>
 }
 
 
-<h1>User Detail (ID = @Model.ID)</h1>
-<div>
-    <h4>Username: <b><i>@Model.Username</i></b></h4>
-    <h4>First Name: <b><i>@Model.FirstName</i></b></h4>
-    <h4>Last Name: <b><i>@Model.LastName</i></b></h4>
-    <h4>Email: <b><i>@Model.Email</i></b></h4>
-    <h4>Date created: <b><i>@Model.Created</i></b></h4>
-    <h4>Membership: <b><i>@Model.Membership.Name</i></b></h4>
-    <h4>User Role Type: <b><i>@Model.Type.Name</i></b></h4>
+@if (ViewBag.Message.Length > 0)
+{
+    <p class="text-success">@ViewBag.Message<span class="glyphicon glyphicon-ok " aria-hidden="true"></span></p>
+}
+else if (ViewBag.ErrorMessage.Length > 0)
+{
+    <p class="text-danger">@ViewBag.ErrorMessage <span class="glyphicon glyphicon-remove " aria-hidden="true"></span></p>
+}
 
-</div>
-<br />
-<p><a asp-controller="User" asp-action="Index">back</a> &nbsp;&nbsp; [<a asp-controller="User" asp-action="Detail" asp-route-userId="@((Model.ID == 1)?1:Model.ID-1)">prev</a> | <a asp-controller="User" asp-action="Detail" asp-route-userId="@(Model.ID+1)">next</a>]</p>
-<!-- There is a BUG here with ID not in database-->
+@if (Model != null)
+{
+    <div>
+        <h4>Username: <b><i>@Model.Username</i></b></h4>
+        <h4>First Name: <b><i>@Model.FirstName</i></b></h4>
+        <h4>Last Name: <b><i>@Model.LastName</i></b></h4>
+        <h4>Email: <b><i>@Model.Email</i></b></h4>
+        <h4>Date created: <b><i>@Model.Created</i></b></h4>
+        <h4>Membership: <b><i>@Model.Membership.Name</i></b></h4>
+        <h4>User Role Type: <b><i>@Model.Type.Name</i></b></h4>
+
+    </div>
+    <br />
+    <p><a asp-controller="User" asp-action="Index">back</a> &nbsp;&nbsp; [<a asp-controller="User" asp-action="Detail" asp-route-userId="@((Model.ID == 1)?1:Model.ID-1)">prev</a> | <a asp-controller="User" asp-action="Detail" asp-route-userId="@(Model.ID+1)">next</a>]</p>
+    <!-- There is a BUG here with ID not in database
+        Check for Pagination option insted.
+    -->
+}
+
+

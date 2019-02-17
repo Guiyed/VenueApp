@@ -1,14 +1,4 @@
-﻿@{
-    ViewBag.Title = "Test View";
-}
-
-<h1>@ViewBag.Title</h1>
-
-<h3>Space for testing under development views</h3>
-<br />
-
-
-@model VenueApp.ViewModels.EditUserViewModel
+﻿@model VenueApp.ViewModels.EditUserViewModel
 
 @{
     ViewBag.Title = "User Profile";
@@ -43,13 +33,6 @@
                 <li class="list-group-item text-right"><span class="pull-left"><strong>Name</strong></span> @ViewBag.ProfileInfo["FullName"]</li>
                 <li class="list-group-item text-right"><span class="pull-left"><strong>Birthday</strong></span> -- / -- / --</li>
                 <li class="list-group-item text-right"><span class="pull-left"><strong>Email</strong></span> @ViewBag.ProfileInfo["Email"]</li>
-                <!--
-
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Name</strong></span> a(Model.FirstName ?? "-") a(Model.LastName ?? "-")</li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Birthday</strong></span> -- / -- / --</li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Email</strong></span> a(Model.Email ?? "-")</li>
-                                -->
-
             </ul>
 
             <div class="panel panel-default">
@@ -61,7 +44,6 @@
             <div class="panel panel-default">
                 <div class="panel-heading"><a class="text-muted" asp-controller="Membership" asp-action="Index">Membership </a><i class="far fa-id-card fa-1x"></i></div>
                 <div class="panel-body">@ViewBag.ProfileInfo["Membership"]</div>
-                <!-- <div class="panel-body"><a asp-controller="Membership" asp-action="Detail">aModel.Membership</a></div> -->
             </div>
 
         </div><!--/col-3-->
@@ -317,5 +299,3 @@
     };
 
 </script>
-
-
