@@ -511,6 +511,7 @@ namespace VenueApp.Controllers
                         Type = selectedUser.Type,
                         UserTypeID = selectedUser.TypeID,
                         MembershipID = selectedUser.MembershipID
+                        /***/
                     };
 
                     ViewBag.ProfileInfo = new Dictionary<string, string>()
