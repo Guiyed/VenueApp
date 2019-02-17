@@ -1,6 +1,6 @@
 ﻿@model VenueApp.ViewModels.EditUserViewModel
 @{
-    ViewBag.Title = "Edit User " + Model.Username + "(id=" + Model.UserID + ")";
+    ViewBag.Title = "Edit User " + Model.Username + "(Id=" + Model.UserID + ")";
 }
 
 <h1>@ViewBag.Title</h1>
@@ -9,7 +9,12 @@
 
 <form asp-controller="User" asp-action="Edit" method="post">
     <div class="container">
-        <div class=" row"> <h3> Edit User Data</h3></div>
+        <div class=" row">
+            <h3>
+                Edit User Data
+                <a class="back pull-right" asp-controller="User" asp-action="Index"><i class="fas fa-angle-double-left"></i></a>
+            </h3>
+        </div>
         <div class="row">
             <div class="form-group col-md-12">
                 <label asp-for="Username"></label>
@@ -81,7 +86,10 @@
 </form>
 
 <br />
+<!--
 <p><a asp-controller="User" asp-action="Index">back</a>
+    
+-->
 
 <script>
     function copyVerify(passw) {

@@ -9,7 +9,12 @@
 
 <form asp-controller="User" asp-action="Add" method="post">
     <div class="container">
-        <div class=" row"> <h3> New User Data</h3></div>
+        <div class=" row">
+            <h3>
+                New User Data
+                <a class="back pull-right" asp-controller="User" asp-action="Index"><i class="fas fa-angle-double-left"></i></a>
+            </h3>
+        </div>
         <div class="row">
             <div class="form-group col-md-12">
                 <label asp-for="Username"></label>
@@ -84,7 +89,10 @@
 </form>
 
 <br />
+<!--
 <p><a asp-controller="User" asp-action="Index">back</a> 
+    
+-->
 
 
 

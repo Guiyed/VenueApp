@@ -124,8 +124,29 @@ landingNewUser {
 }
 */
 
+/*  Icon Colors */
+.add{
+    color: green;
+}
+.add:hover {
+    color: darkgreen;
+}
 
+.delete {
+    color: red;
+}
 
+.delete:hover{
+    color: darkred;
+}
+
+.back{
+    color: goldenrod;
+}
+
+.back:hover {
+    color: darkgoldenrod;
+}
 
 
 

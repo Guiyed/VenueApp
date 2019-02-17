@@ -32,16 +32,23 @@ else if (ViewBag.ErrorMessage.Length > 0)
     <p class="text-danger">@ViewBag.ErrorMessage <span class="glyphicon glyphicon-remove " aria-hidden="true"></span></p>
 }
 
-@if(userType.Length > 0)
+@if (userType.Length > 0)
 {
 
-    <h2>List of Users on Database</h2>
     @if (Model.Count == 0)
     {
+        <h3>List of Users on Database</h3>
         <p>No users yet!</p>
     }
     else
     {
+        <h3>
+            List of Users in Database
+            <a class="delete pull-right" asp-controller="User" asp-action="Remove"><i class="fas fa-times bi"></i></a>
+            <span class="pull-right">&nbsp;&nbsp;&nbsp;</span>
+            <a class="add pull-right" asp-controller="User" asp-action="add"><i class="fas fa-plus"></i></a>
+        </h3>
+                
         <table class="table table-hover">
             <tr>
                 <th class="col-md-1">#</th>
@@ -61,6 +68,9 @@ else if (ViewBag.ErrorMessage.Length > 0)
         </table>
     }
 
+    <!--
     <p><a asp-controller="User" asp-action="Add">Add User</a> | <a asp-controller="User" asp-action="Remove">Remove</a></p>
+        
+    -->
 
 }
