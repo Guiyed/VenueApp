@@ -1,17 +1,17 @@
-﻿@model VenueApp.ViewModels.EditUserViewModel
+﻿@model VenueApp.ViewModels.AddUserViewModel
+
 @{
-    ViewBag.Title = "Edit User " + Model.Username + "(Id=" + Model.UserID + ")";
+    ViewBag.Title = "Add Booking";
 }
+
 
 <h1>@ViewBag.Title</h1>
 
-<br />
-
-<form asp-controller="User" asp-action="Edit" method="post">
+<form asp-controller="User" asp-action="Add" method="post">
     <div class="container">
         <div class=" row">
             <h3>
-                Edit User Data
+                New User Data
                 <a class="back pull-right" asp-controller="User" asp-action="Index"><i class="fas fa-angle-double-left"></i></a>
             </h3>
         </div>
@@ -52,26 +52,13 @@
         <div class="row">
             <div class="form-group col-md-6">
                 <label asp-for="Password"></label>
-                <input id="password" class="form-control" asp-for="Password" value="@Model.Password" onchange="copyVerify(this.value)" />
+                <input class="form-control" asp-for="Password" />
                 <span class="small text-danger" asp-validation-for="Password"></span>
-                <input id="verify" hidden asp-for="Verify" value="@Model.Password" />
             </div>
             <div class="form-group col-md-6">
-                <label asp-for="Birthday"></label>
-                <input type="date" class="form-control " style="line-height: 1" asp-for="Birthday" value="@Model.Birthday">
-                <span class="small text-danger" asp-validation-for="Birthday"></span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6">
-                <label asp-for="PhoneNumber"></label>
-                <input id="password" class="form-control" asp-for="PhoneNumber" value="@Model.PhoneNumber"/>
-                <span class="small text-danger" asp-validation-for="PhoneNumber"></span>
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="Location"></label>
-                <input type="text" class="form-control " asp-for="Location" value="@Model.Location">
-                <span class="small text-danger" asp-validation-for="Location"></span>
+                <label asp-for="Verify"></label>
+                <input class="form-control" asp-for="Verify" />
+                <span class="small text-danger" asp-validation-for="Verify"></span>
             </div>
         </div>
         <div class="row">
@@ -87,31 +74,48 @@
             </div>
         </div>
         <br />
-
-        <input class="pull-right btn btn-success btn-lg" type="submit" value="Edit User" />
-        <input type="hidden" name="UserID" value="@Model.UserID" />
+        <input class="pull-right btn btn-info btn-lg" type="submit" value="Add User To Database" />
 
     </div>
-        <br />
-        <div>
-            @if (Model.ServerError)
-            {
-                <span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>
-            }
-            <span class="text-danger" asp-validation-for="ServerError"></span>
-        </div>
+    <br />
+    <br />
+    <div>
+        @if (Model.ServerError)
+        {
+            <span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>
+        }
+        <span class="text-danger" asp-validation-for="ServerError"></span>
+    </div>
 </form>
 
 <br />
 <!--
 <p><a asp-controller="User" asp-action="Index">back</a>
-    
+
 -->
 
-<script>
-    function copyVerify(passw) {
-        alert("The password has changed. The new value is: " + passw);
-        document.getElementById('verify').setAttribute("value", passw);
-    }
 
-</script>
+
+
+@model CheeseMVC.ViewModels.AddMenuItemViewModel
+
+@{
+    ViewBag.Title = "Add Item to Menu: " + Model.Menu.Name;
+}
+
+<h1>@ViewBag.Title</h1>
+
+<form asp-controller="Menu" asp-action="AddItem" method="post">
+
+    <div class="form-group">
+        <label asp-for="CheeseID"></label>
+        <select asp-for="CheeseID" asp-items="Model.Cheeses"></select>
+        <input type="hidden" name="MenuID" value="@Model.Menu.ID" />
+        <span asp-validation-for="CheeseID"></span>
+        <span asp-validation-for="MenuID"></span>
+    </div>
+
+
+    <input type="submit" value="Add Item" />
+
+</form>

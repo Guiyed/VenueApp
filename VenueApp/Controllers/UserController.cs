@@ -418,14 +418,17 @@ namespace VenueApp.Controllers
                         Email = userToEdit.Email,
                         Password = userToEdit.Password,
                         UserTypeID = userToEdit.TypeID,
-                        MembershipID = userToEdit.MembershipID
+                        MembershipID = userToEdit.MembershipID,
+                        Birthday = userToEdit.Birthday,
+                        PhoneNumber = userToEdit.PhoneNumber,
+                        Location = userToEdit.Location
                     };
                     return View(editUserViewModel);
                 }
                 else
                 {
                     // The user does not exist in the Database or it is a protected user which cannot be updted... return custom message
-                    TempData["ErrorMessage"] = "Sorry, The user does not exist in the Database or it is a protected user which cannot be updted.";
+                    TempData["ErrorMessage"] = "Sorry, The user does not exist in the Database or it is a protected user which cannot be updated.";
                     TestFunctions.PrintConsoleMessage("COULD NOT FIND THE USER IN THE DATABASE OR THE EVENT IS A PROTECTED ONE");
                 }
                 return Redirect("/User");
@@ -460,6 +463,10 @@ namespace VenueApp.Controllers
                     userToEdit.Type = newUserRole;
                     userToEdit.Email = modUser.Email;
                     userToEdit.Password = modUser.Password;
+                    userToEdit.Birthday = modUser.Birthday;
+                    userToEdit.PhoneNumber = modUser.PhoneNumber;
+                    userToEdit.Location = modUser.Location;
+
 
                     context.Users.Update(userToEdit);
                     context.SaveChanges();
@@ -474,7 +481,7 @@ namespace VenueApp.Controllers
                 else
                 {
                     // The user does not exist in the Database or it is a protected user which cannot be updted... return custom message
-                    ModelState.AddModelError("ServerError", "Sorry, The user does not exist in the Database or it is a protected user which cannot be updted.");
+                    ModelState.AddModelError("ServerError", "Sorry, The user does not exist in the Database or it is a protected user which cannot be updated.");
                     modUser.ServerError = true;
                     TestFunctions.PrintConsoleMessage("COULD NOT FIND THE USER IN THE DATABASE OR THE USER IS A PROTECTED ONE");
                 }
@@ -510,8 +517,11 @@ namespace VenueApp.Controllers
                         Membership = selectedUser.Membership,
                         Type = selectedUser.Type,
                         UserTypeID = selectedUser.TypeID,
-                        MembershipID = selectedUser.MembershipID
-                        /***/
+                        MembershipID = selectedUser.MembershipID,
+                        Birthday = selectedUser.Birthday,
+                        PhoneNumber = selectedUser.PhoneNumber,
+                        Location = selectedUser.Location
+                        
                     };
 
                     ViewBag.ProfileInfo = new Dictionary<string, string>()
@@ -552,6 +562,9 @@ namespace VenueApp.Controllers
                     userToEdit.LastName = modUser.LastName;
                     userToEdit.Email = modUser.Email;
                     userToEdit.Password = modUser.Password;
+                    userToEdit.Birthday = modUser.Birthday;
+                    userToEdit.PhoneNumber = modUser.PhoneNumber;
+                    userToEdit.Location = modUser.Location;
 
                     context.Users.Update(userToEdit);
                     context.SaveChanges();

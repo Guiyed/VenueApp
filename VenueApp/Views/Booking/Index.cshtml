@@ -1,0 +1,69 @@
+﻿@model List<VenueApp.Models.Booking>
+
+@{
+    ViewBag.Title = "Bookings Index";
+
+    @using Microsoft.AspNetCore.Http
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+    string userType = @HttpContextAccessor.HttpContext.Session.GetString("Type") ?? "";
+
+    int count = 1;
+}
+
+<h1>@ViewBag.Title</h1>
+
+@if (ViewBag.Message.Length > 0)
+{
+    <p class="text-success">@ViewBag.Message<span class="glyphicon glyphicon-ok " aria-hidden="true"></span></p>
+}
+else if (ViewBag.ErrorMessage.Length > 0)
+{
+    <p class="text-danger">@ViewBag.ErrorMessage <span class="glyphicon glyphicon-remove " aria-hidden="true"></span></p>
+}
+
+
+@if (userType.Length > 0)
+{
+
+    @if (Model.Count == 0)
+    {
+        <h3>List of Bookings on Database</h3>
+        <p>No bookings yet!</p>
+    }
+    else
+    {
+        <h3>
+            List of Bookings in Database
+            <a class="delete pull-right" asp-controller="User" asp-action="Remove"><i class="fas fa-times bi"></i></a>
+            <span class="pull-right">&nbsp;&nbsp;&nbsp;</span>
+            <a class="add pull-right" asp-controller="User" asp-action="add"><i class="fas fa-plus"></i></a>
+        </h3>
+
+        <table class="table table-hover">
+            <tr>
+                <th class="col-md-1">#</th>
+                <th class="col-md-2">User</th>
+                <th class="col-md-8">Event</th>
+                <th class="col-md-1">EventID</th>
+            </tr>
+
+            @foreach (var booking in Model)
+            {
+            <tr>
+                <td>@count</td>
+                <td><b><a asp-controller="User" asp-action="Detail" asp-route-userId="@booking.UserID">@booking.User.Username</a></b> &nbsp; @(booking.UserID)</td>
+                <td><b><a asp-controller="Event" asp-action="Detail" asp-route-userId="@booking.EventID">@booking.Event.Name</a></b></td>
+                <td class="right">@booking.EventID"</td>
+            </tr>
+                count += 1;
+            }
+        </table>
+    }
+
+    <!--
+    <p><a asp-controller="Booking" asp-action="Add">Add Booking</a> </p>
+
+    -->
+
+}
