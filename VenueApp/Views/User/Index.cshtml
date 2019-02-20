@@ -61,7 +61,11 @@ else if (ViewBag.ErrorMessage.Length > 0)
                 <tr>
                     <td>@count</td>
                     <td><b><a asp-controller="User" asp-action="Detail" asp-route-userId="@user.ID">@user.Username</a></b> &nbsp; @(user.Protected ? "(Protected)" : "")</td>
-                    <td class="right"><a asp-controller="User" asp-action="Edit" asp-route-userId="@user.ID">Edit</a> </td>
+                    <td class="right">
+                        <a asp-controller="User" asp-action="Edit" asp-route-userId="@user.ID">Edit</a>
+                          |  <a asp-controller="Booking" asp-action="Add" asp-route-userId="@user.ID">Book Event</a>
+
+                    </td>
                 </tr>
                 count += 1;
             }

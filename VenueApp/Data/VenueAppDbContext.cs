@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Globalization;
 using VenueApp.Models;
 
 namespace VenueApp.Data
@@ -54,6 +55,12 @@ namespace VenueApp.Data
                 new User { ID = 1, Username = "admin", Password = "password", Created = DateTime.Now, MembershipID = 1, TypeID = 1, Protected = true },
                 new User { ID = 2, Username = "user", Password = "password", Created = DateTime.Now, MembershipID = 1, TypeID = 2, Protected = true }
                 );
+
+            modelBuilder.Entity<Event>().HasData(
+                new Event { ID = 1, Name = "Test Event 1", Description = "Description of Test Event 1.", Date = new DateTime(2019, 07, 28, 18, 35, 5, new CultureInfo("en-US", false).Calendar), Price = 9.99, CategoryID = 1, Location = "Launchcode. Miami, Florida", Created = DateTime.Now, Protected = true },
+                new Event { ID = 2, Name = "Test Event 2", Description = "Description of Test Event 2.", Date = DateTime.Today, Price= 10.50, CategoryID = 1, Location="Launchcode. Miami, Florida", Created = DateTime.Now, Protected = false }
+                );
+
 
         }
     }

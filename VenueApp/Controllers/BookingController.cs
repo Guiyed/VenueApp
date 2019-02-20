@@ -23,12 +23,14 @@ namespace VenueApp.Controllers
             context = dbContext;
         }
 
+
+
+        //-------------------------------- INDEX -----------------------------------//
+        // GET: /<controller>/
         public IActionResult Index()
         {
-            //If the username is a Logged in user... get username else get empty ""
             ViewBag.Message = TempData["Message"] ?? "";
             ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
-
 
             //Create empty list
             IList<Booking> bookings = new List<Booking>();
@@ -37,14 +39,14 @@ namespace VenueApp.Controllers
             if (HttpContext.Session.GetString("Type") == "admin")
             {
                 //Add all the users to the list
-                bookings = context.Bookings.ToList();
+                bookings = context.Bookings.Include(c => c.User).Include(c => c.Event).ToList();
                 return View(bookings);
             }
             //If there is an regular "User" Logged in the session
             else if (HttpContext.Session.GetString("Type") == "user")
             {
                 //Show his details only
-                bookings = context.Bookings.Where(c => c.UserID == HttpContext.Session.GetInt32("UserID")).ToList();
+                bookings = context.Bookings.Where(c => c.UserID == HttpContext.Session.GetInt32("UserID")).Include(c => c.User).Include(c => c.Event).ToList();
                 return View(bookings);
             }
             //If not...
@@ -57,6 +59,8 @@ namespace VenueApp.Controllers
         }
 
 
+        //-------------------------------- SCHEDULED (It is like a Method) -----------------------------------//
+        // GET: /<controller>/
         public IActionResult Scheduled(int userId)
         {
             User currentUser = context.Users.SingleOrDefault(c => c.ID == userId);
@@ -67,7 +71,6 @@ namespace VenueApp.Controllers
                 .Where(cm => cm.UserID == userId)
                 .ToList();
 
-
             ViewScheduledViewModel scheduledViewModel = new ViewScheduledViewModel
             {
                 User = currentUser,
@@ -77,7 +80,8 @@ namespace VenueApp.Controllers
             return View(scheduledViewModel);
         }
 
-
+        //-------------------------------- ADD BOOKING BY USER -----------------------------------//
+        // GET: /<controller>/
         public IActionResult Add(int userId)
         {
             User selectedUser = context.Users.SingleOrDefault(c => c.ID == userId);
@@ -98,7 +102,7 @@ namespace VenueApp.Controllers
                     .Where(cm => cm.UserID == addBookingViewModel.UserID).ToList();
 
 
-                if (existingItems.Count == 0)
+                if (existingItems.Count == 0)   //Do not duplicate events in the User bookings
                 {
                     // Add the new booking to my existing database
                     Booking newBooking = new Booking
@@ -119,7 +123,9 @@ namespace VenueApp.Controllers
             return View(addBookingViewModel);
         }
 
-        //-------------------------------- REMOVE OR DELETE BOOKING BY USER-----------------------------------//
+
+
+        //-------------------------------- REMOVE OR DELETE BOOKING BY USER (ADMINS Only)-----------------------------------//
         // GET: /<controller>/
         public IActionResult Delete(int userId, int eventId)
         {
@@ -135,7 +141,6 @@ namespace VenueApp.Controllers
         return View(bookingToBeDeleted);
         }
 
-        
         // POST: /<controller>/
         [HttpPost]
         public IActionResult Delete(BookingViewModel deleteBookingViewModel)
@@ -161,6 +166,7 @@ namespace VenueApp.Controllers
         }
 
 
+
         //-------------------------------- REMOVE OR DELETE BOOKING BY USER-----------------------------------//
         // GET: /<controller>/
         public IActionResult DeleteBy(int userId)
@@ -171,7 +177,6 @@ namespace VenueApp.Controllers
             BookingViewModel showBookingViewModel = new BookingViewModel(selectedUser, events);
             return View(showBookingViewModel);
         }
-
 
         // POST: /<controller>/
         [HttpPost]

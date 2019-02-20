@@ -35,9 +35,11 @@ else if (ViewBag.ErrorMessage.Length > 0)
     {
         <h3>
             List of Bookings in Database
-            <a class="delete pull-right" asp-controller="User" asp-action="Remove"><i class="fas fa-times bi"></i></a>
+            <!--
+            <a class="delete pull-right" asp-controller="Booking" asp-action="Delete"><i class="fas fa-times bi"></i></a>
             <span class="pull-right">&nbsp;&nbsp;&nbsp;</span>
-            <a class="add pull-right" asp-controller="User" asp-action="add"><i class="fas fa-plus"></i></a>
+            <a class="add pull-right" asp-controller="Booking" asp-action="Add"><i class="fas fa-plus"></i></a>
+            -->
         </h3>
 
         <table class="table table-hover">
@@ -52,9 +54,9 @@ else if (ViewBag.ErrorMessage.Length > 0)
             {
             <tr>
                 <td>@count</td>
-                <td><b><a asp-controller="User" asp-action="Detail" asp-route-userId="@booking.UserID">@booking.User.Username</a></b> &nbsp; @(booking.UserID)</td>
-                <td><b><a asp-controller="Event" asp-action="Detail" asp-route-userId="@booking.EventID">@booking.Event.Name</a></b></td>
-                <td class="right">@booking.EventID"</td>
+                <td><b><a asp-controller="User" asp-action="Detail" asp-route-userId="@booking.UserID">@booking.User.Username</a></b> &nbsp;(Id: @booking.UserID)</td>
+                <td><b><a asp-controller="Event" asp-action="Detail" asp-route-eventId="@booking.EventID">@booking.Event.Name</a></b></td>
+                <td class="right">@booking.EventID</td>
             </tr>
                 count += 1;
             }

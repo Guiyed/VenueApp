@@ -1,121 +1,56 @@
-﻿@model VenueApp.ViewModels.AddUserViewModel
+﻿@model VenueApp.ViewModels.BookingViewModel
 
 @{
-    ViewBag.Title = "Add Booking";
+    ViewBag.Title = "Add Event to User: " + Model.User.Username;
 }
 
 
 <h1>@ViewBag.Title</h1>
 
-<form asp-controller="User" asp-action="Add" method="post">
+
+@if (Model.Events.Count > 0)
+{
+    <form asp-controller="Booking" asp-action="Add" method="post">
+        <div class="container">
+            <div class=" row">
+                <h3>
+                    Select The event you want to book
+                    <a class="back pull-right" asp-controller="Booking" asp-action="Index"><i class="fas fa-angle-double-left"></i></a>
+                </h3>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <div class="form-group">
+                        <label asp-for="EventID"></label>
+                        <select class="form-control" asp-for="EventID" asp-items="Model.Events"></select>
+                        <input type="hidden" name="UserID" value="@Model.User.ID" />
+                        <span class="small text-danger" asp-validation-for="EventID"></span>
+                        <span class="small text-danger" asp-validation-for="UserID"></span>
+
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <input class="pull-right btn btn-info btn-lg" type="submit" value="Add Booking To Database" />
+
+        </div>
+        <br />
+    </form>
+}
+else
+{
     <div class="container">
         <div class=" row">
             <h3>
-                New User Data
+                Select The event you want to book
                 <a class="back pull-right" asp-controller="User" asp-action="Index"><i class="fas fa-angle-double-left"></i></a>
             </h3>
+            <br />
+            <h4>
+                Sorry, There are No events created on the database to add to any user.
+                Do you want to create a new <a asp-controller="Event" asp-action="Add">Event</a>?
+            </h4>
         </div>
-        <div class="row">
-            <div class="form-group col-md-12">
-                <label asp-for="Username"></label>
-                <div>
-                    <input class="form-control " asp-for="Username" value="@Model.Username" />
-                    <span class="small text-danger" asp-validation-for="Username"></span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-12">
-                <label asp-for="Email"></label>
-                <div>
-                    <input class="form-control " asp-for="Email" value="@Model.Email" />
-                    <span class="small text-danger" asp-validation-for="Email"></span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6">
-                <label asp-for="FirstName"></label>
-                <div>
-                    <input class="form-control " asp-for="FirstName" value="@Model.FirstName" />
-                    <span class="small text-danger" asp-validation-for="FirstName"></span>
-                </div>
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="LastName"></label>
-                <div>
-                    <input class="form-control " asp-for="LastName" value="@Model.LastName" />
-                    <span class="small text-danger" asp-validation-for="LastName"></span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6">
-                <label asp-for="Password"></label>
-                <input class="form-control" asp-for="Password" />
-                <span class="small text-danger" asp-validation-for="Password"></span>
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="Verify"></label>
-                <input class="form-control" asp-for="Verify" />
-                <span class="small text-danger" asp-validation-for="Verify"></span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6">
-                <label asp-for="MembershipID"></label>
-                <select class="form-control " asp-for="MembershipID" asp-items="@Model.Memberships"> </select>
-                <span class="small text-danger" asp-validation-for="MembershipID"></span>
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="UserTypeID"></label>
-                <select class="form-control " asp-for="UserTypeID" asp-items="@Model.Roles"> </select>
-                <span class="small text-danger" asp-validation-for="UserTypeID"></span>
-            </div>
-        </div>
-        <br />
-        <input class="pull-right btn btn-info btn-lg" type="submit" value="Add User To Database" />
-
     </div>
-    <br />
-    <br />
-    <div>
-        @if (Model.ServerError)
-        {
-            <span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>
-        }
-        <span class="text-danger" asp-validation-for="ServerError"></span>
-    </div>
-</form>
-
-<br />
-<!--
-<p><a asp-controller="User" asp-action="Index">back</a>
-
--->
-
-
-
-
-@model CheeseMVC.ViewModels.AddMenuItemViewModel
-
-@{
-    ViewBag.Title = "Add Item to Menu: " + Model.Menu.Name;
 }
-
-<h1>@ViewBag.Title</h1>
-
-<form asp-controller="Menu" asp-action="AddItem" method="post">
-
-    <div class="form-group">
-        <label asp-for="CheeseID"></label>
-        <select asp-for="CheeseID" asp-items="Model.Cheeses"></select>
-        <input type="hidden" name="MenuID" value="@Model.Menu.ID" />
-        <span asp-validation-for="CheeseID"></span>
-        <span asp-validation-for="MenuID"></span>
-    </div>
-
-
-    <input type="submit" value="Add Item" />
-
-</form>
