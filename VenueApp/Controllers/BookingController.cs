@@ -59,10 +59,14 @@ namespace VenueApp.Controllers
         }
 
 
+
         //-------------------------------- SCHEDULED (It is like a Method) -----------------------------------//
         // GET: /<controller>/
         public IActionResult Scheduled(int userId)
         {
+            ViewBag.Message = TempData["Message"] ?? "";
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
+
             User currentUser = context.Users.SingleOrDefault(c => c.ID == userId);
 
             List<Booking> scheduledEvents = context
@@ -79,6 +83,8 @@ namespace VenueApp.Controllers
 
             return View(scheduledViewModel);
         }
+
+
 
         //-------------------------------- ADD BOOKING BY USER -----------------------------------//
         // GET: /<controller>/
@@ -114,9 +120,16 @@ namespace VenueApp.Controllers
                     context.Bookings.Add(newBooking);
                     context.SaveChanges();
 
-                    return Redirect("/Booking/Scheduled/" + newBooking.UserID);
+                    // Success!!! new event booked...  return custom message
+                    TempData["Message"] = "Event Successfully Booked.";
+                    TestFunctions.PrintConsoleMessage("SUCCESS, BOOKING DELETED");
+
+                    return RedirectToAction("Scheduled", new { userId = newBooking.UserID});
                 }
 
+                // Error!!! booking ID already in database...  return custom message
+                TempData["ErrorMessage"] = "Sorry, the event you are triying to Book is already in the users reservations.";
+                TestFunctions.PrintConsoleMessage("WARNING, BOOKING ALREADY IN DATABASE");
                 return Redirect("/Booking");
             }
 
@@ -130,12 +143,14 @@ namespace VenueApp.Controllers
         public IActionResult Delete(int userId, int eventId)
         {
             User selectedUser = context.Users.SingleOrDefault(c => c.ID == userId);
-            Event selectedEvent = context.Events.SingleOrDefault(c => c.ID == userId);
+            Event selectedEvent = context.Events.SingleOrDefault(c => c.ID == eventId);
 
             BookingViewModel bookingToBeDeleted = new BookingViewModel
             {
                 UserID = selectedUser.ID,
-                EventID = selectedEvent.ID
+                User = selectedUser,
+                EventID = selectedEvent.ID,
+                Event = selectedEvent
             };
 
         return View(bookingToBeDeleted);
@@ -167,7 +182,7 @@ namespace VenueApp.Controllers
 
 
 
-        //-------------------------------- REMOVE OR DELETE BOOKING BY USER-----------------------------------//
+        //-------------------------------- REMOVE OR DELETE BOOKING -----------------------------------//
         // GET: /<controller>/
         public IActionResult DeleteBy(int userId)
         {

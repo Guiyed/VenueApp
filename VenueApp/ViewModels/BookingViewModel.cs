@@ -17,6 +17,7 @@ namespace VenueApp.ViewModels
         public int UserID { get; set; }
 
         public User User { get; set; }
+        public Event Event { get; set; }
         public List<SelectListItem> Events { get; set; }
 
         public BookingViewModel() { }

@@ -35,37 +35,46 @@ else if (ViewBag.ErrorMessage.Length > 0)
     {
         <h3>
             List of Bookings in Database
-            <!--
-            <a class="delete pull-right" asp-controller="Booking" asp-action="Delete"><i class="fas fa-times bi"></i></a>
-            <span class="pull-right">&nbsp;&nbsp;&nbsp;</span>
-            <a class="add pull-right" asp-controller="Booking" asp-action="Add"><i class="fas fa-plus"></i></a>
-            -->
+            
+            @if (userType == "user")
+            {
+                <a class="add pull-right" asp-controller="Booking" asp-action="Add" asp-route-userId="@HttpContextAccessor.HttpContext.Session.GetInt32("UserID")"><i class="fas fa-plus"></i></a>
+            }   
         </h3>
 
         <table class="table table-hover">
             <tr>
                 <th class="col-md-1">#</th>
                 <th class="col-md-2">User</th>
-                <th class="col-md-8">Event</th>
-                <th class="col-md-1">EventID</th>
+                <th class="col-md-7">Event</th>
+                <th class="col-md-1 text-center">EventID</th>
+                <th class="col-md-1 text-center">Delete</th>
             </tr>
 
             @foreach (var booking in Model)
             {
-            <tr>
-                <td>@count</td>
-                <td><b><a asp-controller="User" asp-action="Detail" asp-route-userId="@booking.UserID">@booking.User.Username</a></b> &nbsp;(Id: @booking.UserID)</td>
-                <td><b><a asp-controller="Event" asp-action="Detail" asp-route-eventId="@booking.EventID">@booking.Event.Name</a></b></td>
-                <td class="right">@booking.EventID</td>
-            </tr>
+                <tr>
+                    <td>@count</td>
+                    <td><b><a asp-controller="User" asp-action="Detail" asp-route-userId="@booking.UserID">@booking.User.Username</a></b> &nbsp;(Id: @booking.UserID)</td>
+                    <td><b><a asp-controller="Event" asp-action="Detail" asp-route-eventId="@booking.EventID">@booking.Event.Name</a></b></td>
+                    <td class="text-center">@booking.EventID</td>
+                    <td class="text-center"><a class="delete" asp-controller="Booking" asp-action="Delete" asp-route-userId="@booking.UserID" asp-route-eventId="@booking.EventID"><i class="fas fa-times bi"></i></a></td>
+
+                </tr>
                 count += 1;
             }
         </table>
     }
 
-    <!--
-    <p><a asp-controller="Booking" asp-action="Add">Add Booking</a> </p>
+    <br />
 
-    -->
+    @if (userType == "admin")
+    {
+    <p>To add another event, please use the User Index "<a asp-controller="User" asp-action="Index">Book</a>" option</p>
+    }   
+
+
+
+
 
 }

@@ -9,24 +9,28 @@
 <form method="post">
 
     <div class="col-md-12">
-        <h3>
-            Are you sure that you want to delete the event:
-            from user
-            Bookings?
-            </h3>
+        <h4>Are you sure that you want to delete the event:</h4>
+        <h3 class="text-info"> @Model.Event.Name</h3>
+        <h4>from @Model.User.Username's reservations?</h4>
     </div>
 
     <div class="form-group">
         <div class="col-md-12">
             <br>
-            <button class="btn btn-lg btn-success" type="submit">YES</button>
             <input type="hidden" name="UserID" value="@Model.UserID" />
             <input type="hidden" name="EventID" value="@Model.EventID" />
-            <a class="back pull-right" asp-controller="Booking" asp-action="Index">
-                <button class="btn btn-lg btn-danger" type="button"> NO</button>
-            </a>
+            <div class="row">
+                <div class="col-md-6">
+                    <button class="btn btn-lg btn-success center-block" type="submit">YES</button>
+                </div>
+                <div class="col-md-6">
+                    <a class="back" asp-controller="Booking" asp-action="Index">
+                        <button class="btn btn-lg btn-danger center-block" type="button"> NO</button>
+                    </a>
+                </div>
+            </div>
         </div>
-    </div>>
+    </div>
 </form>
 
 <br />
