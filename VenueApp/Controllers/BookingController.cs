@@ -130,7 +130,7 @@ namespace VenueApp.Controllers
                 // Error!!! booking ID already in database...  return custom message
                 TempData["ErrorMessage"] = "Sorry, the event you are triying to Book is already in the users reservations.";
                 TestFunctions.PrintConsoleMessage("WARNING, BOOKING ALREADY IN DATABASE");
-                return Redirect("/Booking");
+                return RedirectToAction("Scheduled", new { userId = addBookingViewModel.UserID });
             }
 
             return View(addBookingViewModel);
@@ -214,7 +214,7 @@ namespace VenueApp.Controllers
                 TestFunctions.PrintConsoleMessage("ERROR, NO BOOKING FOUND");
             }
 
-            return Redirect("/Booking");
+            return RedirectToAction("Scheduled", new { userId = deleteBookingViewModel.UserID });
         }
 
 

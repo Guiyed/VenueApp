@@ -38,17 +38,14 @@ namespace VenueApp.Controllers
             if (HttpContext.Session.GetString("Type") == "admin")
             {
                 //Add all the events to the list
-                events = context.Events.Where(c => c.Deleted == false).Include(c => c.Category).ToList();
+                events = context.Events.Include(c => c.Category).ToList();
                 return View(events);
             }
             //If there is an regular "User" Logged in the session
             else if (HttpContext.Session.GetString("Type") == "user")
             {
-                //Show his details only
-                /*return RedirectToAction("Detail", new { userId = HttpContext.Session.GetInt32("UserID") });
-                       OR       
-                events = context.Events.Where(c => c.ID == HttpContext.Session.GetInt32("UserID")).ToList();
-                */
+                //Add all the events to the list Except Deleted ones
+                events = context.Events.Where(c => c.Deleted == false).Include(c => c.Category).ToList();
                 return View(events);
             }
             //If not...

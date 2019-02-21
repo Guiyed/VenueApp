@@ -1,6 +1,13 @@
 ﻿@model VenueApp.ViewModels.ViewScheduledViewModel
+
 @{
-    ViewBag.Title = "Scheduled events from User \"" + Model.User.Username +"\"";
+    @using Microsoft.AspNetCore.Http
+    @using System.Globalization
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+    string userType = @HttpContextAccessor.HttpContext.Session.GetString("Type") ?? "";
+
+    ViewBag.Title = "\"" + Model.User.Username + "'s\" " + "Scheduled events";
 }
 
 <h1>@ViewBag.Title</h1>
@@ -14,22 +21,31 @@ else if (ViewBag.ErrorMessage.Length > 0)
     <p class="text-danger">@ViewBag.ErrorMessage <span class="glyphicon glyphicon-remove " aria-hidden="true"></span></p>
 }
 
-
-<div>
-    <ul class="list-group">
-        <li class="list-group-item text-muted profileheader">Events Titles</li>
-        @foreach (var item in Model.Bookings)
-        {
-            <li class="list-group-item">@item.Event.Name</li>
-        }
-    </ul>
-</div>
-
-
-@if (Model.Bookings.Count == 0)
+@if (userType.Length > 0)
 {
-    <p>The User does not have any reservations!</p>
-    <p><a asp-controller="Booking" asp-action="Add" asp-route-userId="@Model.User.ID"> Book an event!!!</a></p>
+   
+    <div>
+        <ul class="list-group">
+            <li class="list-group-item text-muted bookingheader">
+                Reservations / Events
+                <a class="delete pull-right" asp-controller="Booking" asp-action="DeleteBy" asp-route-userId="@Model.User.ID"><i class="fas fa-times bi"></i></a>
+                <span class="pull-right">&nbsp;&nbsp;&nbsp;</span>
+                <a class="add pull-right" asp-controller="Booking" asp-action="add" asp-route-userId="@Model.User.ID"><i class="fas fa-plus"></i></a>
+            </li>
+            @foreach (var item in Model.Bookings)
+            {
+                <li class="list-group-item">@item.Event.Name</li>
+            }
+        </ul>
+    </div>
+
+
+    @if (Model.Bookings.Count == 0)
+    {
+        <p>The User does not have any reservations!</p>
+        <p><a asp-controller="Booking" asp-action="Add" asp-route-userId="@Model.User.ID"> Book an event!!!</a></p>
+    }
+    
 }
 
 <br />

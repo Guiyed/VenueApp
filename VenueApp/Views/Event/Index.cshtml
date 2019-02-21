@@ -38,9 +38,13 @@ else if (ViewBag.ErrorMessage.Length > 0)
     {
         <h3>
             List of Events in Database
-            <a class="delete pull-right" asp-controller="Event" asp-action="Remove"><i class="fas fa-times bi"></i></a>
-            <span class="pull-right">&nbsp;&nbsp;&nbsp;</span>
-            <a class="add pull-right" asp-controller="Event" asp-action="add"><i class="fas fa-plus"></i></a>
+            
+            @if (userType == "admin")
+            {
+                <a class="delete pull-right" asp-controller="Event" asp-action="Remove"><i class="fas fa-times bi"></i></a>
+                <span class="pull-right">&nbsp;&nbsp;&nbsp;</span>
+                <a class="add pull-right" asp-controller="Event" asp-action="add"><i class="fas fa-plus"></i></a>
+            }
         </h3>
         
         <table class="table table-striped">
