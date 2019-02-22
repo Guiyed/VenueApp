@@ -3,6 +3,7 @@
 
 @{
     string username = @HttpContextAccessor.HttpContext.Session.GetString("User") ?? "";
+    string userType = @HttpContextAccessor.HttpContext.Session.GetString("UserType") ?? "";
 }
 
 <!DOCTYPE html>
@@ -44,7 +45,9 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li><a asp-area="" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                        <!--
                         <li><a asp-area="" asp-controller="Test" asp-action="Index">TestPage</a></li>                        
+                        -->
                     </ul>
 
                     <ul class="nav navbar-nav navbar-left">
@@ -60,19 +63,23 @@
                         </li>
                     </ul>
 
-                    <ul class="nav navbar-nav navbar-left">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data(Models) <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a asp-area="" asp-controller="User" asp-action="Index">User Index</a></li>
-                                <li><a asp-area="" asp-controller="Event" asp-action="Index">Events Index</a></li>
-                                <li><a asp-area="" asp-controller="Category" asp-action="Index">Event Categories Index</a></li>
-                                <li><a asp-area="" asp-controller="Membership" asp-action="Index">Memberships Index</a></li>
-                                <li><a asp-area="" asp-controller="Role" asp-action="Index">User Roles Index</a></li>
-                                <li><a asp-area="" asp-controller="Booking" asp-action="Index">Bookings Index</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                    @if(userType == "admin")
+                    {
+                        <ul class="nav navbar-nav navbar-left">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data(Models) <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a asp-area="" asp-controller="User" asp-action="Index">User Index</a></li>
+                                    <li><a asp-area="" asp-controller="Event" asp-action="Index">Events Index</a></li>
+                                    <li><a asp-area="" asp-controller="Category" asp-action="Index">Event Categories Index</a></li>
+                                    <li><a asp-area="" asp-controller="Membership" asp-action="Index">Memberships Index</a></li>
+                                    <li><a asp-area="" asp-controller="Role" asp-action="Index">User Roles Index</a></li>
+                                    <li><a asp-area="" asp-controller="Booking" asp-action="Index">Bookings Index</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    }
+
                     <!-----------------------------------  User Button ----------------------------------->
                     @if (username.Length > 0)
                     {
