@@ -24,11 +24,13 @@ namespace VenueApp.Models
         public bool Protected { get; set; }
         public bool Deleted { get; set; }
 
-        /*
+        
         public DateTime Birthday { get; set; }
         public string PhoneNumber { get; set; }
         public string Location { get; set; }
-        */
+
+        //public string ProfilePictureName { get; set; }
+
 
     }
 }

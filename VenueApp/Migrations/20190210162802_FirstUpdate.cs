@@ -137,6 +137,11 @@ namespace VenueApp.Migrations
                 keyColumn: "ID",
                 keyValue: 2);
 
+            migrationBuilder.DeleteData(
+              table: "Users",
+              keyColumn: "ID",
+              keyValue: 1);
+
             migrationBuilder.DropColumn(
                 name: "Created",
                 table: "Users");

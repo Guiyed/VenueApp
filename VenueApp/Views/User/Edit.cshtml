@@ -50,11 +50,28 @@
             </div>
         </div>
         <div class="row">
-            <div class="form-group col-md-12">
+            <div class="form-group col-md-6">
                 <label asp-for="Password"></label>
-                <input id="password" class="form-control" asp-for="Password" value="@Model.Password" onchange="copyVerify(this.value)"/>
+                <input id="password" class="form-control" asp-for="Password" value="@Model.Password" onchange="copyVerify(this.value)" />
                 <span class="small text-danger" asp-validation-for="Password"></span>
-                <input id="verify" hidden asp-for="Verify" value="@Model.Password"/>
+                <input id="verify" hidden asp-for="Verify" value="@Model.Password" />
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Birthday"></label>
+                <input type="date" class="form-control " style="line-height: 1" asp-for="Birthday" value="@Model.Birthday">
+                <span class="small text-danger" asp-validation-for="Birthday"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label asp-for="PhoneNumber"></label>
+                <input id="password" class="form-control" asp-for="PhoneNumber" value="@Model.PhoneNumber"/>
+                <span class="small text-danger" asp-validation-for="PhoneNumber"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Location"></label>
+                <input type="text" class="form-control " asp-for="Location" value="@Model.Location">
+                <span class="small text-danger" asp-validation-for="Location"></span>
             </div>
         </div>
         <div class="row">
@@ -74,7 +91,7 @@
         <input class="pull-right btn btn-success btn-lg" type="submit" value="Edit User" />
         <input type="hidden" name="UserID" value="@Model.UserID" />
 
-        </div>
+    </div>
         <br />
         <div>
             @if (Model.ServerError)

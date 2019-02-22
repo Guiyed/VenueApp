@@ -1,0 +1,41 @@
+﻿@model VenueApp.ViewModels.ViewScheduledViewModel
+
+@{
+    @using System.Globalization;
+    ViewBag.Title = "Remove an Event from your List of Bookings";
+    var count = 1;
+}
+
+<h1>@ViewBag.Title</h1>
+
+<form method="post">
+
+    <div class="col-md-12">
+        <h3>
+            <a class="back pull-right" asp-controller="Booking" asp-action="Scheduled" asp-route-userId="@Model.User.ID"><i class="fas fa-angle-double-left"></i></a>
+        </h3>
+    </div>
+        
+    <table class="table table-striped">
+        <tr class="info">
+            <th class="col-md-1">#</th>
+            <th class="col-md-8">Event Title</th>
+            <th class="col-md-2">Date/Time </th>
+            <th class="col-md-1">Selection</th>
+        </tr>
+
+        @foreach (var booking in Model.Bookings)
+        {
+            <tr>
+                <td>@count</td>
+                <td class=""><label for="@booking.Event.ID">@booking.Event.Name</label></td>
+                <td>@booking.Event.Date.ToString("dddd, dd MMMM yyyy", CultureInfo.CreateSpecificCulture("en-US"))</td>
+                <td class="text-center"><input type="checkbox" name="eventsIds" id="@booking.Event.ID" value="@booking.Event.ID" /> </td>
+            </tr>
+            count += 1;
+        }
+    </table>
+    <input type="hidden" name="userId" value="@Model.User.ID" />
+
+    <input class="btn bg-danger pull-right" type="submit" value="Remove Selected Event(s)" />
+</form>

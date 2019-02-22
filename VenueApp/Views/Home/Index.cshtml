@@ -9,6 +9,8 @@
 
 
 <h1>@ViewBag.Title</h1>
+    
+
 
 
 @if (ViewBag.LogoutMessage.Length > 0)
@@ -23,8 +25,10 @@ else if (ViewBag.ErrorMessage.Length > 0)
 {
     <p class="text-danger">@ViewBag.ErrorMessage <span class="glyphicon glyphicon-remove " aria-hidden="true"></span></p>
 }
-
+<!--
 <h3>Hello, the VenueApp is being implemented. Press the button "User Account" to begin (It is located in the top right of the navbar)</h3>
+    
+-->
 
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
     <ol class="carousel-indicators">
@@ -34,24 +38,17 @@ else if (ViewBag.ErrorMessage.Length > 0)
     </ol>
     <div class="carousel-inner" role="listbox">
         <div class="item active">
-            <img src="~/images/UnderContruction.png" alt="Home Banner" class="img-responsive" />
+            <a asp-controller="User" asp-action="Login"><img src="~/images/VenueApp1.png" alt="Home Banner" class="img-responsive" /></a>
+           
+        </div>
+        <div class="item">
+            <a asp-controller="User" asp-action="Login"><img src="~/images/VenueApp2.png" href="/User/Signup" alt="Banner 2" class="img-responsive" /></a>
             <div class="carousel-caption" role="option">
-                <p>
-                    Test Test Test Test Test Test
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
+                    <p>Venue App</p>
             </div>
         </div>
         <div class="item">
-            <img src="https://via.placeholder.com/1200x400jpeg" alt="Banner 2" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>Using a Jpeg Image as banner.</p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner1.svg" alt="Banner 3" class="img-responsive" />
+            <a asp-controller="User" asp-action="Login"><img src="~/images/VenueApp3.png" href="/User/Signup" alt="Banner 3" class="img-responsive" /></a>
         </div>
     </div>
     <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">

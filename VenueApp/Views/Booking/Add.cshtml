@@ -1,0 +1,56 @@
+﻿@model VenueApp.ViewModels.BookingViewModel
+
+@{
+    ViewBag.Title = "Add Event to User: " + Model.User.Username;
+}
+
+
+<h1>@ViewBag.Title</h1>
+
+
+@if (Model.Events.Count > 0)
+{
+    <form asp-controller="Booking" asp-action="Add" method="post">
+        <div class="container">
+            <div class=" row">
+                <h3>
+                    Select The event you want to book
+                    <a class="back pull-right" asp-controller="Booking" asp-action="Scheduled" asp-route-userId="@Model.User.ID"><i class="fas fa-angle-double-left"></i></a>
+                </h3>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <div class="form-group">
+                        <label asp-for="EventID"></label>
+                        <select class="form-control" asp-for="EventID" asp-items="Model.Events"></select>
+                        <input type="hidden" name="UserID" value="@Model.User.ID" />
+                        <span class="small text-danger" asp-validation-for="EventID"></span>
+                        <span class="small text-danger" asp-validation-for="UserID"></span>
+
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <input class="pull-right btn btn-info btn-lg" type="submit" value="Add Booking To Database" />
+
+        </div>
+        <br />
+    </form>
+}
+else
+{
+    <div class="container">
+        <div class=" row">
+            <h3>
+                Select The event you want to book
+                <a class="back pull-right" asp-controller="User" asp-action="Index"><i class="fas fa-angle-double-left"></i></a>
+            </h3>
+            <br />
+            <h4>
+                Sorry, There are No events created on the database to add to any user.
+                Do you want to create a new <a asp-controller="Event" asp-action="Add">Event</a>?
+            </h4>
+        </div>
+    </div>
+}

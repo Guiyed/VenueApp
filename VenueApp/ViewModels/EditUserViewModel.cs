@@ -22,6 +22,14 @@ namespace VenueApp.ViewModels
         //[Required]
         public UserType Type { get; set; }
 
+        [Required]
+        public DateTime Birthday { get; set; }
+
+        public string PhoneNumber { get; set; }
+
+        public string Location { get; set; }
+
+
         public EditUserViewModel() { }
 
         public EditUserViewModel(IEnumerable<Membership> memberships, IEnumerable<UserType> roles) : base(memberships, roles)
