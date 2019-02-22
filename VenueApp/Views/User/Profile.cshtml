@@ -1,14 +1,17 @@
-﻿@model VenueApp.ViewModels.EditUserViewModel
+﻿@model VenueApp.ViewModels.ProfileViewModel
 
 @{
     ViewBag.Title = "User Profile";
 
     @using Microsoft.AspNetCore.Http
+    @using System.Globalization
     @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
 
     string userName = @HttpContextAccessor.HttpContext.Session.GetString("User") ?? "";
     string userType = @HttpContextAccessor.HttpContext.Session.GetString("Type") ?? "";
     int userID = @HttpContextAccessor.HttpContext.Session.GetInt32("UserID") ?? 0;
+    int count = 1;
 
 }
 
@@ -81,192 +84,136 @@
                     </ul>
                 </div><!--/tab-pane-->
 
-
                 <div class="tab-pane" id="bookings">
+                    <hr>
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Label 1</th>
-                                    <th>Label 2</th>
-                                    <th>Label 3</th>
-                                    <th>Label </th>
-                                    <th>Label </th>
-                                    <th>Label </th>
+                                    <th class="col-md-1 text-center">#</th>
+                                    <th class="col-md-6">Event Name</th>
+                                    <th class="col-md-2 text-center">Date/Time</th>
+                                    <th class="col-md-2 text-center">Category</th>
                                 </tr>
                             </thead>
                             <tbody id="items">
-                                <tr>
-                                    <td>1</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                </tr>
-                                <tr>
-                                    <td>6</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                </tr>
-                                <tr>
-                                    <td>7</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                </tr>
-                                <tr>
-                                    <td>8</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                    <td>Table cell</td>
-                                </tr>
+                                @foreach (var item in Model.Bookings)
+                                {
+                                    <tr>
+                                        <td class="text-center">@count</td>
+                                        <td class="text-capitalize">@item.Event.Name</td>
+                                        <td class="text-capitalize pull-right">@item.Event.Date.ToString("dd/MM/yy  @  hh:mmtt", CultureInfo.CreateSpecificCulture("en-US"))</td>
+                                        <td class="text-center">@item.Event.Category.Name</td>
+                                    </tr>
+                                    count += 1;
+                                }
                             </tbody>
                         </table>
+                        @if (Model.Bookings.Count == 0)
+                        {
+                            <p>You do not have made any reservations yet!</p>
+                            <p><a asp-controller="Booking" asp-action="Add" asp-route-userId="@Model.UserID"> Book an event!!!</a></p>
+                        }
+
                         <hr>
                         <div class="row">
                             <div class="col-md-4 col-md-offset-4 text-center">
                                 <ul class="pagination" id="myPager"></ul>
                             </div>
                         </div>
+
                     </div><!--/table-resp-->
+                    <br />
+                    <p class="pull-right">Click <a asp-controller="Booking" asp-action="Scheduled" asp-route-userId="@Model.UserID"> Here </a> to manage your Reservations</p>
                     <hr>
                 </div><!--/tab-pane-->
 
 
-                <div class="tab-pane" id="settings">
-                    <hr>
-                    <form id="registrationForm" class="form" asp-controller="User" asp-action="Profile" method="post">
-                        <div class="form-group">
+            <div class="tab-pane" id="settings">
+                <hr>
+                <form id="registrationForm" class="form" asp-controller="User" asp-action="Profile" method="post">
+                    <div class="form-group">
 
-                            <div class="col-xs-6">
-                                <label asp-for="FirstName"><h4>First name</h4></label>
-                                <input type="text" class="form-control" asp-for="FirstName" value="@Model.FirstName" id="first_name" placeholder="first name" title="enter your first name if any.">
-                                <span class="small text-danger" asp-validation-for="FirstName"></span>
-                            </div>
+                        <div class="col-xs-6">
+                            <label asp-for="FirstName"><h4>First name</h4></label>
+                            <input type="text" class="form-control" asp-for="FirstName" value="@Model.FirstName" id="first_name" placeholder="first name" title="enter your first name if any.">
+                            <span class="small text-danger" asp-validation-for="FirstName"></span>
                         </div>
+                    </div>
 
-                        <div class="form-group">
+                    <div class="form-group">
 
-                            <div class="col-xs-6">
-                                <label asp-for="LastName"><h4>Last name</h4></label>
-                                <input type="text" class="form-control" asp-for="LastName" value="@Model.LastName" id="last_name" placeholder="last name" title="enter your last name if any.">
-                                <span class="small text-danger" asp-validation-for="LastName"></span>
-                            </div>
+                        <div class="col-xs-6">
+                            <label asp-for="LastName"><h4>Last name</h4></label>
+                            <input type="text" class="form-control" asp-for="LastName" value="@Model.LastName" id="last_name" placeholder="last name" title="enter your last name if any.">
+                            <span class="small text-danger" asp-validation-for="LastName"></span>
                         </div>
+                    </div>
 
-                        <div class="form-group">
+                    <div class="form-group">
 
-                            <div class="col-xs-6">
-                                <label asp-for="PhoneNumber"><h4>Phone Number</h4></label>
-                                <input type="text" class="form-control" asp-for="PhoneNumber" value="PhoneNumber" id="phone" placeholder="enter phone" title="enter your phone number if any.">
-                                <span class="small text-danger" asp-validation-for="PhoneNumber"></span>
+                        <div class="col-xs-6">
+                            <label asp-for="PhoneNumber"><h4>Phone Number</h4></label>
+                            <input type="text" class="form-control" asp-for="PhoneNumber" value="PhoneNumber" id="phone" placeholder="enter phone" title="enter your phone number if any.">
+                            <span class="small text-danger" asp-validation-for="PhoneNumber"></span>
 
-                            </div>
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <div class="col-xs-6">
-                                <label asp-for="Birthday"><h4>Birthday</h4></label>
-                                <input type="date" class="form-control" style="line-height: 1" name="birthday" id="birthday" placeholder="birthday date" title="enter your birthday Date (optional).">
-                            </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label asp-for="Birthday"><h4>Birthday</h4></label>
+                            <input type="date" class="form-control" style="line-height: 1" name="birthday" id="birthday" placeholder="birthday date" title="enter your birthday Date (optional).">
                         </div>
-                        <div class="form-group">
+                    </div>
+                    <div class="form-group">
 
-                            <div class="col-xs-6">
-                                <label asp-for="Email"><h4>Email</h4></label>
-                                <input type="email" class="form-control" asp-for="Email" value="@Model.Email" id="email" placeholder="you@email.com" title="enter your email.">
-                                <span class="small text-danger" asp-validation-for="Email"></span>
-                            </div>
+                        <div class="col-xs-6">
+                            <label asp-for="Email"><h4>Email</h4></label>
+                            <input type="email" class="form-control" asp-for="Email" value="@Model.Email" id="email" placeholder="you@email.com" title="enter your email.">
+                            <span class="small text-danger" asp-validation-for="Email"></span>
                         </div>
+                    </div>
 
-                        <div class="form-group">
+                    <div class="form-group">
 
-                            <div class="col-xs-6">
-                                <label asp-for="Location"><h4>Location</h4></label>
-                                <input type="text" class="form-control" asp-for="Location" value="@Model.Location" id="location" placeholder="somewhere" title="enter a location">
-                            </div>
+                        <div class="col-xs-6">
+                            <label asp-for="Location"><h4>Location</h4></label>
+                            <input type="text" class="form-control" asp-for="Location" value="@Model.Location" id="location" placeholder="somewhere" title="enter a location">
                         </div>
-                        <div class="form-group">
+                    </div>
+                    <div class="form-group">
 
-                            <div class="col-xs-6">
-                                <label asp-for="Password"><h4>Password</h4></label>
-                                <input type="password" class="form-control" asp-for="Password" value="@Model.Password" id="password" placeholder="password" title="enter your password.">
-                                <span class="small text-danger" asp-validation-for="Password"></span>
-                            </div>
+                        <div class="col-xs-6">
+                            <label asp-for="Password"><h4>Password</h4></label>
+                            <input type="password" class="form-control" asp-for="Password" value="@Model.Password" id="password" placeholder="password" title="enter your password.">
+                            <span class="small text-danger" asp-validation-for="Password"></span>
                         </div>
-                        <div class="form-group">
+                    </div>
+                    <div class="form-group">
 
-                            <div class="col-xs-6">
-                                <label asp-for="Verify"><h4>Verify Password</h4></label>
-                                <input type="password" class="form-control" asp-for="Verify" id="verifypassword" placeholder="verify password" title="enter your password again.">
-                                <span class="small text-danger" asp-validation-for="Verify"></span>
-                            </div>
+                        <div class="col-xs-6">
+                            <label asp-for="Verify"><h4>Verify Password</h4></label>
+                            <input type="password" class="form-control" asp-for="Verify" id="verifypassword" placeholder="verify password" title="enter your password again.">
+                            <span class="small text-danger" asp-validation-for="Verify"></span>
                         </div>
-                        <div class="form-group">
-                            <div class="col-xs-12">
-                                <br>
-                                <button class="btn btn-lg btn-success" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
-                                <input type="hidden" name="UserID" value="@Model.UserID" />
-                                <input type="hidden" name="Username" value="@Model.Username" />
-                                <input type="hidden" name="Membership" value="@Model.Membership" />
-                                <button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <br>
+                            <button class="btn btn-lg btn-success" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
+                            <input type="hidden" name="UserID" value="@Model.UserID" />
+                            <input type="hidden" name="Username" value="@Model.Username" />
+                            <input type="hidden" name="Membership" value="@Model.Membership" />
+                            <button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
+            </div>
 
-            </div><!--/tab-pane-->
-        </div><!--/tab-content-->
-    </div><!--/col-9-->
+        </div><!--/tab-pane-->
+    </div><!--/tab-content-->
+</div><!--/col-9-->
 </div><!--/row-->
 
 <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>

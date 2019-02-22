@@ -8,6 +8,8 @@
     string userType = @HttpContextAccessor.HttpContext.Session.GetString("Type") ?? "";
 
     ViewBag.Title = "\"" + Model.User.Username + "'s\" " + "Scheduled events";
+
+    int count = 1;
 }
 
 <h1>@ViewBag.Title</h1>
@@ -23,30 +25,51 @@ else if (ViewBag.ErrorMessage.Length > 0)
 
 @if (userType.Length > 0)
 {
-   
     <div>
-        <ul class="list-group">
-            <li class="list-group-item text-muted bookingheader">
-                Reservations / Events
+        <h3>
+
+            @if (true)
+            {
                 <a class="delete pull-right" asp-controller="Booking" asp-action="DeleteBy" asp-route-userId="@Model.User.ID"><i class="fas fa-times bi"></i></a>
                 <span class="pull-right">&nbsp;&nbsp;&nbsp;</span>
                 <a class="add pull-right" asp-controller="Booking" asp-action="add" asp-route-userId="@Model.User.ID"><i class="fas fa-plus"></i></a>
-            </li>
+            }
+        </h3>
+
+        <table class="table table-striped" >
+            <tr>
+                <th class="col-md-1">#</th>
+                <th class="col-md-6">Event Name</th>
+                <th class="col-md-2">Date</th>
+                <th class="col-md-1">Time</th>
+                <th class="col-md-2">Category</th>
+
+            </tr>
             @foreach (var item in Model.Bookings)
             {
-                <li class="list-group-item">@item.Event.Name</li>
+                <tr>
+                    <td>@count</td>
+                    <td><a asp-controller="Event" asp-action="Brochure" asp-route-eventId="@item.Event.ID">@item.Event.Name</a></td>
+                    <td>@item.Event.Date.ToString("ddd d MMM yyyy", CultureInfo.CreateSpecificCulture("en-US"))</td>
+                    <td>@item.Event.Date.ToString("hh:mm tt", CultureInfo.CreateSpecificCulture("en-US"))</td>
+                    <td>@item.Event.Category.Name</td>
+                </tr>
+                count += 1;
             }
-        </ul>
-    </div>
+        </table>
 
+    </div>
 
     @if (Model.Bookings.Count == 0)
     {
-        <p>The User does not have any reservations!</p>
+        <p>You do not have made any reservations yet!</p>
         <p><a asp-controller="Booking" asp-action="Add" asp-route-userId="@Model.User.ID"> Book an event!!!</a></p>
     }
-    
-}
 
-<br />
-<p><a asp-controller="Booking" asp-action="Add" asp-route-userId="@Model.User.ID"> Add another Event to your bookings</a></p>
+    <br />
+    <p><a asp-controller="Booking" asp-action="Add" asp-route-userId="@Model.User.ID"> Add another Event to your bookings</a></p>
+}
+else
+{
+    <p>Please Log in to view your reservations</p>
+}

@@ -1,7 +1,9 @@
-﻿@model VenueApp.ViewModels.BookingViewModel
+﻿@model VenueApp.ViewModels.ViewScheduledViewModel
 
 @{
-    ViewBag.Title = "Delete Booking from User";
+    @using System.Globalization;
+    ViewBag.Title = "Remove an Event from your List of Bookings";
+    var count = 1;
 }
 
 <h1>@ViewBag.Title</h1>
@@ -10,26 +12,30 @@
 
     <div class="col-md-12">
         <h3>
-            Are you sure that you want to delete the event:
-            from user
-            Bookings?
             <a class="back pull-right" asp-controller="Booking" asp-action="Scheduled" asp-route-userId="@Model.User.ID"><i class="fas fa-angle-double-left"></i></a>
         </h3>
     </div>
+        
+    <table class="table table-striped">
+        <tr class="info">
+            <th class="col-md-1">#</th>
+            <th class="col-md-8">Event Title</th>
+            <th class="col-md-2">Date/Time </th>
+            <th class="col-md-1">Selection</th>
+        </tr>
 
-    <div class="form-group">
-        <div class="col-md-12">
-            <br>
-            <button class="btn btn-lg btn-success" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> YES</button>
-            <input type="hidden" name="UserID" value="@Model.UserID" />
-            <input type="hidden" name="EventID" value="@Model.EventID" />
-            <button class="btn btn-lg" type="button"><i class="glyphicon glyphicon-repeat"></i> NO</button>
-        </div>
-    </div>>
+        @foreach (var booking in Model.Bookings)
+        {
+            <tr>
+                <td>@count</td>
+                <td class=""><label for="@booking.Event.ID">@booking.Event.Name</label></td>
+                <td>@booking.Event.Date.ToString("dddd, dd MMMM yyyy", CultureInfo.CreateSpecificCulture("en-US"))</td>
+                <td class="text-center"><input type="checkbox" name="eventsIds" id="@booking.Event.ID" value="@booking.Event.ID" /> </td>
+            </tr>
+            count += 1;
+        }
+    </table>
+    <input type="hidden" name="userId" value="@Model.User.ID" />
+
+    <input class="btn bg-danger pull-right" type="submit" value="Remove Selected Event(s)" />
 </form>
-
-<br />
-<!--
-<p><a asp-controller="User" asp-action="Index">back</a>
-
--->

@@ -28,7 +28,9 @@ namespace VenueApp.Models
         public DateTime Birthday { get; set; }
         public string PhoneNumber { get; set; }
         public string Location { get; set; }
-        
+
+        //public string ProfilePictureName { get; set; }
+
 
     }
 }

@@ -500,12 +500,19 @@ namespace VenueApp.Controllers
 
             // If the user is already logged in
 //------------------- if (HttpContext.Session.TryGetValue("User", out byte[] value))
-            { 
-                User selectedUser = context.Users.Where(c => c.Protected == false).Include(c => c.Type).Include(d => d.Membership).SingleOrDefault(c => c.ID == userId);
+            {
+                User selectedUser = context.Users.Where(c => c.Deleted == false).Include(c => c.Type).Include(d => d.Membership).SingleOrDefault(c => c.ID == userId);
+
+                List<Booking> scheduledEvents = context
+                                    .Bookings
+                                    .Include(item => item.Event)
+                                    .Include(c => c.Event.Category)
+                                    .Where(cm => cm.UserID == userId)
+                                    .ToList();
 
                 if (selectedUser != null)
                 {
-                    EditUserViewModel userToShow = new EditUserViewModel(context.Memberships.ToList(), context.Types.ToList())
+                    ProfileViewModel userToShow = new ProfileViewModel(context.Memberships.ToList(), context.Types.ToList())
                     {
                         UserID = userId,
                         Username = selectedUser.Username,
@@ -520,8 +527,9 @@ namespace VenueApp.Controllers
                         MembershipID = selectedUser.MembershipID,
                         Birthday = selectedUser.Birthday,
                         PhoneNumber = selectedUser.PhoneNumber,
-                        Location = selectedUser.Location
-                        
+                        Location = selectedUser.Location,
+                        Bookings = scheduledEvents
+
                     };
 
                     ViewBag.ProfileInfo = new Dictionary<string, string>()

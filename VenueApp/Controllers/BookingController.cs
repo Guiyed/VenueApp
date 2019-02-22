@@ -72,6 +72,7 @@ namespace VenueApp.Controllers
             List<Booking> scheduledEvents = context
                 .Bookings
                 .Include(item => item.Event)
+                .Include(c => c.Event.Category)
                 .Where(cm => cm.UserID == userId)
                 .ToList();
 
@@ -91,7 +92,7 @@ namespace VenueApp.Controllers
         public IActionResult Add(int userId)
         {
             User selectedUser = context.Users.SingleOrDefault(c => c.ID == userId);
-            List<Event> events = context.Events.ToList();
+            List<Event> events = context.Events.Include(c => c.Category).ToList();
 
             BookingViewModel addBookingViewModel = new BookingViewModel(selectedUser, events);
             return View(addBookingViewModel);
@@ -124,7 +125,7 @@ namespace VenueApp.Controllers
                     TempData["Message"] = "Event Successfully Booked.";
                     TestFunctions.PrintConsoleMessage("SUCCESS, BOOKING DELETED");
 
-                    return RedirectToAction("Scheduled", new { userId = newBooking.UserID});
+                    return RedirectToAction("Scheduled", new { userId = newBooking.UserID });
                 }
 
                 // Error!!! booking ID already in database...  return custom message
@@ -153,14 +154,14 @@ namespace VenueApp.Controllers
                 Event = selectedEvent
             };
 
-        return View(bookingToBeDeleted);
+            return View(bookingToBeDeleted);
         }
 
         // POST: /<controller>/
         [HttpPost]
         public IActionResult Delete(BookingViewModel deleteBookingViewModel)
         {
-            Booking theBooking = context.Bookings.SingleOrDefault(c => (c.UserID == deleteBookingViewModel.UserID) &&(c.EventID == deleteBookingViewModel.EventID));
+            Booking theBooking = context.Bookings.SingleOrDefault(c => (c.UserID == deleteBookingViewModel.UserID) && (c.EventID == deleteBookingViewModel.EventID));
             if (theBooking != null)
             {
                 context.Bookings.Remove(theBooking);
@@ -186,38 +187,51 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult DeleteBy(int userId)
         {
-            User selectedUser = context.Users.SingleOrDefault(c => c.ID == userId);
-            List<Event> events = context.Events.ToList();
+            User currentUser = context.Users.SingleOrDefault(c => c.ID == userId);
 
-            BookingViewModel showBookingViewModel = new BookingViewModel(selectedUser, events);
-            return View(showBookingViewModel);
+            List<Booking> scheduledEvents = context
+                .Bookings
+                .Include(item => item.Event)
+                .Include(c => c.Event.Category)
+                .Where(cm => cm.UserID == userId)
+                .ToList();
+
+            ViewScheduledViewModel scheduledViewModel = new ViewScheduledViewModel
+            {
+                User = currentUser,
+                Bookings = scheduledEvents
+            };
+
+            return View(scheduledViewModel);
         }
 
         // POST: /<controller>/
         [HttpPost]
-        public IActionResult DeleteBy(BookingViewModel deleteBookingViewModel)
+        public IActionResult DeleteBy(int userId, int[] eventsIds)
         {
-            Booking theBooking = context.Bookings.SingleOrDefault(c => (c.UserID == deleteBookingViewModel.UserID) && (c.EventID == deleteBookingViewModel.EventID));
-            if (theBooking != null)
+            foreach (int eventId in eventsIds)
             {
-                context.Bookings.Remove(theBooking);
-                context.SaveChanges();
+                Booking theBooking = context.Bookings.SingleOrDefault(c => (c.UserID == userId) && (c.EventID == eventId));
+                if (theBooking != null)
+                {
+                    context.Bookings.Remove(theBooking);
+                    context.SaveChanges();
 
-                // Success!!! booking deleted...  return custom message
-                TempData["Message"] = "Booking successfully deleted.";
-                TestFunctions.PrintConsoleMessage("SUCCESS, BOOKING DELETED");
-            }
-            else
-            {
-                // Error!!! booking not found...  return custom message
-                TempData["Message"] = "Booking not found. No changes has been made to the database";
-                TestFunctions.PrintConsoleMessage("ERROR, NO BOOKING FOUND");
+                    // Success!!! booking deleted...  return custom message
+                    TempData["Message"] = "Booking(s) successfully deleted.";
+                    TestFunctions.PrintConsoleMessage("SUCCESS, BOOKING DELETED");
+                }
+                else
+                {
+                    // Error!!! booking not found...  return custom message
+                    TempData["Message"] = "Booking not found. No changes has been made to the database";
+                    TestFunctions.PrintConsoleMessage("ERROR, NO BOOKING FOUND");
+                }
             }
 
-            return RedirectToAction("Scheduled", new { userId = deleteBookingViewModel.UserID });
+            return RedirectToAction("Scheduled", new { userId = userId });
+
         }
-
-
-
+        
     }
 }

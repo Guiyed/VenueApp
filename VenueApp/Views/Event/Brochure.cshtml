@@ -23,5 +23,9 @@
 </div>
 
 <br />
-<p><a asp-controller="Event" asp-action="Index">back</a> &nbsp;&nbsp; [<a asp-controller="Event" asp-action="Detail" asp-route-eventId="@((Model.ID == 1)?1:Model.ID-1)">prev</a> | <a asp-controller="Event" asp-action="Detail" asp-route-eventId="@(Model.ID+1)">next</a>]</p>
-<!-- There is a BUG here with ID not in database-->
+
+@if(userType.Length > 0)
+{
+<p>
+    Go to my<a asp-controller="Booking" asp-action="Scheduled"> bookings</a></p>
+    }

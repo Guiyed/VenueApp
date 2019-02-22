@@ -56,7 +56,7 @@ else if (ViewBag.ErrorMessage.Length > 0)
                 <tr>
                     <td>@count</td>
                     <td><b><a asp-controller="Booking" asp-action="Scheduled" asp-route-userId="@booking.UserID">@booking.User.Username</a></b> &nbsp;(Id: @booking.UserID)</td>
-                    <td><b><a asp-controller="Event" asp-action="Detail" asp-route-eventId="@booking.EventID">@booking.Event.Name</a></b></td>
+                    <td><b><a asp-controller="Event" asp-action="Brochure" asp-route-eventId="@booking.EventID">@booking.Event.Name</a></b></td>
                     <td class="text-center">@booking.EventID</td>
                     <td class="text-center"><a class="delete" asp-controller="Booking" asp-action="Delete" asp-route-userId="@booking.UserID" asp-route-eventId="@booking.EventID"><i class="fas fa-times bi"></i></a></td>
 

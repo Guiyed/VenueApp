@@ -270,7 +270,7 @@ namespace VenueApp.Controllers
                     Date = selectedEvent.Date,
                     Price = selectedEvent.Price,
                     Category = selectedEvent.Category,
-                    //Location = selectedEvent.Location??"",
+                    Location = selectedEvent.Location??"",
                     Created = selectedEvent.Created
                 };
 
@@ -286,5 +286,36 @@ namespace VenueApp.Controllers
             
         }
 
+
+
+
+        //----------------------------------- BROCHURE -----------------------------------//
+        // GET: /<controller>/
+        public IActionResult Brochure(int eventId)
+        {
+
+            // Do nothing... The admin can view any eventID
+            Event selectedEvent = context.Events.Include(c => c.Category).Single(c => c.ID == eventId);
+
+            Event eventToShow = new Event()
+            {
+                ID = selectedEvent.ID,
+                Name = selectedEvent.Name,
+                Description = selectedEvent.Description,
+                Date = selectedEvent.Date,
+                Price = selectedEvent.Price,
+                Category = selectedEvent.Category,
+                Location = selectedEvent.Location??"",
+                Created = selectedEvent.Created
+            };
+
+            return View(eventToShow);
+
+        }
+
     }
+
 }
+
+
+
