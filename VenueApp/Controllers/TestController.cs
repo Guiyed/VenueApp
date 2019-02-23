@@ -24,5 +24,13 @@ namespace VenueApp.Controllers
         }
 
 
+        public ActionResult SetVariable(string key, string value)
+        {
+            HttpContext.Session.SetString(key,value);
+            //Update USER database
+
+            return this.Json(new { success = true });
+        }
+
     }
 }

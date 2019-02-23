@@ -29,7 +29,7 @@ namespace VenueApp.Models
         public string PhoneNumber { get; set; }
         public string Location { get; set; }
 
-        //public string ProfilePictureName { get; set; }
+        //public string ProfilePicture { get; set; }
 
 
     }
