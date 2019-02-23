@@ -45,7 +45,22 @@
                     </div>
                     <hr style="margin-top: 10px; margin-bottom: 10px;" />
                     <div class="input-group input-group-sm">
-                        <input type="file" class="text-center center-block" placeholder="picture file" aria-describedby="basic-addon1">
+                        <form class="form" asp-controller="Test" asp-action="UploadProfilePic" method="post" enctype="multipart/form-data">
+                            <fieldset>
+                                <input class="text-center center-block" placeholder="picture file" type="file" name="image" />
+                                <input type="submit" value="Go" />
+                            </fieldset>
+                        </form>
+
+
+
+
+
+
+
+
+
+
                     </div>
                 </div>
             </div>
@@ -258,7 +273,7 @@
        $.post('/Test/SetVariable',
            { key: "ProfilePic", value: selectedValue }, function (data) {
                if (data.success) {
-                alert("You have susccesfully changed your avatar picture to" + selectedValue);
+                alert("You have susccesfully changed your avatar picture");
                }
            });
     }
