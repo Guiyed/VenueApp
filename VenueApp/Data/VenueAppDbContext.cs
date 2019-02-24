@@ -52,15 +52,21 @@ namespace VenueApp.Data
                 );
 
             modelBuilder.Entity<User>().HasData(
-                new User { ID = 1, Username = "admin", Password = "password", Created = DateTime.Now, MembershipID = 1, TypeID = 1, Protected = true },
-                new User { ID = 2, Username = "user", Password = "password", Created = DateTime.Now, MembershipID = 1, TypeID = 2, Protected = true }
+                new User { ID = 1, Username = "admin", Password = "password", Created = DateTime.Now, MembershipID = 1, TypeID = 1, Protected = true, ProfilePicture = "/images/Avatar3.svg" },
+                new User { ID = 2, Username = "user", Password = "password", Created = DateTime.Now, MembershipID = 1, TypeID = 2, Protected = true, ProfilePicture = "/images/Avatar3.svg" }
                 );
 
             modelBuilder.Entity<Event>().HasData(
                 new Event { ID = 1, Name = "Test Event 1", Description = "Description of Test Event 1.", Date = new DateTime(2019, 07, 28, 18, 35, 5, new CultureInfo("en-US", false).Calendar), Price = 9.99, CategoryID = 1, Location = "Launchcode. Miami, Florida", Created = DateTime.Now, Protected = true },
-                new Event { ID = 2, Name = "Test Event 2", Description = "Description of Test Event 2.", Date = DateTime.Today, Price= 10.50, CategoryID = 1, Location="Launchcode. Miami, Florida", Created = DateTime.Now, Protected = false }
+                new Event { ID = 2, Name = "Test Event 2", Description = "Description of Test Event 2.", Date = DateTime.Today, Price = 10.50, CategoryID = 1, Location = "Launchcode. Miami, Florida", Created = DateTime.Now, Protected = false },
+                new Event { ID = 3, Name = "Music Event", Description = "Description of Music Event", Date = new DateTime(2019, 03, 01, 18, 10, 0, new CultureInfo("en-US", false).Calendar), Price = 10.99, CategoryID = 2, Location = "Miami, Florida", Created = DateTime.Now, Protected = false },
+                new Event { ID = 4, Name = "Art Event", Description = "Description of Art Event", Date = new DateTime(2019, 03, 02, 17, 00, 0, new CultureInfo("en-US", false).Calendar), Price = 20.49, CategoryID = 3, Location = "Ft. Lauderdale, Florida", Created = DateTime.Now, Protected = false },
+                new Event { ID = 5, Name = "Business Event", Description = "Description of Business Event", Date = new DateTime(2019, 03, 05, 8, 15, 0, new CultureInfo("en-US", false).Calendar), Price = 17.00, CategoryID = 4, Location = "Miramar, Florida", Created = DateTime.Now, Protected = false },
+                new Event { ID = 6, Name = "Party Event", Description = "Description of Party Event", Date = new DateTime(2019, 03, 12, 12, 45, 0, new CultureInfo("en-US", false).Calendar), Price = 90.00, CategoryID = 5, Location = "Coral Gables, Florida", Created = DateTime.Now, Protected = false },
+                new Event { ID = 7, Name = "Classes Event", Description = "Description of Class Event", Date = new DateTime(2019, 03, 28, 10, 25, 10, new CultureInfo("en-US", false).Calendar), Price = 35, CategoryID = 6, Location = "Kendall, Florida", Created = DateTime.Now, Protected = false },
+                new Event { ID = 8, Name = "Sport Event", Description = "Description of Sport Event", Date = new DateTime(2019, 04, 15, 21, 27, 10, new CultureInfo("en-US", false).Calendar), Price = 49.98, CategoryID = 7, Location = "Weston. Miami, Florida", Created = DateTime.Now, Protected = false },
+                new Event { ID = 9, Name = "Food & Drink Event", Description = "Description of Food & Drink Event", Date = new DateTime(2019, 08, 01, 18, 35, 30, new CultureInfo("en-US", false).Calendar), Price = 12.00, CategoryID = 8, Location = "Sawgrass, Florida", Created = DateTime.Now, Protected = false }
                 );
-
 
         }
     }

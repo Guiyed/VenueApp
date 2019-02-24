@@ -13,6 +13,12 @@
     int userID = @HttpContextAccessor.HttpContext.Session.GetInt32("UserID") ?? 0;
     int count = 1;
 
+    var imagePath = "";
+    if (HttpContextAccessor.HttpContext.Session.GetString("ProfilePic") != null)
+    {
+        imagePath = @HttpContextAccessor.HttpContext.Session.GetString("ProfilePic");
+    }
+
 }
 
 <h1>@ViewBag.Title</h1>
@@ -24,30 +30,51 @@
             <!--left col-->
 
             <div class="text-center">
-                <img src="~/images/Avatar1.svg" class="avatar img-circle img-thumbnail img-responsive" style="max-width: 60%" alt="avatar">
+                <img src="@imagePath" id="ProfilePic" class="avatar img-circle img-thumbnail img-responsive" style="max-width: 60%" alt="avatar">
                 <h6>Upload a different photo...</h6>
-                <input type="file" class="text-center center-block well well-sm">
+                <div class="text-center center-block well well-sm">
+                    <div >
+                        <p class="text-justify control-label">Select one <span>
+                        <select id="selectBox" class="form control" onchange="changeFunc();">
+                            <option value="" disabled selected>Picture</option>
+                            <option value="/images/Avatar1.svg">Avatar 1</option>
+                            <option value="/images/Avatar2.svg">Avatar 2</option>
+                            <option value="/images/Avatar3.svg">Avatar 3</option>
+                        </select>
+                        </span> or </p>
+                    </div>
+                    <hr style="margin-top: 10px; margin-bottom: 10px;" />
+                    <div class="input-group input-group-sm">
+                        <form class="form" asp-controller="Test" asp-action="UploadProfilePic" method="post" enctype="multipart/form-data">
+                            <fieldset>
+                                <input class="text-center center-block" placeholder="picture file" type="file" name="image" />
+                                <input type="submit" value="Go" />
+                            </fieldset>
+                        </form>
+
+
+                    </div>
+                </div>
             </div>
 
+                <ul class="list-group">
+                    <li class="list-group-item text-muted profileheader">Profile</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong>Joined</strong></span> @Model.Created.ToShortDateString()</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong>Name</strong></span> @ViewBag.ProfileInfo["FullName"]</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong>Birthday</strong></span> -- / -- / --</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong>Email</strong></span> @ViewBag.ProfileInfo["Email"]</li>
+                </ul>
 
-            <ul class="list-group">
-                <li class="list-group-item text-muted profileheader">Profile</li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Joined</strong></span> @Model.Created.ToShortDateString()</li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Name</strong></span> @ViewBag.ProfileInfo["FullName"]</li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Birthday</strong></span> -- / -- / --</li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Email</strong></span> @ViewBag.ProfileInfo["Email"]</li>
-            </ul>
-
-            <div class="panel panel-default">
-                <div class="panel-heading"><span class="text-muted">Website </span><i class="fa fa-link fa-1x"></i></div>
-                <div class="panel-body"><a href="https://github.com/Guiyed">Github.com</a></div>
-            </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading"><span class="text-muted">Website </span><i class="fa fa-link fa-1x"></i></div>
+                    <div style="padding: 10px 20px;" class="panel-body"><a href="https://github.com/Guiyed">Github.com</a></div>
+                </div>
 
 
-            <div class="panel panel-default">
-                <div class="panel-heading"><a class="text-muted" asp-controller="Membership" asp-action="Index">Membership </a><i class="far fa-id-card fa-1x"></i></div>
-                <div class="panel-body">@ViewBag.ProfileInfo["Membership"]</div>
-            </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading small"><a class="text-muted" asp-controller="Membership" asp-action="Index">Membership </a><i class="far fa-id-card fa-1x"></i></div>
+                    <div style="padding: 10px 20px;" class="panel-body">@ViewBag.ProfileInfo["Membership"]</div>
+                </div>
 
         </div><!--/col-3-->
         <!-- right col -->
@@ -229,5 +256,18 @@
         $('.nav-tabs a[href="#' + tab + '"]').tab('show');
         console.log('Change Tab');
     };
+    
+   function changeFunc() {        
+        var selectBox = document.getElementById("selectBox");
+        var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+        document.getElementById('ProfilePic').setAttribute("src", selectedValue);
+       
+       $.post('/Test/SetVariable',
+           { key: "ProfilePic", value: selectedValue }, function (data) {
+               if (data.success) {
+                alert("You have susccesfully changed your avatar picture");
+               }
+           });
+    }
 
 </script>
