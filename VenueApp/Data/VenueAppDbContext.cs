@@ -52,8 +52,8 @@ namespace VenueApp.Data
                 );
 
             modelBuilder.Entity<User>().HasData(
-                new User { ID = 1, Username = "admin", Password = "password", Created = DateTime.Now, MembershipID = 1, TypeID = 1, Protected = true },
-                new User { ID = 2, Username = "user", Password = "password", Created = DateTime.Now, MembershipID = 1, TypeID = 2, Protected = true }
+                new User { ID = 1, Username = "admin", Password = "password", Created = DateTime.Now, MembershipID = 1, TypeID = 1, Protected = true, ProfilePicture = "/images/Avatar3.svg" },
+                new User { ID = 2, Username = "user", Password = "password", Created = DateTime.Now, MembershipID = 1, TypeID = 2, Protected = true, ProfilePicture = "/images/Avatar3.svg" }
                 );
 
             modelBuilder.Entity<Event>().HasData(

@@ -108,8 +108,8 @@ namespace VenueApp.Controllers
                     string userInSesion = HttpContext.Session.GetString("User");
                     string userType = context.Types.SingleOrDefault(c => c.ID == currentUser.TypeID).Name;
                     HttpContext.Session.SetString("Type", userType);
-                    //HttpContext.Session.SetString("ProfilePic", newUser.ProfilePicture);
-                    HttpContext.Session.SetString("ProfilePic", "/images/Avatar3.svg");
+                    HttpContext.Session.SetString("ProfilePic", currentUser.ProfilePicture);
+                    //HttpContext.Session.SetString("ProfilePic", "/images/Avatar3.svg");
 
                     TestFunctions.PrintConsoleMessage("LOGIN SUCCESS " + userInSesion);
 
@@ -200,8 +200,9 @@ namespace VenueApp.Controllers
                         Password = userFromView.Password,
                         Created = DateTime.Now,
                         TypeID = 2,         // Default for "Regular user", needs to be implemented for the next database update
-                        MembershipID = 1    // Default for "None"
+                        MembershipID = 1,    // Default for "None"
                                             //Created = DateTime.Now    //To be used when updating database, needs to be implemented for the next database update
+                        ProfilePicture = "/images/Avatar3.svg"
                     };
 
                     context.Users.Add(newUser);
@@ -213,7 +214,7 @@ namespace VenueApp.Controllers
                     string userInSesion = HttpContext.Session.GetString("User");
                     string userType = context.Types.SingleOrDefault(c => c.ID == newUser.TypeID).Name;
                     HttpContext.Session.SetString("Type", newUser.Type.Name);
-                    //HttpContext.Session.SetString("ProfilePic", newUser.ProfilePicture);
+                    HttpContext.Session.SetString("ProfilePic", newUser.ProfilePicture);
 
                     TestFunctions.PrintConsoleMessage("LOGIN SUCCESS " + userInSesion);
 
@@ -502,8 +503,7 @@ namespace VenueApp.Controllers
         // GET: /<controller>/
         public IActionResult Profile(int userId = 0)
         {
-
-            
+                        
             // If the user is already logged in
             //------------------- if (HttpContext.Session.TryGetValue("User", out byte[] value))
             {
