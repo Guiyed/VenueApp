@@ -1,0 +1,100 @@
+﻿@{
+    ViewBag.Title = "Update Event Database with API";
+
+
+    @using Microsoft.AspNetCore.Http
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+    string userName = @HttpContextAccessor.HttpContext.Session.GetString("User") ?? "";
+    string userType = @HttpContextAccessor.HttpContext.Session.GetString("Type") ?? "";
+    int userID = @HttpContextAccessor.HttpContext.Session.GetInt32("UserID") ?? 0;
+
+}
+
+<h1>@ViewBag.Title</h1>
+
+
+@if (ViewBag.UnauthorizedMessage != null)
+{
+<br />
+<div class="text-center text-warning">
+    @foreach (string message in ViewBag.UnauthorizedMessage)
+            {
+    <h3>@message</h3>
+    <br />
+            }
+</div>
+}
+else{
+
+<button class="btn btn-info" id="myButton">test button</button>
+<br />
+<div id="api">
+
+
+</div>
+<br />
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6">
+            <div id='events-panel' class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Events</h3>
+                </div>
+                <div class="panel-body">
+                    <div id="events" class="list-group">
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading">Event title</h4>
+                            <p class="list-group-item-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            <p class="venue"></p>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading">Event title</h4>
+                            <p class="list-group-item-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            <p class="venue"></p>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading">Event title</h4>
+                            <p class="list-group-item-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            <p class="venue"></p>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading">Event title</h4>
+                            <p class="list-group-item-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            <p class="venue"></p>
+                        </a>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <nav>
+                        <ul class="pager">
+                            <li id="prev" class="previous"><a href="#"><span aria-hidden="true">&larr;</span></a></li>
+                            <li id="next" class="next"><a href="#"><span aria-hidden="true">&rarr;</span></a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div id='attraction-panel' class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Attraction</h3>
+                </div>
+                <div id="attraction" class="panel-body">
+                    <h4 class="list-group-item-heading">Attraction title</h4>
+                    <img class="col-xs-12" src="">
+                    <p id="classification"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+<script src="~/js/site.js"></script>
+
+
+<script type="text/javascript">
+    var apiKey = '@ViewBag.APIkey';
+</script>

@@ -45,7 +45,7 @@
                     </div>
                     <hr style="margin-top: 10px; margin-bottom: 10px;" />
                     <div class="input-group input-group-sm">
-                        <form class="form" asp-controller="Test" asp-action="UploadProfilePic" method="post" enctype="multipart/form-data">
+                        <form class="form" asp-controller="Dashboard" asp-action="UploadProfilePic" method="post" enctype="multipart/form-data">
                             <fieldset>
                                 <input class="text-center center-block" placeholder="picture file" type="file" name="image" />
                                 <input type="submit" value="Go" />
@@ -262,7 +262,7 @@
         var selectedValue = selectBox.options[selectBox.selectedIndex].value;
         document.getElementById('ProfilePic').setAttribute("src", selectedValue);
        
-       $.post('/Test/SetVariable',
+       $.post('/Dashboard/SetVariable',
            { key: "ProfilePic", value: selectedValue }, function (data) {
                if (data.success) {
                 alert("You have susccesfully changed your avatar picture");

@@ -41,39 +41,6 @@ namespace VenueApp.Controllers
         }
 
 
-        public ActionResult SetVariable(string key, string value)
-        {
-            HttpContext.Session.SetString(key,value);
-            //Update USER database
-
-            User userToEdit = context.Users.Include(c => c.Type).Include(d => d.Membership).SingleOrDefault(c => c.ID == HttpContext.Session.GetInt32("UserID"));
-            userToEdit.ProfilePicture = HttpContext.Session.GetString("ProfilePic");
-            context.Users.Update(userToEdit);
-            context.SaveChanges();
-
-            return this.Json(new { success = true });
-        }
-
-
-        [HttpPost]
-        public ActionResult UploadProfilePic(IFormFile image)
-        {
-
-            if (image != null)
-            {
-                var fileName = Path.Combine(he.WebRootPath + "\\images\\profilepics\\", HttpContext.Session.GetString("User") + Path.GetExtension(image.FileName));
-                FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate);
-                image.CopyTo(fs);
-                HttpContext.Session.SetString("ProfilePic", "/images/profilepics/" + HttpContext.Session.GetString("User") + Path.GetExtension(image.FileName));
-                fs.Close();
-            
-                User userToEdit = context.Users.Include(c => c.Type).Include(d => d.Membership).SingleOrDefault(c => c.ID == HttpContext.Session.GetInt32("UserID"));
-                userToEdit.ProfilePicture = "/images/profilepics/" + HttpContext.Session.GetString("User") + Path.GetExtension(image.FileName);
-                context.Users.Update(userToEdit);
-                context.SaveChanges();
-            }
-            return RedirectToAction("Profile", "User", new { userId = HttpContext.Session.GetInt32("UserID")});
-        }
-
+        
     }
 }

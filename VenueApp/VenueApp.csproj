@@ -35,6 +35,9 @@
   <Content Update="Views\Booking\Delete.cshtml">
     <Pack>$(IncludeRazorContentInPack)</Pack>
   </Content>
+  <Content Update="Views\Dashboard\Api.cshtml">
+    <Pack>$(IncludeRazorContentInPack)</Pack>
+  </Content>
   <Content Update="Views\Event\Brochure.cshtml">
     <Pack>$(IncludeRazorContentInPack)</Pack>
   </Content>
