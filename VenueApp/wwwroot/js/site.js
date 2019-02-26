@@ -24,7 +24,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "GET",
-            url: "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=US&city=Miami&apikey=rjvAOXYLhx1XPB30QYsgr5QVhQVO3U4b&size=4&page=" + page,
+            url: "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=US&city=Miami&apikey=rjvAOXYLhx1XPB30QYsgr5QVhQVO3U4b&size=5&page=" + page,
             async: true,
             dataType: "json",
             success: function (json) {
@@ -58,7 +58,14 @@ $(document).ready(function () {
                     getAttraction(eventObject.data._embedded.attractions[0].id);
                 } catch (err) {
                     console.log(err);
-                }
+                }      
+
+                try {
+                    getVenue(eventObject.data._embedded.venues[0].id);
+                } catch (err) {
+                    console.log(err);
+                } 
+
             });
             item = item.next();
         }
@@ -79,13 +86,29 @@ $(document).ready(function () {
             async: true,
             dataType: "json",
             success: function (json) {
-                showAttraction(json);
+                showAttraction(json);            },
+            error: function (xhr, status, err) {
+                console.log(err);
+            }
+        });
+    }
+
+    function getVenue(id) {
+        $.ajax({
+            type: "GET",
+            url: "https://app.ticketmaster.com/discovery/v2/venues/" + id + ".json?apikey=rjvAOXYLhx1XPB30QYsgr5QVhQVO3U4b",
+            async: true,
+            dataType: "json",
+            success: function (json) {                
+                loadMapScenario(json, json.location.latitude, json.location.longitude);
             },
             error: function (xhr, status, err) {
                 console.log(err);
             }
         });
     }
+
+
 
     function showAttraction(json) {
         $("#events-panel").hide();
@@ -98,11 +121,31 @@ $(document).ready(function () {
         $("#attraction .list-group-item-heading").first().text(json.name);
         $("#attraction img").first().attr('src', json.images[0].url);
         $("#classification").text(json.classifications[0].segment.name + " - " + json.classifications[0].genre.name + " - " + json.classifications[0].subGenre.name);
+        //let lat = 26.133435;
+        //let long = -80.3150427;
+        //loadMapScenario(lat, long);        
     }
 
+
+
+    function loadMapScenario(json, lat, long) {
+        var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
+            center: new Microsoft.Maps.Location(lat, long),
+            //mapTypeId: Microsoft.Maps.MapTypeId.aerial,
+            zoom: 15
+        });
+        
+        var pushpin = new Microsoft.Maps.Pushpin(map.getCenter(), null);
+        map.entities.push(pushpin);
+
+        $("#venueName").text(json.name + " - " + json.city.name + ", " + json.state.stateCode);
+    }	
+
     getEvents(page);
-       
-//});
+
+    //src = 'https://www.bing.com/api/maps/mapcontrol?key=Ar6GSgDklc17CZg1iXfmAutlA2Kru2EpLP0NFvJmllNtv3QX2VTgP3YBSY2AVVUu'
+
+});
 
 
 
@@ -135,6 +178,6 @@ $(document).ready(function () {
 
 
 
-    });*/
+    });
 
-});
+});*/
