@@ -135,7 +135,7 @@ $(document).ready(function () {
             zoom: 15
         });
         
-        var pushpin = new Microsoft.Maps.Pushpin(map.getCenter(), null);
+        var pushpin = new Microsoft.Maps.Pushpin(map.getCenter(), { color: 'teal' });
         map.entities.push(pushpin);
 
         $("#venueName").text(json.name + " - " + json.city.name + ", " + json.state.stateCode);
