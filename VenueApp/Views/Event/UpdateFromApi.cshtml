@@ -104,8 +104,7 @@ else
             success: function (json) {
                 var events = json._embedded.events;
                 var venue ="";
-
-
+                
                 for (var i = 0; i < events.length; i++) {
                     try {
                         venue = events[i]._embedded.venues[0].name + " in " + events[i]._embedded.venues[0].city.name;
@@ -113,9 +112,7 @@ else
                         console.log(err);
                     }
 
-                    $("#api").append(`
-                        ${ events[i].name}.     on date ${events[i].dates.start.localDate} at ${venue} <br>
-                    `);
+                    $("#api").append(`<b>${ events[i].name}</b>. on date ${events[i].dates.start.localDate} at <i>${venue}</i> <br>`);
                 }
 
             },

@@ -4,6 +4,7 @@
 @{
     string username = @HttpContextAccessor.HttpContext.Session.GetString("User") ?? "";
     string userType = @HttpContextAccessor.HttpContext.Session.GetString("Type") ?? "";
+    int userID = @HttpContextAccessor.HttpContext.Session.GetInt32("UserID") ?? 0;
 }
 
 <!DOCTYPE html>
@@ -58,7 +59,10 @@
                                 <li><a href="#">Category 2</a></li>
                                 <li><a href="#">Category 3</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="#">Booked Events</a></li>
+                                <li><a asp-controller="Booking" asp-action="Scheduled" asp-route-userId="@userID">Booked Events</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a asp-controller="Dashboard" asp-action="API">Test Events API</a></li>
+
                             </ul>
                         </li>
                     </ul>
