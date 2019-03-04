@@ -3,7 +3,7 @@
 
 @{
     string username = @HttpContextAccessor.HttpContext.Session.GetString("User") ?? "";
-    string userType = @HttpContextAccessor.HttpContext.Session.GetString("UserType") ?? "";
+    string userType = @HttpContextAccessor.HttpContext.Session.GetString("Type") ?? "";
 }
 
 <!DOCTYPE html>

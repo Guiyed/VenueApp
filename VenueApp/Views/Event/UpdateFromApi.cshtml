@@ -1,0 +1,137 @@
+﻿@model VenueApp.ViewModels.SearchEventViewModel
+
+@{
+    ViewBag.Title = "Update Event Database from API";
+
+
+    @using Microsoft.AspNetCore.Http
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+    string userName = @HttpContextAccessor.HttpContext.Session.GetString("User") ?? "";
+    string userType = @HttpContextAccessor.HttpContext.Session.GetString("Type") ?? "";
+    int userID = @HttpContextAccessor.HttpContext.Session.GetInt32("UserID") ?? 0;
+
+}
+
+<h1>@ViewBag.Title</h1>
+
+
+@if (ViewBag.UnauthorizedMessage != null)
+{
+<br />
+<div class="text-center text-warning">
+    @foreach (string message in ViewBag.UnauthorizedMessage)
+        {
+    <h3>@message</h3>
+    <br />
+        }
+</div>
+}
+else
+{
+
+
+<form id="APIform">
+    <div class="container">
+        <div class="row">
+            <div class="form-group col-md-5">
+                <label asp-for="City"></label>
+                <select class="form-control" id="DMAID">
+                    <option value="334">Miami - Ft. Lauderdale</option>
+                    <option value="249">Chicago</option>
+                    <option value="319">Las Vegas</option>
+                    <option value="324">Los Angeles</option>
+                    <option value="345">New York</option>
+                </select>
+            </div>
+
+            <div class="form-group col-md-2">
+                <label asp-for="FromDate"></label>
+                <input type="date" id="fromDate" class="form-control " style="line-height: 1" asp-for="FromDate" />
+            </div>
+            <div class="form-group col-md-2">
+                <label asp-for="ToDate"></label>
+                <input type="date" id="toDate" class="form-control " style="line-height: 1" asp-for="ToDate" />
+            </div>
+            <div class="form-group col-md-2">
+                <label> Show Data</label>
+                <input id="showAPI" class="pull-right btn btn-info" value="Click Here" onclick="showAPIevents();" />
+            </div>
+        </div>
+
+    </div>
+</form>
+
+<hr />
+<br />
+<div id="api"></div>
+<br />
+
+}
+
+
+<script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+
+<script type="text/javascript">
+    'use strict';
+    var apiKey = '@ViewBag.APIkey';
+    var mapKey = '@ViewBag.Mapkey';
+
+    function showAPIevents() {   
+
+        $("#api").text("");
+
+        var dmaID = document.getElementById("DMAID").querySelector(':checked').getAttribute('value');
+        console.log(dmaID);
+        var fromDate = new Date(document.getElementById("fromDate").value);        
+        var toDate = new Date(document.getElementById("toDate").value);
+
+        console.log("from " + fromDate +" to " + toDate);
+        //console.log("from " + isValidDate(fromDate.toISOString().replace(".000", "")) + " to " + toDate.toString("yyyy-MM-dd"));
+
+        fromDate = isValidDate(fromDate) ? fromDate.toISOString().replace(".000", "") : "";
+        toDate = isValidDate(toDate) ? toDate.toISOString().replace(".000", "") : "";
+   
+        
+        var query = "dmaId=" + dmaID + "&startDateTime=" + fromDate + "&endDateTime=" + toDate + "&apikey=" + apiKey + "&size=25";
+        console.log(query);
+
+        $.ajax({
+            type: "GET",
+                url: "https://app.ticketmaster.com/discovery/v2/events.json?" + query,
+            async: true,
+            dataType: "json",
+            success: function (json) {
+                var events = json._embedded.events;
+                var venue ="";
+
+
+                for (var i = 0; i < events.length; i++) {
+                    try {
+                        venue = events[i]._embedded.venues[0].name + " in " + events[i]._embedded.venues[0].city.name;
+                    } catch (err) {
+                        console.log(err);
+                    }
+
+                    $("#api").append(`
+                        ${ events[i].name}.     on date ${events[i].dates.start.localDate} at ${venue} <br>
+                    `);
+                }
+
+            },
+            error: function (xhr, status, err) {
+                console.log(err);
+            }
+        });
+
+
+        function isValidDate(d) {
+            return d instanceof Date && !isNaN(d);
+        }
+
+
+    }
+</script>
+
+<script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=Ar6GSgDklc17CZg1iXfmAutlA2Kru2EpLP0NFvJmllNtv3QX2VTgP3YBSY2AVVUu'></script>
+

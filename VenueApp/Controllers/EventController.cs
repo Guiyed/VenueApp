@@ -15,6 +15,9 @@ namespace VenueApp.Controllers
 {
     public class EventController : Controller
     {
+        private readonly string TicketmasterAPIkey = "rjvAOXYLhx1XPB30QYsgr5QVhQVO3U4b";
+        private readonly string BingMapsAPIkey = "Ar6GSgDklc17CZg1iXfmAutlA2Kru2EpLP0NFvJmllNtv3QX2VTgP3YBSY2AVVUu";
+
         private VenueAppDbContext context;
 
         public EventController(VenueAppDbContext dbContext)
@@ -288,10 +291,120 @@ namespace VenueApp.Controllers
 
 
 
-
-        //----------------------------------- BROCHURE -----------------------------------//
+        //-------------------------------- UPDATE FROM API -----------------------------------//
         // GET: /<controller>/
-        public IActionResult Brochure(int eventId)
+        public IActionResult API()
+        {
+            if (HttpContext.Session.TryGetValue("User", out byte[] value))
+            {
+                string userType = HttpContext.Session.GetString("Type");
+
+                if (userType == "admin")
+                {
+                    ViewBag.APIkey = TicketmasterAPIkey;
+                    ViewBag.Mapkey = BingMapsAPIkey;
+                    return View("UpdateFromAPI");
+                }
+            }
+
+            //Unauthorize Access - Give Error and go Back to Dashboard
+            ViewBag.UnauthorizedMessage = new string[] { "Sorry you are not authorized to access this feature, " +
+                "You are being redirected to the User Login Page in a few seconds." };
+
+            return RedirectToAction("Index", "Dashboard");
+        }
+
+        // GET: /<controller>/
+        [HttpPost]
+        public IActionResult API(EditEventViewModel modEvent)
+        {
+
+            return View();
+
+
+        }
+
+
+
+        /*
+         * public IActionResult Add()
+        {
+
+            //If a Logged In "Admin" is accessing this feature
+            if (HttpContext.Session.GetString("Type") == "admin")
+            {
+                //Display Add Form View
+                AddEventViewModel addEventViewModel = new AddEventViewModel(context.Categories.ToList());
+                return View(addEventViewModel);
+                
+            }
+            else
+            {
+                //Return Error. Only Admins can add users to database
+                TempData["ErrorMessage"] = "This feature is reserved for Admins Only";
+                return RedirectToAction("Index", new { username = HttpContext.Session.GetString("User") });
+            }
+
+
+        }
+
+        // POST: /<controller>/
+        [HttpPost]
+        public IActionResult Add(AddEventViewModel addEventViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                EventCategory newEventCategory =
+                    context.Categories.Single(c => c.ID == addEventViewModel.CategoryID);
+
+                // Add the new event to my existing events
+                Event newEvent = new Event
+                {
+                    Name = addEventViewModel.Name,
+                    Description = addEventViewModel.Description,
+                    Category = newEventCategory,
+                    Price = addEventViewModel.Price,
+                    Date = addEventViewModel.Date + addEventViewModel.Time,
+                    Created = DateTime.Now
+                };
+                
+                context.Events.Add(newEvent);
+                context.SaveChanges();
+
+
+                // Success!!! event added...  return custom message
+                TempData["Message"] = "Event " + newEvent.ID + " was successfully created.";
+                TestFunctions.PrintConsoleMessage("SUCCESS, EVENT ADDED / CREATED");
+
+                return Redirect("/Event");
+            }
+
+            addEventViewModel.SetCategories(context.Categories.ToList());
+            return View(addEventViewModel);
+        }
+        */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //----------------------------------- BROCHURE -----------------------------------//
+            // GET: /<controller>/
+            public IActionResult Brochure(int eventId)
         {
 
             // Do nothing... The admin can view any eventID
