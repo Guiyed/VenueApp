@@ -10,11 +10,16 @@ using VenueApp.Data;
 using VenueApp.Models;
 using VenueApp.ViewModels;
 using VenueApp.Helpers;
+using System.IO;
+using System.Runtime.Serialization.Json;
 
 namespace VenueApp.Controllers
 {
     public class EventController : Controller
     {
+        private readonly string TicketmasterAPIkey = "rjvAOXYLhx1XPB30QYsgr5QVhQVO3U4b";
+        private readonly string BingMapsAPIkey = "Ar6GSgDklc17CZg1iXfmAutlA2Kru2EpLP0NFvJmllNtv3QX2VTgP3YBSY2AVVUu";
+
         private VenueAppDbContext context;
 
         public EventController(VenueAppDbContext dbContext)
@@ -22,8 +27,7 @@ namespace VenueApp.Controllers
             context = dbContext;
         }
 
-
-
+                     
         //-------------------------------- INDEX -----------------------------------//
         // GET: /<controller>/
         public IActionResult Index()
@@ -271,7 +275,8 @@ namespace VenueApp.Controllers
                     Price = selectedEvent.Price,
                     Category = selectedEvent.Category,
                     Location = selectedEvent.Location??"",
-                    Created = selectedEvent.Created
+                    Created = selectedEvent.Created,
+                    Deleted = selectedEvent.Deleted
                 };
 
                 return View(eventToShow);
@@ -287,6 +292,72 @@ namespace VenueApp.Controllers
         }
 
 
+
+        //-------------------------------- UPDATE FROM API -----------------------------------//
+        // GET: /<controller>/
+        public IActionResult API()
+        {
+            if (HttpContext.Session.TryGetValue("User", out byte[] value))
+            {
+                string userType = HttpContext.Session.GetString("Type");
+
+                if (userType == "admin")
+                {
+                    ViewBag.APIkey = TicketmasterAPIkey;
+                    ViewBag.Mapkey = BingMapsAPIkey;
+                    return View("UpdateFromAPI");
+                }
+            }
+
+            //Unauthorize Access - Give Error and go Back to Dashboard
+            ViewBag.UnauthorizedMessage = new string[] { "Sorry you are not authorized to access this feature, " +
+                "You are being redirected to the User Login Page in a few seconds." };
+
+            return RedirectToAction("Index", "Dashboard");
+        }
+
+        // Post: /<controller>/
+        [HttpPost]
+        public IActionResult API(IEnumerable<APIEventViewModel> incoming)
+        {
+            foreach (APIEventViewModel evento in incoming)
+            {                                
+                EventCategory newEventCategory = context.Categories.SingleOrDefault(c => c.Name.ToLower() == evento.Classification.ToLower());
+
+                if (newEventCategory == null)
+                {
+                    newEventCategory = new EventCategory
+                    {
+                        Name = evento.Classification
+                    };
+
+                    context.Categories.Add(newEventCategory);
+                    context.SaveChanges();
+                }
+                                 
+                // Add the new event to my existing events
+                Event newEvent = new Event
+                {
+                    Name = evento.Name,
+                    Description = evento.Description,
+                    Category = newEventCategory,
+                    Price = evento.Price,
+                    Date = evento.StartDate + evento.StartTime.TimeOfDay,
+                    Location = evento.Location,
+                    Created = DateTime.Now
+                };
+
+                context.Events.Add(newEvent);               
+
+                TestFunctions.PrintConsoleMessage(newEvent.Name);
+            }
+
+            context.SaveChanges();
+
+            return Json(new { success = true, message = "Some message" });
+
+        }
+                
 
 
         //----------------------------------- BROCHURE -----------------------------------//

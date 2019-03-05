@@ -36,7 +36,8 @@ namespace VenueApp.Data
                 new EventCategory { ID = 5, Name = "Parties", Protected = true },
                 new EventCategory { ID = 6, Name = "Classes", Protected = true },
                 new EventCategory { ID = 7, Name = "Sports", Protected = true },
-                new EventCategory { ID = 8, Name = "Food & Drikns", Protected = true }
+                new EventCategory { ID = 8, Name = "Food & Drikns", Protected = true },
+                new EventCategory { ID = 9, Name = "Other", Protected = true }
                 );
 
             modelBuilder.Entity<Membership>().HasData(

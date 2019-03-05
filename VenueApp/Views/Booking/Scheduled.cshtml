@@ -62,12 +62,15 @@ else if (ViewBag.ErrorMessage.Length > 0)
 
     @if (Model.Bookings.Count == 0)
     {
+        <br />
         <p>You do not have made any reservations yet!</p>
         <p><a asp-controller="Booking" asp-action="Add" asp-route-userId="@Model.User.ID"> Book an event!!!</a></p>
     }
-
-    <br />
-    <p><a asp-controller="Booking" asp-action="Add" asp-route-userId="@Model.User.ID"> Add another Event to your bookings</a></p>
+    else
+    {
+        <br />
+        <p><a asp-controller="Booking" asp-action="Add" asp-route-userId="@Model.User.ID"> Add another Event to your bookings</a></p>
+    }
 }
 else
 {

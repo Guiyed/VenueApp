@@ -108,8 +108,7 @@ namespace VenueApp.Controllers
                     string userInSesion = HttpContext.Session.GetString("User");
                     string userType = context.Types.SingleOrDefault(c => c.ID == currentUser.TypeID).Name;
                     HttpContext.Session.SetString("Type", userType);
-                    HttpContext.Session.SetString("ProfilePic", currentUser.ProfilePicture);
-                    //HttpContext.Session.SetString("ProfilePic", "/images/Avatar3.svg");
+                    HttpContext.Session.SetString("ProfilePic", currentUser.ProfilePicture);                    
 
                     TestFunctions.PrintConsoleMessage("LOGIN SUCCESS " + userInSesion);
 

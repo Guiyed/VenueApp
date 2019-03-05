@@ -33,19 +33,21 @@
                 <img src="@imagePath" id="ProfilePic" class="avatar img-circle img-thumbnail img-responsive" style="max-width: 60%" alt="avatar">
                 <h6>Upload a different photo...</h6>
                 <div class="text-center center-block well well-sm">
-                    <div >
-                        <p class="text-justify control-label">Select one <span>
-                        <select id="selectBox" class="form control" onchange="changeFunc();">
-                            <option value="" disabled selected>Picture</option>
-                            <option value="/images/Avatar1.svg">Avatar 1</option>
-                            <option value="/images/Avatar2.svg">Avatar 2</option>
-                            <option value="/images/Avatar3.svg">Avatar 3</option>
-                        </select>
-                        </span> or </p>
+                    <div>
+                        <p class="text-justify control-label">
+                            Select one <span>
+                                <select id="selectBox" class="form control" onchange="changeFunc();">
+                                    <option value="" disabled selected>Picture</option>
+                                    <option value="/images/Avatar1.svg">Avatar 1</option>
+                                    <option value="/images/Avatar2.svg">Avatar 2</option>
+                                    <option value="/images/Avatar3.svg">Avatar 3</option>
+                                </select>
+                            </span> or
+                        </p>
                     </div>
                     <hr style="margin-top: 10px; margin-bottom: 10px;" />
                     <div class="input-group input-group-sm">
-                        <form class="form" asp-controller="Test" asp-action="UploadProfilePic" method="post" enctype="multipart/form-data">
+                        <form class="form" asp-controller="Dashboard" asp-action="UploadProfilePic" method="post" enctype="multipart/form-data">
                             <fieldset>
                                 <input class="text-center center-block" placeholder="picture file" type="file" name="image" />
                                 <input type="submit" value="Go" />
@@ -57,24 +59,24 @@
                 </div>
             </div>
 
-                <ul class="list-group">
-                    <li class="list-group-item text-muted profileheader">Profile</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong>Joined</strong></span> @Model.Created.ToShortDateString()</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong>Name</strong></span> @ViewBag.ProfileInfo["FullName"]</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong>Birthday</strong></span> -- / -- / --</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong>Email</strong></span> @ViewBag.ProfileInfo["Email"]</li>
-                </ul>
+            <ul class="list-group">
+                <li class="list-group-item text-muted profileheader">Profile</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Joined</strong></span> @Model.Created.ToShortDateString()</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Name</strong></span> @ViewBag.ProfileInfo["FullName"]</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Birthday</strong></span> -- / -- / --</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Email</strong></span> @ViewBag.ProfileInfo["Email"]</li>
+            </ul>
 
-                <div class="panel panel-default">
-                    <div class="panel-heading"><span class="text-muted">Website </span><i class="fa fa-link fa-1x"></i></div>
-                    <div style="padding: 10px 20px;" class="panel-body"><a href="https://github.com/Guiyed">Github.com</a></div>
-                </div>
+            <div class="panel panel-default">
+                <div class="panel-heading"><span class="text-muted">Website </span><i class="fa fa-link fa-1x"></i></div>
+                <div style="padding: 10px 20px;" class="panel-body"><a href="https://github.com/Guiyed">Github.com</a></div>
+            </div>
 
 
-                <div class="panel panel-default">
-                    <div class="panel-heading small"><a class="text-muted" asp-controller="Membership" asp-action="Index">Membership </a><i class="far fa-id-card fa-1x"></i></div>
-                    <div style="padding: 10px 20px;" class="panel-body">@ViewBag.ProfileInfo["Membership"]</div>
-                </div>
+            <div class="panel panel-default">
+                <div class="panel-heading small"><a class="text-muted" asp-controller="Membership" asp-action="Index">Membership </a><i class="far fa-id-card fa-1x"></i></div>
+                <div style="padding: 10px 20px;" class="panel-body">@ViewBag.ProfileInfo["Membership"]</div>
+            </div>
 
         </div><!--/col-3-->
         <!-- right col -->
@@ -114,13 +116,14 @@
                 <div class="tab-pane" id="bookings">
                     <hr>
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover table-condensed">
                             <thead>
                                 <tr>
                                     <th class="col-md-1 text-center">#</th>
-                                    <th class="col-md-6">Event Name</th>
-                                    <th class="col-md-2 text-center">Date/Time</th>
+                                    <th class="col-md-5">Event Name</th>
+                                    <th class="col-md-3 text-center">Date/Time</th>
                                     <th class="col-md-2 text-center">Category</th>
+                                    <th class="col-md-1 text-center">QR</th>
                                 </tr>
                             </thead>
                             <tbody id="items">
@@ -129,20 +132,20 @@
                                     <tr>
                                         <td class="text-center">@count</td>
                                         <td class="text-capitalize">@item.Event.Name</td>
-                                        <td class="text-capitalize pull-right">@item.Event.Date.ToString("dd/MM/yy  @  hh:mmtt", CultureInfo.CreateSpecificCulture("en-US"))</td>
+                                        <td class="text-capitalize text-center">@item.Event.Date.ToString("dd/MM/yy  @  hh:mmtt", CultureInfo.CreateSpecificCulture("en-US"))</td>
                                         <td class="text-center">@item.Event.Category.Name</td>
+                                        <td class="text-center" ><input type="button" value="show" onclick="showQR(@userID,@item.EventID,@item.Event.CategoryID);" /></td>
                                     </tr>
                                     count += 1;
                                 }
                             </tbody>
+
                         </table>
                         @if (Model.Bookings.Count == 0)
                         {
                             <p>You do not have made any reservations yet!</p>
                             <p><a asp-controller="Booking" asp-action="Add" asp-route-userId="@Model.UserID"> Book an event!!!</a></p>
                         }
-
-                        <hr>
                         <div class="row">
                             <div class="col-md-4 col-md-offset-4 text-center">
                                 <ul class="pagination" id="myPager"></ul>
@@ -152,95 +155,100 @@
                     </div><!--/table-resp-->
                     <br />
                     <p class="pull-right">Click <a asp-controller="Booking" asp-action="Scheduled" asp-route-userId="@Model.UserID"> Here </a> to manage your Reservations</p>
+                    <br />
                     <hr>
+                    <br />
+                    <div class="text-center" title="QR Code">
+                        <img id="qr">
+                    </div>
                 </div><!--/tab-pane-->
 
 
-            <div class="tab-pane" id="settings">
-                <hr>
-                <form id="registrationForm" class="form" asp-controller="User" asp-action="Profile" method="post">
-                    <div class="form-group">
+                <div class="tab-pane" id="settings">
+                    <hr>
+                    <form id="registrationForm" class="form" asp-controller="User" asp-action="Profile" method="post">
+                        <div class="form-group">
 
-                        <div class="col-xs-6">
-                            <label asp-for="FirstName"><h4>First name</h4></label>
-                            <input type="text" class="form-control" asp-for="FirstName" value="@Model.FirstName" id="first_name" placeholder="first name" title="enter your first name if any.">
-                            <span class="small text-danger" asp-validation-for="FirstName"></span>
+                            <div class="col-xs-6">
+                                <label asp-for="FirstName"><h4>First name</h4></label>
+                                <input type="text" class="form-control" asp-for="FirstName" value="@Model.FirstName" id="first_name" placeholder="first name" title="enter your first name if any.">
+                                <span class="small text-danger" asp-validation-for="FirstName"></span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
+                        <div class="form-group">
 
-                        <div class="col-xs-6">
-                            <label asp-for="LastName"><h4>Last name</h4></label>
-                            <input type="text" class="form-control" asp-for="LastName" value="@Model.LastName" id="last_name" placeholder="last name" title="enter your last name if any.">
-                            <span class="small text-danger" asp-validation-for="LastName"></span>
+                            <div class="col-xs-6">
+                                <label asp-for="LastName"><h4>Last name</h4></label>
+                                <input type="text" class="form-control" asp-for="LastName" value="@Model.LastName" id="last_name" placeholder="last name" title="enter your last name if any.">
+                                <span class="small text-danger" asp-validation-for="LastName"></span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
+                        <div class="form-group">
 
-                        <div class="col-xs-6">
-                            <label asp-for="PhoneNumber"><h4>Phone Number</h4></label>
-                            <input type="text" class="form-control" asp-for="PhoneNumber" value="PhoneNumber" id="phone" placeholder="enter phone" title="enter your phone number if any.">
-                            <span class="small text-danger" asp-validation-for="PhoneNumber"></span>
+                            <div class="col-xs-6">
+                                <label asp-for="PhoneNumber"><h4>Phone Number</h4></label>
+                                <input type="text" class="form-control" asp-for="PhoneNumber" value="PhoneNumber" id="phone" placeholder="enter phone" title="enter your phone number if any.">
+                                <span class="small text-danger" asp-validation-for="PhoneNumber"></span>
 
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <div class="col-xs-6">
-                            <label asp-for="Birthday"><h4>Birthday</h4></label>
-                            <input type="date" class="form-control" style="line-height: 1" name="birthday" id="birthday" placeholder="birthday date" title="enter your birthday Date (optional).">
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label asp-for="Birthday"><h4>Birthday</h4></label>
+                                <input type="date" class="form-control" style="line-height: 1" name="birthday" id="birthday" placeholder="birthday date" title="enter your birthday Date (optional).">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
+                        <div class="form-group">
 
-                        <div class="col-xs-6">
-                            <label asp-for="Email"><h4>Email</h4></label>
-                            <input type="email" class="form-control" asp-for="Email" value="@Model.Email" id="email" placeholder="you@email.com" title="enter your email.">
-                            <span class="small text-danger" asp-validation-for="Email"></span>
+                            <div class="col-xs-6">
+                                <label asp-for="Email"><h4>Email</h4></label>
+                                <input type="email" class="form-control" asp-for="Email" value="@Model.Email" id="email" placeholder="you@email.com" title="enter your email.">
+                                <span class="small text-danger" asp-validation-for="Email"></span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
+                        <div class="form-group">
 
-                        <div class="col-xs-6">
-                            <label asp-for="Location"><h4>Location</h4></label>
-                            <input type="text" class="form-control" asp-for="Location" value="@Model.Location" id="location" placeholder="somewhere" title="enter a location">
+                            <div class="col-xs-6">
+                                <label asp-for="Location"><h4>Location</h4></label>
+                                <input type="text" class="form-control" asp-for="Location" value="@Model.Location" id="location" placeholder="somewhere" title="enter a location">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
+                        <div class="form-group">
 
-                        <div class="col-xs-6">
-                            <label asp-for="Password"><h4>Password</h4></label>
-                            <input type="password" class="form-control" asp-for="Password" value="@Model.Password" id="password" placeholder="password" title="enter your password.">
-                            <span class="small text-danger" asp-validation-for="Password"></span>
+                            <div class="col-xs-6">
+                                <label asp-for="Password"><h4>Password</h4></label>
+                                <input type="password" class="form-control" asp-for="Password" value="@Model.Password" id="password" placeholder="password" title="enter your password.">
+                                <span class="small text-danger" asp-validation-for="Password"></span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
+                        <div class="form-group">
 
-                        <div class="col-xs-6">
-                            <label asp-for="Verify"><h4>Verify Password</h4></label>
-                            <input type="password" class="form-control" asp-for="Verify" id="verifypassword" placeholder="verify password" title="enter your password again.">
-                            <span class="small text-danger" asp-validation-for="Verify"></span>
+                            <div class="col-xs-6">
+                                <label asp-for="Verify"><h4>Verify Password</h4></label>
+                                <input type="password" class="form-control" asp-for="Verify" id="verifypassword" placeholder="verify password" title="enter your password again.">
+                                <span class="small text-danger" asp-validation-for="Verify"></span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-xs-12">
-                            <br>
-                            <button class="btn btn-lg btn-success" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
-                            <input type="hidden" name="UserID" value="@Model.UserID" />
-                            <input type="hidden" name="Username" value="@Model.Username" />
-                            <input type="hidden" name="Membership" value="@Model.Membership" />
-                            <button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <br>
+                                <button class="btn btn-lg btn-success" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
+                                <input type="hidden" name="UserID" value="@Model.UserID" />
+                                <input type="hidden" name="Username" value="@Model.Username" />
+                                <input type="hidden" name="Membership" value="@Model.Membership" />
+                                <button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
+                            </div>
                         </div>
-                    </div>
-                </form>
-            </div>
+                    </form>
+                </div>
 
-        </div><!--/tab-pane-->
-    </div><!--/tab-content-->
-</div><!--/col-9-->
+            </div><!--/tab-pane-->
+        </div><!--/tab-content-->
+    </div><!--/col-9-->
 </div><!--/row-->
 
 <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
@@ -256,13 +264,13 @@
         $('.nav-tabs a[href="#' + tab + '"]').tab('show');
         console.log('Change Tab');
     };
-    
-   function changeFunc() {        
+
+   function changeFunc() {
         var selectBox = document.getElementById("selectBox");
         var selectedValue = selectBox.options[selectBox.selectedIndex].value;
         document.getElementById('ProfilePic').setAttribute("src", selectedValue);
-       
-       $.post('/Test/SetVariable',
+
+       $.post('/Dashboard/SetVariable',
            { key: "ProfilePic", value: selectedValue }, function (data) {
                if (data.success) {
                 alert("You have susccesfully changed your avatar picture");
@@ -270,4 +278,13 @@
            });
     }
 
+    function showQR(user, event, category) {
+        var src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + event + category + user
+        var x = document.getElementById('qr');
+        if (!x) { x = document.createElement('IMG'); document.body.appendChild(x); }
+        x.setAttribute("id", "qr");
+        x.setAttribute("src", src);
+        x.setAttribute("alt", "QR Code");
+    }
+        
 </script>
