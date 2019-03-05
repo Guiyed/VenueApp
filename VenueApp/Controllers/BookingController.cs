@@ -66,23 +66,36 @@ namespace VenueApp.Controllers
         {
             ViewBag.Message = TempData["Message"] ?? "";
             ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
-
-            User currentUser = context.Users.SingleOrDefault(c => c.ID == userId);
-
-            List<Booking> scheduledEvents = context
-                .Bookings
-                .Include(item => item.Event)
-                .Include(c => c.Event.Category)
-                .Where(cm => cm.UserID == userId)
-                .ToList();
-
-            ViewScheduledViewModel scheduledViewModel = new ViewScheduledViewModel
+                                              
+            //If there is an "User" Logged in the session
+            if (HttpContext.Session.GetString("Type") != null)
             {
-                User = currentUser,
-                Bookings = scheduledEvents
-            };
+                User currentUser = context.Users.SingleOrDefault(c => c.ID == userId);
 
-            return View(scheduledViewModel);
+                List<Booking> scheduledEvents = context
+                    .Bookings
+                    .Include(item => item.Event)
+                    .Include(c => c.Event.Category)
+                    .Where(cm => cm.UserID == userId)
+                    .ToList();
+
+                ViewScheduledViewModel scheduledViewModel = new ViewScheduledViewModel
+                {
+                    User = currentUser,
+                    Bookings = scheduledEvents
+                };
+
+                return View(scheduledViewModel);
+            }
+            //If not...
+            else
+            {
+                //return empty list with Error Message
+                ViewBag.ErrorMessage = "You need to be Logged In to access this feature";
+                IList<Booking> bookings = new List<Booking>();
+                return View("Index",bookings);
+            }
+                                             
         }
 
 

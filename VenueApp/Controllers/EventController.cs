@@ -324,6 +324,8 @@ namespace VenueApp.Controllers
             {                                
                 EventCategory newEventCategory = context.Categories.SingleOrDefault(c => c.Name.ToLower() == evento.Classification.ToLower());
 
+
+                // If the category does not exists? create a new one
                 if (newEventCategory == null)
                 {
                     newEventCategory = new EventCategory
@@ -357,7 +359,108 @@ namespace VenueApp.Controllers
             return Json(new { success = true, message = "Some message" });
 
         }
-                
+
+
+        //----------------------------------- Search -----------------------------------//
+        // GET: /<controller>/
+        public IActionResult Search()
+        {
+
+            ViewBag.Message = TempData["Message"] ?? "";
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
+
+            SearchEventViewModel searchEventModel = new SearchEventViewModel(context.Categories.ToList());
+
+            return View(searchEventModel);
+        }
+
+        // Post: /<controller>/
+        [HttpPost]
+        public IActionResult Results(SearchEventViewModel searchEventModel)
+        {
+            
+            ViewBag.Message = TempData["Message"] ?? "";
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
+
+
+
+            if (searchEventModel.Value.Equals(""))
+            {
+                if (searchEventModel.Location.Equals("all") && searchEventModel.CategoryID.Equals(0))
+                {
+                    searchEventModel.Events = context.Events
+                        .Include(c => c.Category).ToList();
+                }
+                else if (searchEventModel.Location.Equals("all"))
+                {
+                    searchEventModel.Events = context.Events
+                        .Where(c => c.Name.ToLower().Contains(searchEventModel.Value.ToLower()))
+                        .Where(cid => cid.CategoryID == searchEventModel.CategoryID)
+                        .Include(c => c.Category).ToList();
+                }
+                else if (searchEventModel.CategoryID.Equals(0))
+                {
+                    searchEventModel.Events = context.Events
+                        .Where(c => c.Name.ToLower().Contains(searchEventModel.Value.ToLower()))
+                        .Where(l => l.Location.ToLower().Contains(searchEventModel.Location.ToLower()))
+                        .Include(c => c.Category).ToList();
+                }
+                else
+                {
+                    searchEventModel.Events = context.Events
+                        .Where(c => c.Name.ToLower().Contains(searchEventModel.Value.ToLower()))
+                        .Where(l => l.Location.ToLower().Contains(searchEventModel.Location.ToLower()))
+                        .Where(cid => cid.CategoryID == searchEventModel.CategoryID)
+                        .Include(c => c.Category).ToList();
+                }
+            }
+            else
+            {
+                if (searchEventModel.Location.Equals("all") && searchEventModel.CategoryID.Equals(0))
+                {
+                    searchEventModel.Events = context.Events.Where(c => c.Name.ToLower().Contains(searchEventModel.Value.ToLower())).Include(c => c.Category).ToList();
+                }
+                else if (searchEventModel.Location.Equals("all"))
+                {
+                    searchEventModel.Events = context.Events
+                        .Where(cid => cid.CategoryID == searchEventModel.CategoryID)
+                        .Include(c => c.Category).ToList();
+                }
+                else if (searchEventModel.CategoryID.Equals(0))
+                {
+                    searchEventModel.Events = context.Events
+                        .Where(l => l.Location.ToLower().Contains(searchEventModel.Location.ToLower()))
+                        .Include(c => c.Category).ToList();
+                }
+                else
+                {
+                    searchEventModel.Events = context.Events
+                        .Where(l => l.Location.ToLower().Contains(searchEventModel.Location.ToLower()))
+                        .Where(cid => cid.CategoryID == searchEventModel.CategoryID)
+                        .Include(c => c.Category).ToList();
+                }
+
+            }
+
+            /*
+                Equals(searchEventModel.All) || searchEventModel.Value.Equals(""))
+            {
+                searchEventModel.Jobs = jobData.FindByValue(searchEventModel.Value);
+            }
+            else
+            {
+                searchEventModel.Jobs = jobData.FindByColumnAndValue(searchEventModel.Column, searchEventModel.Value);
+            }
+            */
+
+            searchEventModel.SetCategories(context.Categories.ToList());
+            return View("Search", searchEventModel);
+        }
+
+
+
+
+
 
 
         //----------------------------------- BROCHURE -----------------------------------//
