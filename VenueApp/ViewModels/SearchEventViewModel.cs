@@ -31,8 +31,9 @@ namespace VenueApp.ViewModels
         public double Price { get; set; }
 
         public string City { get; set; }
+        public int DMAID { get; set; }
         public string Location { get; set; }
-
+        public bool ServerError { get; set; }
 
         [Display(Name = "Category")]
         public int CategoryID { get; set; }                             

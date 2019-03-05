@@ -323,8 +323,7 @@ namespace VenueApp.Controllers
             foreach (APIEventViewModel evento in incoming)
             {                                
                 EventCategory newEventCategory = context.Categories.SingleOrDefault(c => c.Name.ToLower() == evento.Classification.ToLower());
-
-
+                
                 // If the category does not exists? create a new one
                 if (newEventCategory == null)
                 {
@@ -335,6 +334,7 @@ namespace VenueApp.Controllers
 
                     context.Categories.Add(newEventCategory);
                     context.SaveChanges();
+
                 }
                                  
                 // Add the new event to my existing events
@@ -348,7 +348,7 @@ namespace VenueApp.Controllers
                     Location = evento.Location,
                     Created = DateTime.Now
                 };
-
+                
                 context.Events.Add(newEvent);               
 
                 TestFunctions.PrintConsoleMessage(newEvent.Name);
