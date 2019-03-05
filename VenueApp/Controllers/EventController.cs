@@ -10,6 +10,8 @@ using VenueApp.Data;
 using VenueApp.Models;
 using VenueApp.ViewModels;
 using VenueApp.Helpers;
+using System.IO;
+using System.Runtime.Serialization.Json;
 
 namespace VenueApp.Controllers
 {
@@ -25,8 +27,7 @@ namespace VenueApp.Controllers
             context = dbContext;
         }
 
-
-
+                     
         //-------------------------------- INDEX -----------------------------------//
         // GET: /<controller>/
         public IActionResult Index()
@@ -274,7 +275,8 @@ namespace VenueApp.Controllers
                     Price = selectedEvent.Price,
                     Category = selectedEvent.Category,
                     Location = selectedEvent.Location??"",
-                    Created = selectedEvent.Created
+                    Created = selectedEvent.Created,
+                    Deleted = selectedEvent.Deleted
                 };
 
                 return View(eventToShow);
@@ -314,97 +316,53 @@ namespace VenueApp.Controllers
             return RedirectToAction("Index", "Dashboard");
         }
 
-        // GET: /<controller>/
+        // Post: /<controller>/
         [HttpPost]
-        public IActionResult API(EditEventViewModel modEvent)
+        public IActionResult API(IEnumerable<APIEventViewModel> incoming)
         {
+            foreach (APIEventViewModel evento in incoming)
+            {                                
+                EventCategory newEventCategory = context.Categories.SingleOrDefault(c => c.Name.ToLower() == evento.Classification.ToLower());
 
-            return View();
+                if (newEventCategory == null)
+                {
+                    newEventCategory = new EventCategory
+                    {
+                        Name = evento.Classification
+                    };
 
-
-        }
-
-
-
-        /*
-         * public IActionResult Add()
-        {
-
-            //If a Logged In "Admin" is accessing this feature
-            if (HttpContext.Session.GetString("Type") == "admin")
-            {
-                //Display Add Form View
-                AddEventViewModel addEventViewModel = new AddEventViewModel(context.Categories.ToList());
-                return View(addEventViewModel);
-                
-            }
-            else
-            {
-                //Return Error. Only Admins can add users to database
-                TempData["ErrorMessage"] = "This feature is reserved for Admins Only";
-                return RedirectToAction("Index", new { username = HttpContext.Session.GetString("User") });
-            }
-
-
-        }
-
-        // POST: /<controller>/
-        [HttpPost]
-        public IActionResult Add(AddEventViewModel addEventViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                EventCategory newEventCategory =
-                    context.Categories.Single(c => c.ID == addEventViewModel.CategoryID);
-
+                    context.Categories.Add(newEventCategory);
+                    context.SaveChanges();
+                }
+                                 
                 // Add the new event to my existing events
                 Event newEvent = new Event
                 {
-                    Name = addEventViewModel.Name,
-                    Description = addEventViewModel.Description,
+                    Name = evento.Name,
+                    Description = evento.Description,
                     Category = newEventCategory,
-                    Price = addEventViewModel.Price,
-                    Date = addEventViewModel.Date + addEventViewModel.Time,
+                    Price = evento.Price,
+                    Date = evento.StartDate + evento.StartTime.TimeOfDay,
+                    Location = evento.Location,
                     Created = DateTime.Now
                 };
-                
-                context.Events.Add(newEvent);
-                context.SaveChanges();
 
+                context.Events.Add(newEvent);               
 
-                // Success!!! event added...  return custom message
-                TempData["Message"] = "Event " + newEvent.ID + " was successfully created.";
-                TestFunctions.PrintConsoleMessage("SUCCESS, EVENT ADDED / CREATED");
-
-                return Redirect("/Event");
+                TestFunctions.PrintConsoleMessage(newEvent.Name);
             }
 
-            addEventViewModel.SetCategories(context.Categories.ToList());
-            return View(addEventViewModel);
+            context.SaveChanges();
+
+            return Json(new { success = true, message = "Some message" });
+
         }
-        */
+                
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //----------------------------------- BROCHURE -----------------------------------//
-            // GET: /<controller>/
-            public IActionResult Brochure(int eventId)
+        //----------------------------------- BROCHURE -----------------------------------//
+        // GET: /<controller>/
+        public IActionResult Brochure(int eventId)
         {
 
             // Do nothing... The admin can view any eventID
