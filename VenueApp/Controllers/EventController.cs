@@ -382,33 +382,38 @@ namespace VenueApp.Controllers
             ViewBag.Message = TempData["Message"] ?? "";
             ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
 
+            //.Where(t => t.Date > (searchEventModel.FromDate??DateTime.Today())  && t.Date < searchEventModel.ToDate??DateTime.MaxValue)
 
+            DateTime startDate = searchEventModel.FromDate;
+            DateTime endDate = (searchEventModel.ToDate == DateTime.MinValue? DateTime.MaxValue: searchEventModel.ToDate);
 
             if (searchEventModel.Value.Equals(""))
             {
                 if (searchEventModel.Location.Equals("all") && searchEventModel.CategoryID.Equals(0))
                 {
                     searchEventModel.Events = context.Events
+                        .Where(t => t.Date > startDate && t.Date < endDate)
                         .Include(c => c.Category).ToList();
+
                 }
                 else if (searchEventModel.Location.Equals("all"))
                 {
                     searchEventModel.Events = context.Events
-                        .Where(c => c.Name.ToLower().Contains(searchEventModel.Value.ToLower()))
+                        .Where(t => t.Date > startDate && t.Date < endDate)
                         .Where(cid => cid.CategoryID == searchEventModel.CategoryID)
                         .Include(c => c.Category).ToList();
                 }
                 else if (searchEventModel.CategoryID.Equals(0))
                 {
                     searchEventModel.Events = context.Events
-                        .Where(c => c.Name.ToLower().Contains(searchEventModel.Value.ToLower()))
+                        .Where(t => t.Date > startDate && t.Date < endDate)
                         .Where(l => l.Location.ToLower().Contains(searchEventModel.Location.ToLower()))
                         .Include(c => c.Category).ToList();
                 }
                 else
                 {
                     searchEventModel.Events = context.Events
-                        .Where(c => c.Name.ToLower().Contains(searchEventModel.Value.ToLower()))
+                        .Where(t => t.Date > startDate && t.Date < endDate)
                         .Where(l => l.Location.ToLower().Contains(searchEventModel.Location.ToLower()))
                         .Where(cid => cid.CategoryID == searchEventModel.CategoryID)
                         .Include(c => c.Category).ToList();
@@ -418,23 +423,32 @@ namespace VenueApp.Controllers
             {
                 if (searchEventModel.Location.Equals("all") && searchEventModel.CategoryID.Equals(0))
                 {
-                    searchEventModel.Events = context.Events.Where(c => c.Name.ToLower().Contains(searchEventModel.Value.ToLower())).Include(c => c.Category).ToList();
+                    searchEventModel.Events = context.Events
+                        .Where(t => t.Date > startDate && t.Date < endDate)
+                        .Where(n => n.Name.ToLower().Contains(searchEventModel.Value.ToLower()))
+                        .Include(c => c.Category).ToList();
                 }
                 else if (searchEventModel.Location.Equals("all"))
                 {
                     searchEventModel.Events = context.Events
+                        .Where(t => t.Date > startDate && t.Date < endDate)
+                        .Where(n => n.Name.ToLower().Contains(searchEventModel.Value.ToLower()))
                         .Where(cid => cid.CategoryID == searchEventModel.CategoryID)
                         .Include(c => c.Category).ToList();
                 }
                 else if (searchEventModel.CategoryID.Equals(0))
                 {
                     searchEventModel.Events = context.Events
+                        .Where(t => t.Date > startDate && t.Date < endDate)
+                        .Where(n => n.Name.ToLower().Contains(searchEventModel.Value.ToLower()))
                         .Where(l => l.Location.ToLower().Contains(searchEventModel.Location.ToLower()))
                         .Include(c => c.Category).ToList();
                 }
                 else
                 {
                     searchEventModel.Events = context.Events
+                        .Where(t => t.Date > startDate && t.Date < endDate)
+                        .Where(n => n.Name.ToLower().Contains(searchEventModel.Value.ToLower()))
                         .Where(l => l.Location.ToLower().Contains(searchEventModel.Location.ToLower()))
                         .Where(cid => cid.CategoryID == searchEventModel.CategoryID)
                         .Include(c => c.Category).ToList();
