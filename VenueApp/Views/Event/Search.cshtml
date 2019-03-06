@@ -27,8 +27,7 @@ else if (ViewBag.ErrorMessage.Length > 0)
     <p class="text-danger">@ViewBag.ErrorMessage <span class="glyphicon glyphicon-remove " aria-hidden="true"></span></p>
 }
 
-@if (userType.Length > 0)
-{
+
     <form asp-controller="Event" asp-action="Results" method="post">
         <div class="container">
 
@@ -104,14 +103,21 @@ else if (ViewBag.ErrorMessage.Length > 0)
                 </tr>
                 @foreach (var evento in Model.Events)
                 {
-                    <tr>
-                        <td>@count</td>
-                        <td><a asp-controller="Event" asp-action="Brochure" asp-route-eventId="@evento.ID">@evento.Name</a></td>
-                        <td class="text-center">@evento.Category.Name</td>
-                        <td class="text-center">@evento.Date.ToString("ddd d MMM yyyy", CultureInfo.CreateSpecificCulture("en-US"))</td>
-                        <td class="text-center">@evento.Date.ToString("hh:mm tt", CultureInfo.CreateSpecificCulture("en-US"))</td>
+                <tr>
+                    <td>@count</td>
+                    <td><a asp-controller="Event" asp-action="Brochure" asp-route-eventId="@evento.ID">@evento.Name</a></td>
+                    <td class="text-center">@evento.Category.Name</td>
+                    <td class="text-center">@evento.Date.ToString("ddd d MMM yyyy", CultureInfo.CreateSpecificCulture("en-US"))</td>
+                    <td class="text-center">@evento.Date.ToString("hh:mm tt", CultureInfo.CreateSpecificCulture("en-US"))</td>
+                    @if (userType.Length > 0)
+                    {
                         <td class="text-center"><a class="book" asp-controller="Booking" asp-action="AddFromSearch" method="post" asp-route-userID="@userID" asp-route-eventId="@evento.ID"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></a></td>
-                    </tr>
+                    }
+                    else
+                    {
+                        <td class="text-center"><a class="book" onclick="notAvailable();"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></a></td>
+                    }
+                </tr>
                     count += 1;
                 }
             </table>
@@ -121,7 +127,6 @@ else if (ViewBag.ErrorMessage.Length > 0)
     {
         <p>You need to create a criteria</p>
     }
-}
 
 
 <script type="text/javascript">
@@ -131,5 +136,9 @@ else if (ViewBag.ErrorMessage.Length > 0)
         showObj.disabled = false;
         showObj.style.display = 'inline';
         showObj.focus();
+    }
+
+    function notAvailable() {
+        alert("Please Log in first to access all functionalities");
     }
 </script>

@@ -382,8 +382,6 @@ namespace VenueApp.Controllers
             ViewBag.Message = TempData["Message"] ?? "";
             ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
 
-            //.Where(t => t.Date > (searchEventModel.FromDate??DateTime.Today())  && t.Date < searchEventModel.ToDate??DateTime.MaxValue)
-
             DateTime startDate = searchEventModel.FromDate;
             DateTime endDate = (searchEventModel.ToDate == DateTime.MinValue? DateTime.MaxValue: searchEventModel.ToDate);
 
@@ -455,18 +453,7 @@ namespace VenueApp.Controllers
                 }
 
             }
-
-            /*
-                Equals(searchEventModel.All) || searchEventModel.Value.Equals(""))
-            {
-                searchEventModel.Jobs = jobData.FindByValue(searchEventModel.Value);
-            }
-            else
-            {
-                searchEventModel.Jobs = jobData.FindByColumnAndValue(searchEventModel.Column, searchEventModel.Value);
-            }
-            */
-
+            
             searchEventModel.SetCategories(context.Categories.ToList());
             return View("Search", searchEventModel);
         }
