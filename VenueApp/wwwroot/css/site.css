@@ -1,10 +1,46 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
 for details on configuring this project to bundle and minify static web assets. */
+/*
+
+:root {
+    --footer-height: 120px;
+}
+
 body {
+    min-height: 100%;
+    position: relative;
     padding-top: 50px;
-    padding-bottom: 20px;
+    padding-bottom: var(--footer-height);
     background-color: whitesmoke;
 }
+
+.footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--footer-height);
+    html, body
+*/
+
+html,body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1 0 auto;
+}
+
+.footer {
+    flex-shrink: 0;
+}
+
+
 
 /* Profile */
 .profileheader {
@@ -156,6 +192,14 @@ landingNewUser {
     color: darkgoldenrod;
 }
 
+.book {
+    color: mediumpurple;
+}
+
+.book:hover {
+    color: rebeccapurple;
+}
+
 
 
 /* Wrapping element */
@@ -163,6 +207,8 @@ landingNewUser {
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    padding-bottom: 10px;
+    padding-top: 45px;
 }
 
 /* Carousel */

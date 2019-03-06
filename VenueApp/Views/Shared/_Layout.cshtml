@@ -27,139 +27,149 @@
     </environment>
 </head>
 <body>
-
     
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                        <img style="margin-top: -15px" alt="Brand" src="~/images/venue.png">
-                    </a>
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">VenueApp</a>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a asp-area="" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
-                        <!--
-                        <li><a asp-area="" asp-controller="Test" asp-action="Index">TestPage</a></li>                        
-                        -->
-                    </ul>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img style="margin-top: -15px" alt="Brand" src="~/images/venue.png">
+                </a>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">VenueApp</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a asp-area="" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                    <!--
+                    <li><a asp-area="" asp-controller="Test" asp-action="Index">TestPage</a></li>
+                    -->
+                </ul>
 
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Events <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-controller="Event" asp-action="Index">All Events</a></li>
+                            <li><a asp-controller="Event" asp-action="Search">Search</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a asp-controller="Booking" asp-action="Scheduled" asp-route-userId="@userID">Booked Events</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a asp-controller="Dashboard" asp-action="API">Test Events API</a></li>
+
+                        </ul>
+                    </li>
+                </ul>
+
+                @if (userType == "admin")
+                {
                     <ul class="nav navbar-nav navbar-left">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Events <span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data(Models) <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">Category 1</a></li>
-                                <li><a href="#">Category 2</a></li>
-                                <li><a href="#">Category 3</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a asp-controller="Booking" asp-action="Scheduled" asp-route-userId="@userID">Booked Events</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a asp-controller="Dashboard" asp-action="API">Test Events API</a></li>
-
+                                <li><a asp-area="" asp-controller="User" asp-action="Index">User Index</a></li>
+                                <li><a asp-area="" asp-controller="Event" asp-action="Index">Events Index</a></li>
+                                <li><a asp-area="" asp-controller="Category" asp-action="Index">Event Categories Index</a></li>
+                                <li><a asp-area="" asp-controller="Membership" asp-action="Index">Memberships Index</a></li>
+                                <li><a asp-area="" asp-controller="Role" asp-action="Index">User Roles Index</a></li>
+                                <li><a asp-area="" asp-controller="Booking" asp-action="Index">Bookings Index</a></li>
                             </ul>
                         </li>
                     </ul>
+                }
 
-                    @if(userType == "admin")
-                    {
-                        <ul class="nav navbar-nav navbar-left">
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data(Models) <span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a asp-area="" asp-controller="User" asp-action="Index">User Index</a></li>
-                                    <li><a asp-area="" asp-controller="Event" asp-action="Index">Events Index</a></li>
-                                    <li><a asp-area="" asp-controller="Category" asp-action="Index">Event Categories Index</a></li>
-                                    <li><a asp-area="" asp-controller="Membership" asp-action="Index">Memberships Index</a></li>
-                                    <li><a asp-area="" asp-controller="Role" asp-action="Index">User Roles Index</a></li>
-                                    <li><a asp-area="" asp-controller="Booking" asp-action="Index">Bookings Index</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    }
+                <!-----------------------------------  User Button ----------------------------------->
+                @if (username.Length > 0)
+                {
+                    <p class="navbar-right">
+                        <a asp-controller="Dashboard" asp-action="Index">
+                            <button type="button" class="btn btn-default btn-lg user-login-btn">
+                                <span class="fas fa-user fa-lg" aria-hidden="true"></span> @username
+                            </button>
+                        </a>
+                    </p>
+                    <p class="navbar-text navbar-right text-danger" style="margin-right: 10px;">
+                        <a id="logout" asp-controller="User" asp-action="Logout">Logout </a>
+                    </p>
+                }
+                else
+                {
+                    <p class="navbar-text navbar-right">
+                        <a class="text-muted" asp-controller="User" asp-action="Login">User Account  <span class="far fa-user-circle fa-lg" aria-hidden="true"></span></a>
+                    </p>
+                }
 
-                    <!-----------------------------------  User Button ----------------------------------->
-                    @if (username.Length > 0)
-                    {
-                        <p class="navbar-right">
-                            <a asp-controller="Dashboard" asp-action="Index">
-                                <button type="button" class="btn btn-default btn-lg user-login-btn">
-                                    <span class="fas fa-user fa-lg" aria-hidden="true"></span> @username
-                                </button>
-                            </a>
-                        </p>
-                        <p class="navbar-text navbar-right text-danger" style="margin-right: 10px;">
-                            <a id="logout" asp-controller="User" asp-action="Logout">Logout </a>
-                        </p>
-                    }
-                    else
-                    {
-                        <p class="navbar-text navbar-right">
-                            <a class="text-muted" asp-controller="User" asp-action="Login">User Account  <span class="far fa-user-circle fa-lg" aria-hidden="true"></span></a>
-                        </p>
-                    }
-
-                </div><!-- /.navbar-collapse -->
-            </div>
-        </nav>
-
-        <partial name="_CookieConsentPartial" />
-
-        <div class="container body-content">
-            @RenderBody()
-            
-            <footer class="text-center navbar-fixed-bottom">
-                <hr />
-                <div>
-                    <ul class="list-inline" style="margin-bottom: 5px;">
-                        <li><a href="https://www.facebook.com/" target="_blank" class="btn social-icon"><i class="fab fa-facebook fa-lg"></i></a></li>
-                        <li><a href="https://twitter.com/" target="_blank" class="btn social-icon"><i class="fab fa-twitter fa-lg"></i></a></li>
-                        <li><a href="https://www.linkedin.com/" target="_blank" class="btn social-icon"><i class="fab fa-linkedin fa-lg"></i></a></li>
-                        <li><a href="https://plus.google.com/" target="_blank" class="btn social-icon"><i class="fab fa-google-plus fa-lg"></i></a></li>
-                        <li><a href="https://www.instagram.com/" target="_blank" class="btn social-icon"><i class="fab fa-instagram fa-lg"></i></a></li>
-                    </ul>
-                </div>
-                <div>
-                    <ul class="list-inline footerLinks">
-                        <li><a asp-area="" asp-controller="Home" asp-action="About">About Company</a>&nbsp;&nbsp;&nbsp;|</li>
-                        <li><a href="#">Corporate Partnerships</a>&nbsp;&nbsp;&nbsp;|</li>
-                        <li><a href="#">Fundraisers &amp; Donations</a>&nbsp;&nbsp;&nbsp;|</li>
-                        <li><a href="#">Help</a>&nbsp;&nbsp;&nbsp;|</li>
-                        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact Us</a>&nbsp;&nbsp;&nbsp;|</li>
-                        <li><a href="#" target="_blank" rel="noopener">Careers</a></li>
-                    </ul>
-                    <p><span class="copyright">Copyright &copy; 2019 - VenueApp  | <a href="https://app.termly.io/document/terms-of-use-for-website/a764b322-a351-457e-9bae-4492e54afeb5">Terms of Use</a> | <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy Policy</a></span></p>
-                </div>
-            </footer>
+            </div><!-- /.navbar-collapse -->
         </div>
+    </nav>
 
-        <environment include="Development">
-            <script src="~/lib/jquery/dist/jquery.js"></script>
-            <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-            <script src="~/js/site.js" asp-append-version="true"></script>
-        </environment>
-        <environment exclude="Development">
-            <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-                    asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                    asp-fallback-test="window.jQuery"
-                    crossorigin="anonymous"
-                    integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
-            </script>
-            <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-                    asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                    asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                    crossorigin="anonymous"
-                    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
-            </script>
-            <script src="~/js/site.min.js" asp-append-version="true"></script>
-        </environment>
+    <partial name="_CookieConsentPartial" />
 
-        @RenderSection("Scripts", required: false)
+    <!--
+    <div class="container body-content">
+    -->
+    <div class="container content body-content">
+
+        @RenderBody()
+
+        <!--
+        <footer class="text-center navbar-fixed-bottom">
+        -->
+        </div>
+        
+        <footer class="text-center footer">
+            <hr />
+            <div>
+                <ul class="list-inline" style="margin-bottom: 5px;">
+                    <li><a href="https://www.facebook.com/" target="_blank" class="btn social-icon"><i class="fab fa-facebook fa-lg"></i></a></li>
+                    <li><a href="https://twitter.com/" target="_blank" class="btn social-icon"><i class="fab fa-twitter fa-lg"></i></a></li>
+                    <li><a href="https://www.linkedin.com/" target="_blank" class="btn social-icon"><i class="fab fa-linkedin fa-lg"></i></a></li>
+                    <li><a href="https://plus.google.com/" target="_blank" class="btn social-icon"><i class="fab fa-google-plus fa-lg"></i></a></li>
+                    <li><a href="https://www.instagram.com/" target="_blank" class="btn social-icon"><i class="fab fa-instagram fa-lg"></i></a></li>
+                </ul>
+            </div>
+            <div>
+                <ul class="list-inline footerLinks">
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">About Company</a>&nbsp;&nbsp;&nbsp;|</li>
+                    <li><a href="#">Corporate Partnerships</a>&nbsp;&nbsp;&nbsp;|</li>
+                    <li><a href="#">Fundraisers &amp; Donations</a>&nbsp;&nbsp;&nbsp;|</li>
+                    <li><a href="#">Help</a>&nbsp;&nbsp;&nbsp;|</li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact Us</a>&nbsp;&nbsp;&nbsp;|</li>
+                    <li><a href="#" target="_blank" rel="noopener">Careers</a></li>
+                </ul>
+                <p><span class="copyright">Copyright &copy; 2019 - VenueApp  | <a href="https://app.termly.io/document/terms-of-use-for-website/a764b322-a351-457e-9bae-4492e54afeb5">Terms of Use</a> | <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy Policy</a></span></p>
+            </div>
+        </footer>
+    <!--
+    </div>
+        
+    -->
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -38,6 +38,9 @@
   <Content Update="Views\Dashboard\Api.cshtml">
     <Pack>$(IncludeRazorContentInPack)</Pack>
   </Content>
+  <Content Update="Views\Event\Search.cshtml">
+    <Pack>$(IncludeRazorContentInPack)</Pack>
+  </Content>
   <Content Update="Views\Event\UpdateFromApi.cshtml">
     <Pack>$(IncludeRazorContentInPack)</Pack>
   </Content>

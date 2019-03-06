@@ -11,63 +11,35 @@ namespace VenueApp.ViewModels
     public class SearchEventViewModel
     {
         // The search results
-        public List<Event> events { get; set; }
+        public List<Event> Events { get; set; }
 
         // The search value
         [Display(Name = "Keyword:")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Value { get; set; } = "";
-        
+
+                
         // The column to search, defaults to all
         public EventCategory Category { get; set; }
-
-            
-        /*
-        // The current column (Defaults to All for the search view)
-        public JobFieldType Column { get; set; } = JobFieldType.All;
-
-        // All columns, for display
-        public List<JobFieldType> Columns { get; set; }
-
-        // View title
-        public string Title { get; set; } = "";
-
-        public BaseViewModel()
-        {
-            // Populate the list of all columns
-            Columns = new List<JobFieldType>();
-
-            foreach (JobFieldType enumVal in Enum.GetValues(typeof(JobFieldType)))
-            {
-                Columns.Add(enumVal);
-            }
-
-
-        }
-        */
 
         [DataType(DataType.Date)]
         public DateTime FromDate { get; set; }
 
-         [DataType(DataType.Date)]
+        [DataType(DataType.Date)]
         public DateTime ToDate { get; set; }
 
-
-        //[DataType(DataType.)]
         public double Price { get; set; }
 
-        //[Required]
         public string City { get; set; }
-
         public int DMAID { get; set; }
+        public string Location { get; set; }
+        public bool ServerError { get; set; }
 
-        [Required]
         [Display(Name = "Category")]
         public int CategoryID { get; set; }                             
         
-        [Required]
         public List<SelectListItem> Categories { get; set; }
-
-        public bool ServerError { get; set; }
+                
 
 
         public SearchEventViewModel()
@@ -84,8 +56,8 @@ namespace VenueApp.ViewModels
             {
                 new SelectListItem
                 {
-                    Value = "Select One",
-                    Text = "Select One",
+                    Value = "0",
+                    Text = "All",
                     Selected = true,
                 }
             };

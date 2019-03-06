@@ -323,7 +323,8 @@ namespace VenueApp.Controllers
             foreach (APIEventViewModel evento in incoming)
             {                                
                 EventCategory newEventCategory = context.Categories.SingleOrDefault(c => c.Name.ToLower() == evento.Classification.ToLower());
-
+                
+                // If the category does not exists? create a new one
                 if (newEventCategory == null)
                 {
                     newEventCategory = new EventCategory
@@ -333,6 +334,7 @@ namespace VenueApp.Controllers
 
                     context.Categories.Add(newEventCategory);
                     context.SaveChanges();
+
                 }
                                  
                 // Add the new event to my existing events
@@ -346,7 +348,7 @@ namespace VenueApp.Controllers
                     Location = evento.Location,
                     Created = DateTime.Now
                 };
-
+                
                 context.Events.Add(newEvent);               
 
                 TestFunctions.PrintConsoleMessage(newEvent.Name);
@@ -357,7 +359,109 @@ namespace VenueApp.Controllers
             return Json(new { success = true, message = "Some message" });
 
         }
-                
+
+
+        //----------------------------------- Search -----------------------------------//
+        // GET: /<controller>/
+        public IActionResult Search()
+        {
+
+            ViewBag.Message = TempData["Message"] ?? "";
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
+
+            SearchEventViewModel searchEventModel = new SearchEventViewModel(context.Categories.ToList());
+
+            return View(searchEventModel);
+        }
+
+        // Post: /<controller>/
+        [HttpPost]
+        public IActionResult Results(SearchEventViewModel searchEventModel)
+        {
+            
+            ViewBag.Message = TempData["Message"] ?? "";
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
+
+            DateTime startDate = searchEventModel.FromDate;
+            DateTime endDate = (searchEventModel.ToDate == DateTime.MinValue? DateTime.MaxValue: searchEventModel.ToDate);
+
+            if (searchEventModel.Value.Equals(""))
+            {
+                if (searchEventModel.Location.Equals("all") && searchEventModel.CategoryID.Equals(0))
+                {
+                    searchEventModel.Events = context.Events
+                        .Where(t => t.Date > startDate && t.Date < endDate)
+                        .Include(c => c.Category).ToList();
+
+                }
+                else if (searchEventModel.Location.Equals("all"))
+                {
+                    searchEventModel.Events = context.Events
+                        .Where(t => t.Date > startDate && t.Date < endDate)
+                        .Where(cid => cid.CategoryID == searchEventModel.CategoryID)
+                        .Include(c => c.Category).ToList();
+                }
+                else if (searchEventModel.CategoryID.Equals(0))
+                {
+                    searchEventModel.Events = context.Events
+                        .Where(t => t.Date > startDate && t.Date < endDate)
+                        .Where(l => l.Location.ToLower().Contains(searchEventModel.Location.ToLower()))
+                        .Include(c => c.Category).ToList();
+                }
+                else
+                {
+                    searchEventModel.Events = context.Events
+                        .Where(t => t.Date > startDate && t.Date < endDate)
+                        .Where(l => l.Location.ToLower().Contains(searchEventModel.Location.ToLower()))
+                        .Where(cid => cid.CategoryID == searchEventModel.CategoryID)
+                        .Include(c => c.Category).ToList();
+                }
+            }
+            else
+            {
+                if (searchEventModel.Location.Equals("all") && searchEventModel.CategoryID.Equals(0))
+                {
+                    searchEventModel.Events = context.Events
+                        .Where(t => t.Date > startDate && t.Date < endDate)
+                        .Where(n => n.Name.ToLower().Contains(searchEventModel.Value.ToLower()))
+                        .Include(c => c.Category).ToList();
+                }
+                else if (searchEventModel.Location.Equals("all"))
+                {
+                    searchEventModel.Events = context.Events
+                        .Where(t => t.Date > startDate && t.Date < endDate)
+                        .Where(n => n.Name.ToLower().Contains(searchEventModel.Value.ToLower()))
+                        .Where(cid => cid.CategoryID == searchEventModel.CategoryID)
+                        .Include(c => c.Category).ToList();
+                }
+                else if (searchEventModel.CategoryID.Equals(0))
+                {
+                    searchEventModel.Events = context.Events
+                        .Where(t => t.Date > startDate && t.Date < endDate)
+                        .Where(n => n.Name.ToLower().Contains(searchEventModel.Value.ToLower()))
+                        .Where(l => l.Location.ToLower().Contains(searchEventModel.Location.ToLower()))
+                        .Include(c => c.Category).ToList();
+                }
+                else
+                {
+                    searchEventModel.Events = context.Events
+                        .Where(t => t.Date > startDate && t.Date < endDate)
+                        .Where(n => n.Name.ToLower().Contains(searchEventModel.Value.ToLower()))
+                        .Where(l => l.Location.ToLower().Contains(searchEventModel.Location.ToLower()))
+                        .Where(cid => cid.CategoryID == searchEventModel.CategoryID)
+                        .Include(c => c.Category).ToList();
+                }
+
+            }
+            
+            searchEventModel.SetCategories(context.Categories.ToList());
+            return View("Search", searchEventModel);
+        }
+
+
+
+
+
 
 
         //----------------------------------- BROCHURE -----------------------------------//

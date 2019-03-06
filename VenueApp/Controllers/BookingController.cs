@@ -66,23 +66,36 @@ namespace VenueApp.Controllers
         {
             ViewBag.Message = TempData["Message"] ?? "";
             ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
-
-            User currentUser = context.Users.SingleOrDefault(c => c.ID == userId);
-
-            List<Booking> scheduledEvents = context
-                .Bookings
-                .Include(item => item.Event)
-                .Include(c => c.Event.Category)
-                .Where(cm => cm.UserID == userId)
-                .ToList();
-
-            ViewScheduledViewModel scheduledViewModel = new ViewScheduledViewModel
+                                              
+            //If there is an "User" Logged in the session
+            if (HttpContext.Session.GetString("Type") != null)
             {
-                User = currentUser,
-                Bookings = scheduledEvents
-            };
+                User currentUser = context.Users.SingleOrDefault(c => c.ID == userId);
 
-            return View(scheduledViewModel);
+                List<Booking> scheduledEvents = context
+                    .Bookings
+                    .Include(item => item.Event)
+                    .Include(c => c.Event.Category)
+                    .Where(cm => cm.UserID == userId)
+                    .ToList();
+
+                ViewScheduledViewModel scheduledViewModel = new ViewScheduledViewModel
+                {
+                    User = currentUser,
+                    Bookings = scheduledEvents
+                };
+
+                return View(scheduledViewModel);
+            }
+            //If not...
+            else
+            {
+                //return empty list with Error Message
+                ViewBag.ErrorMessage = "You need to be Logged In to access this feature";
+                IList<Booking> bookings = new List<Booking>();
+                return View("Index",bookings);
+            }
+                                             
         }
 
 
@@ -139,6 +152,42 @@ namespace VenueApp.Controllers
 
 
 
+        public IActionResult AddFromSearch(int eventID, int userID)
+        {
+            IList<Booking> existingItems = context.Bookings
+                .Where(cm => cm.EventID == eventID)
+                .Where(cm => cm.UserID == userID).ToList();
+
+
+            if (existingItems.Count == 0)   //Do not duplicate events in the User bookings
+            {
+                // Add the new booking to my existing database
+                Booking newBooking = new Booking
+                {
+                    EventID = eventID,
+                    UserID = userID
+                };
+
+                context.Bookings.Add(newBooking);
+                context.SaveChanges();
+
+                // Success!!! new event booked...  return custom message
+                TempData["Message"] = "Event Successfully Booked.";
+                TestFunctions.PrintConsoleMessage("SUCCESS, NEW BOOKING");
+
+            }
+            else
+            {
+                // Error!!! booking ID already in database...  return custom message
+                TempData["ErrorMessage"] = "Sorry, the event you are triying to Book is already in the users reservations.";
+                TestFunctions.PrintConsoleMessage("WARNING, BOOKING ALREADY IN DATABASE");
+            }
+
+            return RedirectToAction("Search","Event");
+        }
+
+
+        
         //-------------------------------- REMOVE OR DELETE BOOKING BY USER (ADMINS Only)-----------------------------------//
         // GET: /<controller>/
         public IActionResult Delete(int userId, int eventId)
