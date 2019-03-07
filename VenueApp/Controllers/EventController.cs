@@ -375,7 +375,7 @@ namespace VenueApp.Controllers
         }
 
         // Post: /<controller>/
-        [HttpPost]
+        //[HttpPost]
         public IActionResult Results(SearchEventViewModel searchEventModel)
         {
             
