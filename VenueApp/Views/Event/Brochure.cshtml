@@ -1,31 +1,143 @@
 ﻿@model VenueApp.Models.Event
 
 @{
-    ViewBag.Title = "Event Detail";
+    ViewBag.Title = "Event Info";
 
     @using Microsoft.AspNetCore.Http
     @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
     string userType = @HttpContextAccessor.HttpContext.Session.GetString("Type") ?? "";
+    int userID = @HttpContextAccessor.HttpContext.Session.GetInt32("UserID") ?? 0;
+
+    var imagePath = "/images/Categories/";
+
+    switch (Model.Category.ID)
+    {
+        case 1:
+            imagePath += "categories.png";
+            break;
+        case 2:
+            imagePath += "music.jpg";
+            break;
+        case 3:
+        case 11:
+            imagePath += "arts.jpg";
+            break;
+        case 4:
+            imagePath += "business.png";
+            break;
+        case 5:
+            imagePath += "party.jpg";
+            break;
+        case 6:
+            imagePath += "classes.png";
+            break;
+        case 7:
+            imagePath += "sports.jpg";
+            break;
+        case 8:
+            imagePath += "fooddrink.jpg";
+            break;
+        case 9:
+            imagePath += "others.png";
+            break;
+        default:
+            imagePath += "categories.png";
+            break;
+    }
+
 }
 
 
-<h1>Event Detail (ID = @Model.ID)</h1>
-<div>
-    <h4>Name: <b><i>@Model.Name</i></b></h4>
-    <h4>Description: <b><i>@Model.Description</i></b></h4>
-    <h4>Date: <b><i>@Model.Date</i></b></h4>
-    <h4>Category: <b><i>@Model.Category.Name</i></b></h4>
-    <h4>Price: <b><i>@Model.Price</i></b></h4>
-    <h4>Location: <b><i>@Model.Location</i></b></h4>
-    <h4>Created: <b><i>@Model.Created</i></b></h4>
+<h1>Event Info (ID = @Model.ID)</h1>
 
+
+<div class="row">
+    <div class="col-md-4">
+        <!--left col-->
+        <br />
+        <div class="text-center">
+            <img src="@imagePath" id="CategoryPic" class="img-responsive" style="max-width: 100%" alt="Category Picture">
+            <h6 class="center-block">Category: <b><i>@Model.Category.Name</i></b></h6>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-11">
+                <h3 class="text-info"><b>@Model.Name</b></h3>
+                <p style="font-size:15px;padding-left:10px;"><b>$ @Model.Price</b></p>
+            </div>
+            <div class="col-md-1">
+                <br />
+                <br />
+                @if (userType.Length > 0)
+                {
+                    <p class="text-center" style="font-size:20px;"><a class="book" asp-controller="Booking" asp-action="AddFromSearch" method="post" asp-route-userID="@userID" asp-route-eventId="@Model.ID"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></a></p>
+                }
+                else
+                {
+                    <p class="text-center" style="font-size:20px;"><a class="book" onclick="notAvailable();"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></a></p>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div style="padding-left:15px;padding-right:20px;">
+                <p style="font-size:16px;height:7.2em; padding:5px; border:dotted; border-color:lightgray">Description: <i>@Model.Description</i></p>
+                <p class="pull-right" style="font-size:14px;"><b>Date: </b>@Model.Date.ToShortDateString() at @Model.Date.ToLongTimeString()</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="height:400px;">
+    <h5 style="vertical-align:central;">Location: <b><i>@Model.Location</i></b></h5>
+    <div style="padding: 2px,10px,2px,10px;">
+        <div class="" id="myMap" style='width: 100%; height: 40vh;'></div>
+        <p class="pull-right"> Location by BingMaps</p>
+    </div>
+</div>
+<div class="row">
+    <br />
+    <h5>Back to <a asp-controller="Event" asp-action="Search"> search</a></h5>
+    @if (userType.Length > 0)
+    {
+        <p>Go to my<a asp-controller="Booking" asp-action="Scheduled"> bookings</a></p>
+    }
 </div>
 
-<br />
 
-@if(userType.Length > 0)
-{
-<p>
-    Go to my<a asp-controller="Booking" asp-action="Scheduled"> bookings</a></p>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=Ar6GSgDklc17CZg1iXfmAutlA2Kru2EpLP0NFvJmllNtv3QX2VTgP3YBSY2AVVUu'></script>
+<script type="text/javascript">
+    'use strict';
+    var eventLocation = '@Model.Location';
+
+    $(document).ready(function () {
+        console.log("ready!");
+        loadMapScenario(eventLocation)
+    });
+
+    function loadMapScenario(loc) {
+        var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
+            center: new Microsoft.Maps.Location(47.624527, -122.355255),
+            //mapTypeId: Microsoft.Maps.MapTypeId.aerial,
+            zoom: 10 });
+
+        Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+        var searchManager = new Microsoft.Maps.Search.SearchManager(map);
+        var requestOptions = {
+            bounds: map.getBounds(),
+            where: loc,
+            callback: function (answer, userData) {
+                map.setView({ bounds: answer.results[0].bestView });
+                map.entities.push(new Microsoft.Maps.Pushpin(answer.results[0].location, { color: 'teal' }));
+            }
+        };
+        searchManager.geocode(requestOptions);
+        });
     }
+
+    function notAvailable() {
+        alert("Please Log in first to access all features");
+    }
+    
+</script>

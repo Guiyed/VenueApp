@@ -28,7 +28,7 @@ else if (ViewBag.ErrorMessage.Length > 0)
 }
 
 
-    <form asp-controller="Event" asp-action="Results" method="post">
+    <form asp-controller="Event" asp-action="Results" method="get">
         <div class="container">
 
             <div class="row">
@@ -139,6 +139,6 @@ else if (ViewBag.ErrorMessage.Length > 0)
     }
 
     function notAvailable() {
-        alert("Please Log in first to access all functionalities");
+        alert("Please Log in first to access all features");
     }
 </script>
