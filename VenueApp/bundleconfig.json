@@ -4,5 +4,35 @@
     "inputFiles": [
       "wwwroot/css/site.css"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/BrochureAPI.min.js",
+    "inputFiles": [
+      "wwwroot/js/BrochureAPI.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/site.min.js",
+    "inputFiles": [
+      "wwwroot/js/site.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/testAPI.min.js",
+    "inputFiles": [
+      "wwwroot/js/testAPI.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/timerRedirect.min.js",
+    "inputFiles": [
+      "wwwroot/js/timerRedirect.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/timeStamp.min.js",
+    "inputFiles": [
+      "wwwroot/js/timeStamp.js"
+    ]
   }
 ]

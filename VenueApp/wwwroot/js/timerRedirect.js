@@ -16,7 +16,7 @@ function showRemaining() {
     console.log("Now " + now);
     var distance = end - now;
     console.log(distance)
-    if (distance < 0) {
+    if (distance <= 0) {
         document.getElementById('timer').setAttribute("class", "text-center text-danger");
         document.getElementById('countdown').innerHTML = "!!! Redirecting !!!";
         clearInterval(timer);
