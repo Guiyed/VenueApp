@@ -5,7 +5,6 @@
 $(document).ready(function () {
     console.log("ready!");
     loadMapScenario(eventLocation)
-});
 
 function loadMapScenario(loc) {
     var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
@@ -32,3 +31,4 @@ function notAvailable() {
     alert("Please Log in first to access all features");
 }
 
+});

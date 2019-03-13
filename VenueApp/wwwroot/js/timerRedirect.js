@@ -12,8 +12,6 @@ $(document).ready(function () {
     var _hour = _minute * 60;
     var _day = _hour * 24;
     var timer;
-    timer = setInterval(showRemaining, 999);   // 0.99 second interval
-});
 
 function showRemaining() {
     var now = new Date();
@@ -42,4 +40,6 @@ function showRemaining() {
 
     document.getElementById('countdown').innerHTML = seconds + 'secs';
 }
+    timer = setInterval(showRemaining, 999);   // 0.99 second interval
 
+});
