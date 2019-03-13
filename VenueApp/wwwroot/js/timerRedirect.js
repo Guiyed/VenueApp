@@ -13,7 +13,7 @@ $(document).ready(function () {
     var _day = _hour * 24;
     var timer;
 
-function showRemaining() {
+function showRemaining(end) {
     var now = new Date();
     console.log("Now " + now);
     var distance = end - now;
@@ -40,6 +40,6 @@ function showRemaining() {
 
     document.getElementById('countdown').innerHTML = seconds + 'secs';
 }
-    timer = setInterval(showRemaining, 999);   // 0.99 second interval
+    timer = setInterval(showRemaining(end), 999);   // 0.99 second interval
 
 });

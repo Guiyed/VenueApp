@@ -56,7 +56,7 @@ namespace VenueApp.Controllers
                 "You are being redirected to the User Login Page in a few seconds." };
 
             //Set Timer before Redirection (AddSeconds to timer before the countdown) 
-            HttpContext.Session.SetString("EndDate", DateTime.Now.AddSeconds(5).ToString("yyyy-MM-ddTHH:mm:ss"));
+            HttpContext.Session.SetString("EndDate", DateTime.Now.AddSeconds(3).ToString("yyyy-MM-ddTHH:mm:ss"));
             ViewBag.EndDate = HttpContext.Session.GetString("EndDate");
 
             return View(); 
