@@ -5,7 +5,16 @@
     <PublishDir>$(OutDir)_PublishedWebsites\NetCoreWebApp\</PublishDir>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>0</WarningLevel>
+  </PropertyGroup>
+
   <ItemGroup>
+    <Content Remove="bundleconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
@@ -74,6 +83,10 @@
   
 <ItemGroup>
   <Folder Include="wwwroot\images\profilepics\" />
+</ItemGroup>
+  
+<ItemGroup>
+  <None Include="bundleconfig.json" />
 </ItemGroup>
 
 

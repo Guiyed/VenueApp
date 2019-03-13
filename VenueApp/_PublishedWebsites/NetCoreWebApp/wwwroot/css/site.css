@@ -1,0 +1,258 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
+for details on configuring this project to bundle and minify static web assets. */
+/*
+
+:root {
+    --footer-height: 120px;
+}
+
+body {
+    min-height: 100%;
+    position: relative;
+    padding-top: 50px;
+    padding-bottom: var(--footer-height);
+    background-color: whitesmoke;
+}
+
+.footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--footer-height);
+    html, body
+*/
+
+html,body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1 0 auto;
+}
+
+.footer {
+    flex-shrink: 0;
+}
+
+
+
+/* Profile */
+.profileheader {
+    background-color: #607880;
+    color: white;
+    font-weight: bolder;
+}
+
+/* Bookings */
+.bookingheader {
+    background-color: lightgrey;
+    color: white;
+    font-weight: bolder;
+    font-size: 20px;
+}
+
+
+
+/* Dashboard */
+.dashboardBoxesL, .dashboardBoxesR {
+    height: 100px;
+    padding: 25px;
+    font-size: 30px;
+    border-radius: 10px;
+    margin-top: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+.dashboardBoxesR {
+    margin-left: 20px;
+}
+
+/* Dashboard Buttons colors */
+#Profile {
+    background-color: deeppink;
+}
+
+#Memberships {
+    background-color: mediumpurple;
+}
+
+#Search-Events {
+    background-color: mediumseagreen;
+}
+
+#Events {
+    background-color: mediumturquoise;
+}
+
+#MyBookings {
+    background-color: mediumturquoise;
+}
+
+#Create-Events {
+    background-color: mediumseagreen;
+}
+
+#Manage-Users {
+    background-color: deeppink;
+}
+
+#Reports {
+    /*background-color: lightslategrey; */
+    background-color: mediumpurple;
+}
+
+#Databases {
+    background-color: salmon;
+}
+
+#Broadcast {
+    background-color: black;
+    padding-top: 7px;
+}
+
+.Highlight{
+    color: darkturquoise;
+    font-weight:700;
+}
+
+
+
+/* Header */
+.user-login-btn {
+    /*
+    background-color: darkturquoise;
+    color:white; 
+    */
+    background-color: lawngreen;
+    color: darkslategray;
+}
+
+.user-login-btn:hover {
+    background-color: limegreen;
+    color: darkslategray;
+}
+
+
+#logout {    
+    color: lightcyan;
+}
+#logout:hover {
+    color: crimson;
+}
+
+
+
+
+/* Login/Signup Template*/
+.landingReturningUser {
+    background-color: #c8dae3;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.required{
+    font-weight: bold;
+    font-size:20px;
+    color: darkred;
+}
+
+/*
+landingNewUser {
+}
+*/
+
+/*  Icon Colors */
+.add{
+    color: green;
+}
+.add:hover {
+    color: darkgreen;
+}
+
+.delete {
+    color: red;
+}
+
+.delete:hover{
+    color: darkred;
+}
+
+.back{
+    color: goldenrod;
+}
+
+.back:hover {
+    color: darkgoldenrod;
+}
+
+.book {
+    color: mediumpurple;
+}
+
+.book:hover {
+    color: rebeccapurple;
+}
+
+
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 10px;
+    padding-top: 45px;
+}
+
+/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+
+
+/* ----- Footer -----*/
+.social-icon {
+    color: midnightblue;
+    line-height: 10px;
+}
+
+.copyright {
+    text-align: center;
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.footerLinks {
+    font-size: 14px;
+    line-height: 14px;
+    margin-bottom: 5px;
+}
+
+
+
+
+    /* Hide/rearrange for smaller screens */
+    @media screen and (max-width: 767px) {
+        /* Hide captions */
+        .carousel-caption {
+            display: none;
+        }
+    }
