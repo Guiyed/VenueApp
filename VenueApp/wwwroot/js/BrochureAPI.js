@@ -32,4 +32,6 @@ $(document).ready(function () {
     }
 
     loadMapScenario(eventLocation)
+    //src = 'https://www.bing.com/api/maps/mapcontrol?key=Ar6GSgDklc17CZg1iXfmAutlA2Kru2EpLP0NFvJmllNtv3QX2VTgP3YBSY2AVVUu'
+
 });

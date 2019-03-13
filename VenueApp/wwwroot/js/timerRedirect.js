@@ -13,10 +13,10 @@ $(document).ready(function () {
     var _day = _hour * 24;
     var timer;
 
-function showRemaining(end) {
+function showRemaining(ended) {
     var now = new Date();
     console.log("Now " + now);
-    var distance = end - now;
+    var distance = ended - now;
     console.log(distance)
     if (distance <= 0) {
         document.getElementById('timer').setAttribute("class", "text-center text-danger");
