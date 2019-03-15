@@ -25,9 +25,17 @@
     <p id="demo"></p>
 }
 
+
+<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+        asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+        asp-fallback-test="window.jQuery"
+        >
+</script>
 <script type="text/javascript">
     var endDate = '@ViewBag.EndDate';
+    var nowDate = '@ViewBag.NowDate';
 </script>
-<script src="~/js/site.min.js" asp-append-version="true"></script>
 <script src="~/js/timerRedirect.js"></script>
+<!--
 <script src="~/js/timeStamp.js"></script>
+-->

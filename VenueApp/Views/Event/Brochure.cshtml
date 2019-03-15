@@ -48,7 +48,6 @@
 
 }
 
-
 <h1>Event Info (ID = @Model.ID)</h1>
 
 
@@ -105,9 +104,17 @@
 </div>
 
 
+<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+        asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+        asp-fallback-test="window.jQuery"
+        crossorigin="anonymous"
+        integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+</script>
 <script type="text/javascript">
     var eventLocation = '@Model.Location';
+    loadMap();
+
+    function notAvailable() {
+        alert("Please Log in first to access all features");
+    }
 </script>
-<script src="~/js/site.min.js" asp-append-version="true"></script>
-<script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=Ar6GSgDklc17CZg1iXfmAutlA2Kru2EpLP0NFvJmllNtv3QX2VTgP3YBSY2AVVUu'></script>
-<script src="~/js/BrochureAPI.js"></script>
