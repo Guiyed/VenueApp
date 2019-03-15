@@ -500,12 +500,21 @@ namespace VenueApp.Controllers
 
         //-------------------------------- Profile -----------------------------------//
         // GET: /<controller>/
-        public IActionResult Profile(int userId = 0)
+        public IActionResult Profile(int userId = 1)
         {
-                        
-            // If the user is already logged in
-            //------------------- if (HttpContext.Session.TryGetValue("User", out byte[] value))
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
+
+
+            // Check for User or Admin Role
+            if (HttpContext.Session.TryGetValue("User", out byte[] value))
             {
+                // If user is Login but userId different from session.... Send error and display Logged User Profile
+                if (HttpContext.Session.GetString("Type") == "user" && HttpContext.Session.GetInt32("UserID") != userId)
+                {
+                    ViewBag.ErrorMessage = "You cannot access another's user Profile";
+                    userId = HttpContext.Session.GetInt32("UserID").GetValueOrDefault();
+                }
+
                 User selectedUser = context.Users.Where(c => c.Deleted == false).Include(c => c.Type).Include(d => d.Membership).SingleOrDefault(c => c.ID == userId);
 
                 List<Booking> scheduledEvents = context
@@ -548,7 +557,9 @@ namespace VenueApp.Controllers
                     return View(userToShow);
                 }
             }
+
             //If user not logged in... Send Unauthorized Access page
+            //TempData["ErrorMessage"] = "This feature is reserved for Admins Only";
             return RedirectToAction("Index", "Dashboard");
         }
         

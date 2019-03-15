@@ -35,7 +35,7 @@ namespace VenueApp.Controllers
         //-------------------------------- INDEX -----------------------------------//
         // GET: /<controller>/
         public IActionResult Index()
-        {
+        {            
             if (HttpContext.Session.TryGetValue("User", out byte[] value))
             {
                 string userType = HttpContext.Session.GetString("Type");
@@ -71,6 +71,8 @@ namespace VenueApp.Controllers
         //[ChildActionOnly]
         public IActionResult UserDashboard ()
         {
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] ?? "";
+
             if (HttpContext.Session.TryGetValue("User", out byte[] value))
             {
                 return View("User");
@@ -148,6 +150,10 @@ namespace VenueApp.Controllers
                 {
                     ViewBag.APIkey = TicketmasterAPIkey;
                     return View();
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "You need to be and Admin to Access this feature";
                 }
             }
 

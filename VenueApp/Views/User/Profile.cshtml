@@ -23,6 +23,11 @@
 
 <h1>@ViewBag.Title</h1>
 
+@if (ViewBag.ErrorMessage.Length > 0)
+{
+    <p class="text-danger">@ViewBag.ErrorMessage <span class="glyphicon glyphicon-remove " aria-hidden="true"></span></p>
+}
+
 <hr>
 <div class="container bootstrap snippet">
     <div class="row">
@@ -134,7 +139,7 @@
                                         <td class="text-capitalize">@item.Event.Name</td>
                                         <td class="text-capitalize text-center">@item.Event.Date.ToString("dd/MM/yy  @  hh:mmtt", CultureInfo.CreateSpecificCulture("en-US"))</td>
                                         <td class="text-center">@item.Event.Category.Name</td>
-                                        <td class="text-center" ><input type="button" value="show" onclick="showQR(@userID,@item.EventID,@item.Event.CategoryID);" /></td>
+                                        <td class="text-center"><input type="button" value="show" onclick="showQR(@userID,@item.EventID,@item.Event.CategoryID);" /></td>
                                     </tr>
                                     count += 1;
                                 }
@@ -286,5 +291,5 @@
         x.setAttribute("src", src);
         x.setAttribute("alt", "QR Code");
     }
-        
+
 </script>

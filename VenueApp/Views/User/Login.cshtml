@@ -8,15 +8,15 @@
 
 @if (ViewBag.LogoutMessage.Length > 0)
 {
-<p class="text-danger">You have Succsessfully Logged Out <span class="glyphicon glyphicon-log-out " aria-hidden="true"></span></p>
+    <p class="text-danger">You have Succsessfully Logged Out <span class="glyphicon glyphicon-log-out " aria-hidden="true"></span></p>
 }
 else if (ViewBag.Message.Length > 0)
 {
-<p class="text-success">@ViewBag.Message<span class="glyphicon glyphicon-ok " aria-hidden="true"></span></p>
+    <p class="text-success">@ViewBag.Message<span class="glyphicon glyphicon-ok " aria-hidden="true"></span></p>
 }
 else if (ViewBag.ErrorMessage.Length > 0)
 {
-<p class="text-danger">@ViewBag.ErrorMessage <span class="glyphicon glyphicon-remove " aria-hidden="true"></span></p>
+    <p class="text-danger">@ViewBag.ErrorMessage <span class="glyphicon glyphicon-remove " aria-hidden="true"></span></p>
 }
 
 <div class="container-fluid">
@@ -97,3 +97,17 @@ else if (ViewBag.ErrorMessage.Length > 0)
         </div>
     </div>
 </div>
+
+
+<environment exclude="Development">
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+            asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+            asp-fallback-test="window.jQuery"
+            crossorigin="anonymous"
+            integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+    </script>
+    <script type="text/javascript">
+        alert(`If you want to try they "ADMIN" role, please Login with this credential:
+User: Test, Password: test. Thanks`);
+    </script>
+    </environment>

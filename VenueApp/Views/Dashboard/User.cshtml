@@ -13,6 +13,10 @@
 
 <h1>@ViewBag.Title</h1>
 
+@if (ViewBag.ErrorMessage.Length > 0)
+{
+    <p class="text-danger">@ViewBag.ErrorMessage <span class="glyphicon glyphicon-remove " aria-hidden="true"></span></p>
+}
 
 @if (userName.Length > 0)
 {
@@ -29,14 +33,14 @@
             <div id="Profile" class="col-md-4 col-md-offset-2 dashboardBoxesL"> My Profile <i class="fas fa-user-circle"></i></div>
         </a>
         <a asp-controller="Test" asp-action="TBI">
-            <div id="Memberships" class="col-md-4 dashboardBoxesR" > Memberships <i class="far fa-id-card"></i></div>
+            <div id="Memberships" class="col-md-4 dashboardBoxesR"> Memberships <i class="far fa-id-card"></i></div>
         </a>
     </div><div class="row text-center">
         <a asp-controller="Event" asp-action="Search">
-            <div id="Search-Events" class="col-md-4 col-md-offset-2 dashboardBoxesL" > Search Events <i class="fas fa-search"></i></div>
+            <div id="Search-Events" class="col-md-4 col-md-offset-2 dashboardBoxesL"> Search Events <i class="fas fa-search"></i></div>
         </a>
         <a asp-controller="Booking" asp-action="Scheduled" asp-route-userId="@userID">
             <div id="MyBookings" class="col-md-4 dashboardBoxesR"> My Bookings <i class="far fa-calendar-check"></i></div>
         </a>
-    </div>    
+    </div>
 </div>
